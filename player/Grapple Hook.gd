@@ -1,19 +1,22 @@
 extends Node3D
 
+var firing_hook = false
 var hooked = false
 var hook_pos = Vector3()
-var hook_length = 0
-@export var spring_force = 60
-var spring_damp = 0.25
-var max_length  = 50
-var min_length = 1
-var reel_rate = 15
-
-@export var force_curve = Curve.new()
-var max_force_distance = .3
-
+var rope_length = 0
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity_vector") * ProjectSettings.get_setting("physics/3d/default_gravity")
+var hook_init_pos = Vector3()
+var hook_vector = Vector3()
+
+@export var max_length  = 20
+@export var hook_launch_velocity = 40
+@export var min_length = 2
+@export var spring_force = 60
+@export var max_force_stretch = .1 #The percent of stretch in the rope where the force is maximized
+@export var reel_rate = 5
+
+@export var force_curve = Curve.new()
 
 @onready var raycast = $RayCast3D
 @onready var grapple_point = $"Grapple Hook Point"
@@ -24,67 +27,97 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity_vector") *
 func _ready():
 	pass # Replace with function body.
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	hook()
-	grapple_point.global_position = hook_pos
+	if firing_hook:
+		rope_length += hook_launch_velocity * delta
+		if(rope_length > max_length):
+			reset_hook(true)
+			
+		else: 
+			var new_hook_pos = get_grapple_point()
+			if new_hook_pos:
+				hook(new_hook_pos)
+	
+	if hooked:
+		grapple_point.global_position = hook_pos
+	elif firing_hook:
+		grapple_point.global_position = hook_init_pos + (rope_length * hook_vector)
+		
+	if Input.is_action_just_pressed("Fire Grapple"):
+		if hooked or firing_hook:
+			reset_hook(false)
+			
+		else:
+			fire_hook()
+	
+	
+
+func reset_hook(missed):
+	if missed:
+		print("Missed Hook")
+	else:
+		print("Released Hook")	
+		
+	rope_length = 0
+	grapple_rope.hide()
+	grapple_point.hide()
+	firing_hook = false
+	hooked = false
+
+func fire_hook():
+	print("Firing Grapple")
+	firing_hook = true
+	rope_length = 0
+	grapple_point.global_position = global_position
+	hook_init_pos = grapple_point.global_position
+	hook_vector = -global_transform.basis.z.normalized()
+	grapple_rope.show()
+	grapple_point.show()
+	
+func hook(pos):
+	print("Hooked!")
+	hooked = true
+	firing_hook = false
+	hook_pos = pos
+	
+	rope_length = global_position.distance_to(hook_pos)
+	print(rope_length)
+	print(hook_pos)
 	
 func _physics_process(delta):
-	var length_error = 0
-	var tension_vector = Vector3.UP
+	var stretch_length = 0
+	var tension = Vector3()
 	
 	if hooked:
 				
 		if Input.is_action_pressed("Reel In"):
-			hook_length += -reel_rate * delta
+			rope_length += -reel_rate * delta
 		
 		if Input.is_action_pressed("Reel Out"):
-			hook_length += reel_rate * delta
+			rope_length += reel_rate * delta
 		
-		hook_length = clamp(hook_length, min_length, max_length)
+		rope_length = clamp(rope_length, min_length, max_length)
 		
-		tension_vector = (hook_pos - global_position)
-		length_error = tension_vector.length() - hook_length
+		var tension_vector = (hook_pos - global_position)
+		stretch_length = tension_vector.length() - rope_length
 		
-		print(length_error)
+		var spring_comp = spring_force * force_curve.sample(stretch_length / (rope_length * max_force_stretch))
+		tension = tension_vector.normalized() * abs(spring_comp)
 		
-		#Get cos between gravity and tension vector
-		#var force = length_error * spring_force
-				
-		var spring_comp = (spring_force * force_curve.sample(length_error / (hook_length * max_force_distance)))
-		var tension = tension_vector.normalized() * abs(spring_comp)
-		
-		print("Tension: " + str(tension))
+		#print("Tension: " + str(tension))
 		character.velocity += tension * delta
-	
-		tension_vector = tension
 		
-	var up_vector = Vector3.UP.lerp(tension_vector.normalized(), clamp(tension_vector.length()/ .5*spring_force, 0, .5))
+	var up_vector = Vector3.UP.lerp(tension.normalized(), clamp(tension.length()/ .5*spring_force, 0, .5))
 	character.set_up_vector(up_vector)
+
+func get_grapple_point():
+	var target = grapple_point.global_position
+	raycast.look_at(target)
+	raycast.target_position.z = -rope_length
 	
-func hook():
-
-	if Input.is_action_just_pressed("Fire Grapple"):
-		if hooked:
-			hooked = false
-			grapple_point.hide()
-			grapple_rope.hide()
-			
-		else:
-			var new_hook_pos = get_hook_pos()
-			if new_hook_pos:
-				
-				hooked = true
-				hook_pos = new_hook_pos
-				
-				grapple_point.show()
-				grapple_rope.show()
-			
-				hook_length = global_position.distance_to(hook_pos)
-				print(hook_length)
-				print(hook_pos)
-
-func get_hook_pos():
+	print("Hook Length: " + str(rope_length))
+	print("Target: " + str(target))
+	
 	if raycast.is_colliding():
 		return raycast.get_collision_point()

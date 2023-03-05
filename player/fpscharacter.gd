@@ -1,27 +1,33 @@
 extends CharacterBody3D
 
 
-const SPEED = 20.0
-const FRICTION = 5
-const ACCEL = 25
+const SPRINT_SPEED = 20
+const WALK_SPEED = 10
+const SURF_FRICTION = 6
+const SLIDE_FRICTION = 1
+const AIR_FRICTION = 3
+const ACCEL = 15
 const JUMP_VELOCITY = 15
 
-var num_jumps = 2
-const MAX_JUMPS = 2
-const WALL_JUMPS = 1
-const GRAV_JUMP_MULT = 0.5
+@export var HEIGHT = 1.5
+@export var CROUCH_HEIGHT = 0.5
+@export var HEAD_OFFSET = -0.2
+var num_jumps = 1
+var MAX_JUMPS = 2
+var WALL_JUMPS = 1
+const GRAV_JUMP_MULT = 0.75
 
-@export var up_vector = Vector3(0,1,0)
+var up_vector = Vector3(0,1,0)
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 var mouse_sensitivity = 0.2
 @onready var head = $head
+@onready var hitbox = $CollisionShape3D
 
 func set_up_vector(v):
 	var ang_error = rad_to_deg(Vector3.UP.angle_to(v))
-	print("Deg: " + str(ang_error))
 	
 	if ang_error > 90:
 		v = Vector3.UP
@@ -30,6 +36,7 @@ func set_up_vector(v):
 	
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
 	
 func _input(event):
 	if Input.is_action_just_pressed("ui_cancel"):
@@ -53,44 +60,62 @@ func jump():
 		velocity.y = JUMP_VELOCITY
 		
 func _physics_process(delta):
-	look_at(global_transform.origin - transform.basis.z, up_vector)
+	look_at(global_position - transform.basis.x.cross(up_vector), up_vector)
+	#print(global_rotation)
 	
 	# Handle Jump.
 	if is_on_floor():
 		num_jumps = MAX_JUMPS
 		
 	elif is_on_wall():
-		num_jumps = WALL_JUMPS
+		if(num_jumps < WALL_JUMPS): #Restore jumps on wall contact
+			num_jumps = WALL_JUMPS
 		
 	if Input.is_action_just_pressed("Jump"):
 		jump()
 
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
+	var input_dir = Input.get_vector("Left", "Right", "Forward", "Back")
+	
+	var direction = Vector3(input_dir.x, 0, input_dir.y).normalized()
+	
+	#print ("Direction: " + str(direction))
+	var friction
+	if is_on_floor():
+		friction = Vector3(SURF_FRICTION, AIR_FRICTION, SURF_FRICTION)
+
+	else:
+		friction = Vector3(AIR_FRICTION, AIR_FRICTION, AIR_FRICTION)
+
+	velocity.x = move_toward(velocity.x, 0, friction.x * delta)
+	velocity.y = move_toward(velocity.y, 0, friction.y * delta)
+	velocity.z = move_toward(velocity.z, 0, friction.z * delta)
+	
+	if direction:
+		var speed = SPRINT_SPEED
+		var acceleration = ACCEL * delta
+		var desired_direction = global_transform.basis * direction
+		var desired_velocity = desired_direction * speed
+		#var nudge_vector = (transform.basis * desired_velocity) - velocity
+		velocity.x = move_toward(velocity.x, desired_velocity.x, acceleration)
+		velocity.z = move_toward(velocity.z, desired_velocity.z, acceleration)
+		
+		#velocity += nudge_vector
+		#velocity.x += clamp(desired_velocity.x, -acceleration, acceleration)
+		#velocity.z += clamp(desired_velocity.z, -acceleration, acceleration)
+		velocity.y += clamp(desired_direction.y * acceleration, -acceleration, acceleration)
+		#print("Velocity: " + str(velocity) + " Mag " + str(velocity.length()))
+		
 	# Add the gravity.
 	if not is_on_floor():
 		if Input.is_action_pressed("Jump") and velocity.y > 0:
 			velocity.y -= gravity * delta * GRAV_JUMP_MULT
 		else:
 			velocity.y -= gravity * delta
-
-
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var input_dir = Input.get_vector("Left", "Right", "Forward", "Back")
-	var direction
-	
-	direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	
-	if direction:
 		
-			
-		velocity.z = clamp(velocity.z + delta * direction.z * ACCEL, -SPEED, SPEED)
-		velocity.x = clamp(velocity.x + delta * direction.x * ACCEL, -SPEED, SPEED)
-	else:
-		velocity.x = move_toward(velocity.x, 0, FRICTION * delta)
-		velocity.z = move_toward(velocity.z, 0, FRICTION * delta)
-		#velocity.y = move_toward(velocity.y, 0, FRICTION * delta)
-	
 	move_and_slide()
+	#print (velocity)
 	
 	
 	
