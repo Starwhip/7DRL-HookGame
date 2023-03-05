@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://bpnujqm6j55f3"]
+[gd_scene load_steps=12 format=3 uid="uid://bpnujqm6j55f3"]
 
 [ext_resource type="Script" path="res://player/fpscharacter.gd" id="1_h4bf1"]
 [ext_resource type="Script" path="res://player/Grapple Hook.gd" id="2_53o63"]
 [ext_resource type="PackedScene" uid="uid://cbwtajho43dhg" path="res://HUD/HUD.tscn" id="3_5djpv"]
+[ext_resource type="Script" path="res://player/RopeRender.gd" id="3_gyt40"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_s1jd3"]
 height = 3.0
@@ -12,6 +13,10 @@ height = 3.0
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_agfkc"]
 
+[sub_resource type="Curve" id="Curve_jeond"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.219457, 0.309091), 2.92231, 2.92231, 0, 0, Vector2(1, 1), -0.197615, 0.0, 0, 0]
+point_count = 3
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1j65g"]
 albedo_color = Color(1, 0.133333, 0.545098, 1)
 
@@ -20,7 +25,8 @@ material = SubResource("StandardMaterial3D_1j65g")
 radius = 0.1
 height = 0.2
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_r2bbm"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pv2e3"]
+albedo_color = Color(0.839216, 0, 0.105882, 1)
 
 [node name="CharacterBody3D" type="CharacterBody3D"]
 collision_layer = 2
@@ -41,19 +47,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13947, 0)
 
 [node name="Grapple Hook" type="Node3D" parent="head"]
 script = ExtResource("2_53o63")
-spring_force = 10
+force_curve = SubResource("Curve_jeond")
 
 [node name="RayCast3D" type="RayCast3D" parent="head/Grapple Hook"]
 target_position = Vector3(0, 0, -50)
 debug_shape_custom_color = Color(0.776471, 0.396078, 0.294118, 1)
 
 [node name="Grapple Hook Point" type="MeshInstance3D" parent="head/Grapple Hook"]
+visible = false
 mesh = SubResource("SphereMesh_s0fhs")
 
 [node name="Grapple Hook Rope" type="MeshInstance3D" parent="head/Grapple Hook"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.13947, 0)
-mesh = SubResource("ImmediateMesh_r2bbm")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.365297, -0.279804, -0.881991)
+visible = false
+material_override = SubResource("StandardMaterial3D_pv2e3")
 skeleton = NodePath("../../..")
+script = ExtResource("3_gyt40")
 
 [node name="Camera3D" type="Camera3D" parent="head"]
 
