@@ -29,6 +29,48 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	pass
+
+func reset_hook(missed):
+	if missed:
+		print("Missed Hook")
+	else:
+		print("Released Hook")	
+	
+	raycast.rotation = Vector3(0,0,0)
+	raycast.target_position = Vector3(0,0,0)
+
+	grapple_rope.hide()
+	grapple_point.hide()
+	firing_hook = false
+	hooked = false
+
+func fire_hook():
+	print("Firing Grapple")
+	firing_hook = true
+	rope_length = 0
+	grapple_point.global_position = global_position
+	hook_init_pos = grapple_point.global_position
+	hook_vector = -global_transform.basis.z.normalized()
+	grapple_rope.show()
+	grapple_point.show()
+	print(rope_length)
+	print(grapple_point.global_position)
+	print(hook_init_pos)
+	print(hook_vector)
+	
+func hook(pos):
+	print("Hooked!")
+	hooked = true
+	firing_hook = false
+	hook_pos = pos
+	
+	grapple_point.global_position = pos
+	rope_length = global_position.distance_to(hook_pos)
+	print(rope_length)
+	print(hook_pos)
+	
+func _physics_process(delta):
 	if firing_hook:
 		rope_length += hook_launch_velocity * delta
 		if(rope_length > max_length):
@@ -47,45 +89,11 @@ func _process(delta):
 	if Input.is_action_just_pressed("Fire Grapple"):
 		if hooked or firing_hook:
 			reset_hook(false)
-			
 		else:
 			fire_hook()
 	
 	
-
-func reset_hook(missed):
-	if missed:
-		print("Missed Hook")
-	else:
-		print("Released Hook")	
-		
-	rope_length = 0
-	grapple_rope.hide()
-	grapple_point.hide()
-	firing_hook = false
-	hooked = false
-
-func fire_hook():
-	print("Firing Grapple")
-	firing_hook = true
-	rope_length = 0
-	grapple_point.global_position = global_position
-	hook_init_pos = grapple_point.global_position
-	hook_vector = -global_transform.basis.z.normalized()
-	grapple_rope.show()
-	grapple_point.show()
 	
-func hook(pos):
-	print("Hooked!")
-	hooked = true
-	firing_hook = false
-	hook_pos = pos
-	
-	rope_length = global_position.distance_to(hook_pos)
-	print(rope_length)
-	print(hook_pos)
-	
-func _physics_process(delta):
 	var stretch_length = 0
 	var tension = Vector3()
 	
@@ -116,8 +124,12 @@ func get_grapple_point():
 	raycast.look_at(target)
 	raycast.target_position.z = -rope_length
 	
-	print("Hook Length: " + str(rope_length))
+	print("Raycast Target Position " + str(raycast.target_position))
+	print("Rope Length: " + str(rope_length))
 	print("Target: " + str(target))
 	
+	print("Collision: " + str(raycast.get_collision_point()))
+	
 	if raycast.is_colliding():
+		print("Hit something")
 		return raycast.get_collision_point()
