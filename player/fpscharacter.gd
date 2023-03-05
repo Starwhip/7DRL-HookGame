@@ -7,7 +7,7 @@ const SURF_FRICTION = 6
 const SLIDE_FRICTION = 1
 const AIR_FRICTION = 3
 const ACCEL = 15
-const JUMP_VELOCITY = 15
+const JUMP_VELOCITY = 8
 
 @export var HEIGHT = 1.5
 @export var CROUCH_HEIGHT = 0.5
@@ -29,10 +29,11 @@ var mouse_sensitivity = 0.2
 func set_up_vector(v):
 	var ang_error = rad_to_deg(Vector3.UP.angle_to(v))
 	
-	if ang_error > 90:
+	print(ang_error)
+	if ang_error > 80:
 		v = Vector3.UP
 	
-	up_vector = up_vector.lerp(v,0.1)
+	up_vector = up_vector.lerp(v,0.05)
 	
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -66,12 +67,12 @@ func _physics_process(delta):
 	# Handle Jump.
 	if is_on_floor():
 		num_jumps = MAX_JUMPS
-		
+	
 	elif is_on_wall():
 		if(num_jumps < WALL_JUMPS): #Restore jumps on wall contact
 			num_jumps = WALL_JUMPS
 		
-	if Input.is_action_just_pressed("Jump"):
+	if Input.is_action_just_pressed("Jump") or Input.is_action_pressed("Jump") and is_on_floor():
 		jump()
 
 	# Get the input direction and handle the movement/deceleration.

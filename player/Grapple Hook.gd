@@ -13,7 +13,7 @@ var hook_vector = Vector3()
 @export var hook_launch_velocity = 40
 @export var min_length = 2
 @export var spring_force = 60
-@export var max_force_stretch = .1 #The percent of stretch in the rope where the force is maximized
+@export var max_force_stretch = .05 #The percent of stretch in the rope where the force is maximized
 @export var reel_rate = 5
 
 @export var force_curve = Curve.new()
@@ -54,10 +54,10 @@ func fire_hook():
 	hook_vector = -global_transform.basis.z.normalized()
 	grapple_rope.show()
 	grapple_point.show()
-	print(rope_length)
-	print(grapple_point.global_position)
-	print(hook_init_pos)
-	print(hook_vector)
+	#print(rope_length)
+	#print(grapple_point.global_position)
+	#print(hook_init_pos)
+	#print(hook_vector)
 	
 func hook(pos):
 	print("Hooked!")
@@ -116,7 +116,8 @@ func _physics_process(delta):
 		#print("Tension: " + str(tension))
 		character.velocity += tension * delta
 		
-	var up_vector = Vector3.UP.lerp(tension.normalized(), clamp(tension.length()/ .5*spring_force, 0, .5))
+	var up_vector = Vector3.UP.lerp(tension.normalized(), clamp(tension.length()/ .5*spring_force, 0, 1))
+	
 	character.set_up_vector(up_vector)
 
 func get_grapple_point():
@@ -124,12 +125,12 @@ func get_grapple_point():
 	raycast.look_at(target)
 	raycast.target_position.z = -rope_length
 	
-	print("Raycast Target Position " + str(raycast.target_position))
-	print("Rope Length: " + str(rope_length))
-	print("Target: " + str(target))
+	#print("Raycast Target Position " + str(raycast.target_position))
+	#print("Rope Length: " + str(rope_length))
+	#print("Target: " + str(target))
 	
-	print("Collision: " + str(raycast.get_collision_point()))
+	#print("Collision: " + str(raycast.get_collision_point()))
 	
 	if raycast.is_colliding():
-		print("Hit something")
+		#print("Hit something")
 		return raycast.get_collision_point()
