@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://bpnujqm6j55f3"]
+[gd_scene load_steps=10 format=3 uid="uid://bpnujqm6j55f3"]
 
 [ext_resource type="Script" path="res://player/fpscharacter.gd" id="1_h4bf1"]
 [ext_resource type="Script" path="res://player/Grapple Hook.gd" id="2_53o63"]
+[ext_resource type="PackedScene" uid="uid://cbwtajho43dhg" path="res://HUD/HUD.tscn" id="3_5djpv"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_s1jd3"]
 height = 3.0
@@ -22,6 +23,7 @@ height = 0.2
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_r2bbm"]
 
 [node name="CharacterBody3D" type="CharacterBody3D"]
+collision_layer = 2
 script = ExtResource("1_h4bf1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -54,3 +56,5 @@ mesh = SubResource("ImmediateMesh_r2bbm")
 skeleton = NodePath("../../..")
 
 [node name="Camera3D" type="Camera3D" parent="head"]
+
+[node name="HUD" parent="head/Camera3D" instance=ExtResource("3_5djpv")]
