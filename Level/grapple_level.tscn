@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Level/grapple_level.gd" id="1_xplk5"]
 [ext_resource type="PackedScene" uid="uid://bpnujqm6j55f3" path="res://player/fpscharacter.tscn" id="3_1dina"]
-[ext_resource type="Texture2D" uid="uid://o367n3bg3ihh" path="res://addons/kenney_prototype_textures/green/texture_13.png" id="3_ljvdj"]
+[ext_resource type="Texture2D" uid="uid://bab5vx8v4io2a" path="res://addons/kenney_prototype_textures/green/texture_13.png" id="3_ljvdj"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_72c3h"]
 bounce = 1.0
