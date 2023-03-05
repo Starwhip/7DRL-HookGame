@@ -1,0 +1,109 @@
+[gd_scene load_steps=10 format=3 uid="uid://buvlia4r1t7ks"]
+
+[ext_resource type="Script" path="res://player/player.gd" id="1_c2afh"]
+[ext_resource type="Script" path="res://Camera Control.gd" id="2_s30cy"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vemxh"]
+
+[sub_resource type="Animation" id="Animation_wq1ah"]
+resource_name = "walk"
+loop_mode = 2
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("playerModel/LeftLeg")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0.226022, 0, 0, 0.974122, 1, 1, -0.27708, 0, 0, 0.960847)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("playerModel/RightLeg")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, -0.251858, 0, 0, 0.967764, 1, 1, 0.228912, 0, 0, 0.973447)
+
+[sub_resource type="Animation" id="Animation_n4txv"]
+resource_name = "idle"
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("playerModel/LeftLeg")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(1, 1, 0, 0, 0, 1)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("playerModel/RightLeg")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(1, 1, 0, 0, 0, 1)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vw286"]
+_data = {
+"idle": SubResource("Animation_n4txv"),
+"walk": SubResource("Animation_wq1ah")
+}
+
+[sub_resource type="BoxMesh" id="BoxMesh_vayqj"]
+size = Vector3(0.5, 0.5, 0.25)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ki50r"]
+size = Vector3(0.25, 0.25, 0.25)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gpyeh"]
+size = Vector3(0.1, 0.5, 0.1)
+
+[node name="CharacterBody3D" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00473118, 3.74593, 0.00130272)
+script = ExtResource("1_c2afh")
+moveAccel = 1
+
+[node name="cameraHorizontal" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.970764, 0)
+script = ExtResource("2_s30cy")
+
+[node name="cameraVertical" type="Node3D" parent="cameraHorizontal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1344, 0.167765)
+
+[node name="Camera3D" type="Camera3D" parent="cameraHorizontal/cameraVertical"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_vemxh")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_vw286")
+}
+blend_times = [&"walk", &"idle", 0.3, &"walk", &"walk", 0.3]
+
+[node name="playerModel" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.955775, 0)
+
+[node name="Torso" type="MeshInstance3D" parent="playerModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.69601, 0)
+mesh = SubResource("BoxMesh_vayqj")
+skeleton = NodePath("../..")
+
+[node name="Head" type="MeshInstance3D" parent="playerModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.07233, 0)
+mesh = SubResource("BoxMesh_ki50r")
+skeleton = NodePath("../Torso")
+
+[node name="LeftLeg" type="Node3D" parent="playerModel"]
+transform = Transform3D(1, 0, 0, 0, 0.846453, 0.532463, 0, -0.532463, 0.846453, 0.143161, 0.431282, 0)
+
+[node name="Leg" type="MeshInstance3D" parent="playerModel/LeftLeg"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.215174, 0)
+mesh = SubResource("BoxMesh_gpyeh")
+skeleton = NodePath("../../Torso")
+
+[node name="RightLeg" type="Node3D" parent="playerModel"]
+transform = Transform3D(1, 0, 0, 0, 0.895199, -0.445667, 0, 0.445667, 0.895199, -0.149955, 0.429617, 0)
+
+[node name="Leg" type="MeshInstance3D" parent="playerModel/RightLeg"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.215174, 0)
+mesh = SubResource("BoxMesh_gpyeh")
+skeleton = NodePath("../../Torso")
