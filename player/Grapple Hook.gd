@@ -146,8 +146,9 @@ func get_grapple_point():
 
 func check_grapple_occlusion():
 	const ERR_DISTANCE = 0.001
+	var collision_mask = 0b00000000000000000001
 	var space_state = get_world_3d().direct_space_state
-	var query_current = PhysicsRayQueryParameters3D.create(global_position, hook_pos)
+	var query_current = PhysicsRayQueryParameters3D.create(global_position, hook_pos, collision_mask)
 	var new_hit = space_state.intersect_ray(query_current)	
 			
 	if new_hit and new_hit.get("position").distance_to(hook_pos) > ERR_DISTANCE:
@@ -176,7 +177,7 @@ func check_grapple_occlusion():
 		for i in samples:
 			var sample_pos = global_position + (i * (global_position.direction_to(hook_pos) * global_position.distance_to(hook_pos)) / samples)
 			
-			var queryLast = PhysicsRayQueryParameters3D.create(sample_pos, last_point)
+			var queryLast = PhysicsRayQueryParameters3D.create(sample_pos, last_point, collision_mask)
 			var old_hit = space_state.intersect_ray(queryLast)
 
 			#if there a hit, and it is far from the old anchor, it is still occluded

@@ -44,8 +44,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13947, 0)
 
 [node name="Grapple Hook" type="Node3D" parent="head"]
 script = ExtResource("2_53o63")
-max_length = 200
-hook_launch_velocity = 100
+max_length = 35
+hook_launch_velocity = 50
 reel_rate = 25
 force_curve = SubResource("Curve_jeond")
 
