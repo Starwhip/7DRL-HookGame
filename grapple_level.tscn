@@ -1,16 +1,18 @@
-[gd_scene load_steps=17 format=3 uid="uid://biuyv160jvll0"]
+[gd_scene load_steps=20 format=3 uid="uid://biuyv160jvll0"]
 
 [ext_resource type="Script" path="res://grapple_level.gd" id="1_gk81r"]
 [ext_resource type="Texture2D" uid="uid://cpimo1g6kd2x0" path="res://addons/kenney_prototype_textures/dark/texture_01.png" id="3_h2f8w"]
 [ext_resource type="Texture2D" uid="uid://cbj14faf6r770" path="res://addons/kenney_prototype_textures/light/texture_06.png" id="4_tf37a"]
 [ext_resource type="PackedScene" uid="uid://bpnujqm6j55f3" path="res://player/fpscharacter.tscn" id="4_w4yco"]
+[ext_resource type="PackedScene" uid="uid://co6661ht8s7me" path="res://Blender Files/Wall A.dae" id="5_e1ygs"]
+[ext_resource type="PackedScene" uid="uid://4k4h7skeyjvb" path="res://Blender Files/Platform A.dae" id="6_3anct"]
+[ext_resource type="Script" path="res://Respawn Player.gd" id="6_sdh7v"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_w6no1"]
 friction = 0.14
 bounce = 0.2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gr2bj"]
-size = Vector3(47.9281, 1, 42.4195)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x2p41"]
 albedo_texture = ExtResource("4_tf37a")
@@ -46,13 +48,13 @@ script = ExtResource("1_gk81r")
 transform = Transform3D(-0.5, 0.612372, -0.612372, 0, 0.707107, 0.707107, 0.866025, 0.353553, -0.353553, 0, 15, 0)
 
 [node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(95.3872, 0, 0, 0, 1, 0, 0, 0, 105.393, 0, 0, 0)
 physics_material_override = SubResource("PhysicsMaterial_w6no1")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
 shape = SubResource("BoxShape3D_gr2bj")
 
 [node name="Ground" type="MeshInstance3D" parent="Ground/CollisionShape3D"]
-transform = Transform3D(47.0197, 0, 0, 0, 1, 0, 0, 0, 47.0911, 0, 0, 0)
 mesh = SubResource("BoxMesh_l4vyf")
 skeleton = NodePath("../../..")
 
@@ -101,9 +103,6 @@ mesh = SubResource("BoxMesh_v8lkt")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platform4"]
 transform = Transform3D(14.1494, 0, 0, 0, 4.22807, 0, 0, 0, 9.11689, -0.223202, 0.135672, -0.0831776)
 shape = SubResource("ConvexPolygonShape3D_kwios")
-
-[node name="CharacterBody3D" parent="." instance=ExtResource("4_w4yco")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.05129, -10.8569)
 
 [node name="Platform5" type="StaticBody3D" parent="."]
 transform = Transform3D(0.322564, 0, 0, 0, 3.52041, 0, 0, 0, 0.408798, 13.2719, 6.37259, -13.1034)
@@ -158,3 +157,25 @@ skeleton = NodePath("../../Platform5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platform8"]
 shape = SubResource("CylinderShape3D_uoorj")
+
+[node name="Wall A" parent="." instance=ExtResource("5_e1ygs")]
+transform = Transform3D(1.15686, 0, -0.406112, 0, 1.1369, 0, 1.00398, 0, 0.467953, 34.4174, 0.5, -34.2746)
+
+[node name="Wall A2" parent="." instance=ExtResource("5_e1ygs")]
+transform = Transform3D(0.381232, 0, -0.924479, 0, 1, 0, 0.924479, 0, 0.381232, -29.6902, 0.5, 35.967)
+
+[node name="Wall A3" parent="." instance=ExtResource("5_e1ygs")]
+transform = Transform3D(-1.15567, 0, -1.35225, 0, 1.72536, 0, 1.30148, 0, -1.20076, 28.0423, 0.5, 36.3041)
+
+[node name="Platform A" parent="." instance=ExtResource("6_3anct")]
+transform = Transform3D(2.27265, 0, 0, 0, 2.10781, 0, 0, 0, 2.27265, -33.2533, 0.5, -30.5048)
+
+[node name="Platform A2" parent="." instance=ExtResource("6_3anct")]
+transform = Transform3D(2.27265, 0, 0, 0, 2.10781, 0, 0, 0, 2.27265, 35.8156, 0.5, 0.814754)
+
+[node name="Player Spawn" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.26317, 16.8015, -2.64563)
+script = ExtResource("6_sdh7v")
+
+[node name="CharacterBody3D" parent="Player Spawn" instance=ExtResource("4_w4yco")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
