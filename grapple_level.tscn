@@ -1,8 +1,8 @@
 [gd_scene load_steps=20 format=3 uid="uid://biuyv160jvll0"]
 
 [ext_resource type="Script" path="res://grapple_level.gd" id="1_gk81r"]
+[ext_resource type="Texture2D" uid="uid://rh7tuaacvd1g" path="res://addons/kenney_prototype_textures/green/texture_01.png" id="2_e5xcl"]
 [ext_resource type="Texture2D" uid="uid://cpimo1g6kd2x0" path="res://addons/kenney_prototype_textures/dark/texture_01.png" id="3_h2f8w"]
-[ext_resource type="Texture2D" uid="uid://cbj14faf6r770" path="res://addons/kenney_prototype_textures/light/texture_06.png" id="4_tf37a"]
 [ext_resource type="PackedScene" uid="uid://bpnujqm6j55f3" path="res://player/fpscharacter.tscn" id="4_w4yco"]
 [ext_resource type="PackedScene" uid="uid://co6661ht8s7me" path="res://Blender Files/Wall A.dae" id="5_e1ygs"]
 [ext_resource type="PackedScene" uid="uid://4k4h7skeyjvb" path="res://Blender Files/Platform A.dae" id="6_3anct"]
@@ -14,14 +14,18 @@ bounce = 0.2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gr2bj"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x2p41"]
-albedo_texture = ExtResource("4_tf37a")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f8fok"]
+albedo_texture = ExtResource("2_e5xcl")
+uv1_triplanar = true
+uv1_world_triplanar = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_l4vyf"]
-material = SubResource("StandardMaterial3D_x2p41")
+material = SubResource("StandardMaterial3D_f8fok")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g6phw"]
 albedo_texture = ExtResource("3_h2f8w")
+uv1_triplanar = true
+uv1_world_triplanar = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_v8lkt"]
 material = SubResource("StandardMaterial3D_g6phw")

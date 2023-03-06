@@ -7,7 +7,7 @@ var rope_length = 0
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity_vector") * ProjectSettings.get_setting("physics/3d/default_gravity")
 var hook_init_pos = Vector3()
-var hook_vector = Vector3()
+var hook_velocity = Vector3()
 
 var hook_point_array = Array()
 var rope_length_array = Array()
@@ -20,6 +20,9 @@ var rope_length_array = Array()
 @export var reel_rate = 5
 
 @export var force_curve = Curve.new()
+
+@export var ROPE_LENGTH_MOD = 0.75
+@export var RELEASE_VEL_BOOST = 0
 
 @onready var raycast = $RayCast3D
 @onready var grapple_point = $"Grapple Hook Point"
@@ -39,6 +42,7 @@ func reset_hook(missed):
 		print("Missed Hook")
 	else:
 		print("Released Hook")	
+		character.velocity += -character.transform.basis.z * RELEASE_VEL_BOOST
 	
 	raycast.rotation = Vector3(0,0,0)
 	raycast.target_position = Vector3(0,0,0)
@@ -58,11 +62,10 @@ func fire_hook():
 	raycast.rotation = Vector3(0,0,0)
 	raycast.target_position = Vector3(0,0,0)
 	
-	
 	rope_length = 0
 	grapple_point.global_position = global_position
-	hook_init_pos = grapple_point.global_position
-	hook_vector = -global_transform.basis.z.normalized()
+	hook_pos = grapple_point.global_position
+	hook_velocity = -global_transform.basis.z.normalized() * hook_launch_velocity
 	grapple_rope.show()
 	grapple_point.show()
 	#print(rope_length)
@@ -78,7 +81,7 @@ func hook(pos):
 
 	const BOOST = 0.75
 	grapple_point.global_position = pos
-	rope_length = global_position.distance_to(hook_pos) * BOOST
+	rope_length = global_position.distance_to(hook_pos) * ROPE_LENGTH_MOD
 	print(rope_length)
 	print(hook_pos)
 	
@@ -87,10 +90,15 @@ func _physics_process(delta):
 		if not (hooked or firing_hook):
 			fire_hook()
 	else:
-		reset_hook(false)
+		if hooked or firing_hook:
+			reset_hook(false)
 			
 	if firing_hook:
-		rope_length += hook_launch_velocity * delta
+		hook_pos += hook_velocity * delta
+		hook_velocity += gravity * delta
+		
+		grapple_point.global_position = hook_pos
+		rope_length = global_position.distance_to(grapple_point.global_position)
 		if(rope_length > max_length):
 			reset_hook(true)
 			
@@ -98,9 +106,7 @@ func _physics_process(delta):
 			var new_hook_pos = get_grapple_point()
 			if new_hook_pos:
 				hook(new_hook_pos)
-	
-	if firing_hook:
-		grapple_point.global_position = hook_init_pos + (rope_length * hook_vector)
+		
 		
 	var stretch_length = 0
 	var tension = Vector3()
