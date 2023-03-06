@@ -1,6 +1,6 @@
 extends Node3D
 
-const ARENA = preload("res://Level/Components/Arena.tscn")
+const ARENA = preload("res://Level/Components/Platform.tscn")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var path = $Path3D

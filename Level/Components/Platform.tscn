@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://3rnw1q6q5fjp"]
+
+[ext_resource type="PackedScene" uid="uid://beao4ferji416" path="res://Blender Files/Arena A.glb" id="1_pcvq1"]
+
+[node name="Platform" type="StaticBody3D"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[node name="Arena A" parent="." instance=ExtResource("1_pcvq1")]

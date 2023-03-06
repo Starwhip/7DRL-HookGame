@@ -10,6 +10,7 @@ var hook_init_pos = Vector3()
 var hook_vector = Vector3()
 
 var hook_point_array = Array()
+var rope_length_array = Array()
 
 @export var max_length  = 20
 @export var hook_launch_velocity = 40
@@ -43,6 +44,8 @@ func reset_hook(missed):
 	raycast.target_position = Vector3(0,0,0)
 
 	hook_point_array = Array()
+	rope_length_array = Array()
+	
 	grapple_rope.hide()
 	grapple_point.hide()
 	firing_hook = false
@@ -102,7 +105,7 @@ func _physics_process(delta):
 	var tension = Vector3()
 	
 	if hooked:
-		#check_grapple_occlusion()
+		check_grapple_occlusion()
 		grapple_point.global_position = hook_pos
 		
 		if Input.is_action_pressed("Reel In"):
@@ -142,33 +145,47 @@ func get_grapple_point():
 		return raycast.get_collision_point()
 
 func check_grapple_occlusion():
-	
-	var target = hook_pos
+	const ERR_DISTANCE = 0.001
 	var space_state = get_world_3d().direct_space_state
-	var queryCurrent = PhysicsRayQueryParameters3D.create(global_position, hook_pos)
-	var new_hit = space_state.intersect_ray(queryCurrent)	
+	var query_current = PhysicsRayQueryParameters3D.create(global_position, hook_pos)
+	var new_hit = space_state.intersect_ray(query_current)	
 			
-	if new_hit and abs((new_hit.get("position") - hook_pos).length()) > 0.01:
-		print("Added Point")
+	if new_hit and new_hit.get("position").distance_to(hook_pos) > ERR_DISTANCE:
+		#Nudge the anchor point by a radius away from its surface		
+		var new_position = new_hit.get("position") + new_hit.get("normal") * ERR_DISTANCE
+		
+		#Compute length taken by wrap
+		var length_taken = hook_pos.distance_to(new_position)
+		
+		#Store the old values into their stacks
 		hook_point_array.append(hook_pos)
-		print(new_hit)
-		hook_pos = new_hit.get("position")
-		rope_length = global_position.distance_to(hook_pos)
+		rope_length_array.append(length_taken)
+		
+		#Set new positions
+		hook_pos = new_position
+		rope_length = rope_length - length_taken
 	
 	if(hook_point_array.size() > 0):
 		var last_point = hook_point_array.back()
-		var queryLast = PhysicsRayQueryParameters3D.create(global_position, last_point)
-		var old_hit = space_state.intersect_ray(queryLast)
-
-		var v1 = (global_position - hook_pos).normalized()
-		var v2 = (hook_pos - last_point).normalized()
-		var axis = v1.cross(v2).normalized()
-		var angle = acos(v1.dot(v2)) # radians, not degrees
+		var clear_sight = true
 		
-		print("Angle: "+str(angle))
-		if angle < 0.00:
-			print("Removed Point")
+		#Sample many times from current position towards current anchor
+		#Check if all can see the point on the top of the stack
+		
+		var samples = 10
+		for i in samples:
+			var sample_pos = global_position + (i * (global_position.direction_to(hook_pos) * global_position.distance_to(hook_pos)) / samples)
+			
+			var queryLast = PhysicsRayQueryParameters3D.create(sample_pos, last_point)
+			var old_hit = space_state.intersect_ray(queryLast)
+
+			#if there a hit, and it is far from the old anchor, it is still occluded
+			if old_hit and old_hit.get("position").distance_to(last_point) > ERR_DISTANCE:
+				clear_sight = false
+				break
+			
+		if clear_sight == true:
+			#If there's a clear sight, pop from stacks to unwrap the line.
 			hook_pos = hook_point_array.pop_back()
-			rope_length = global_position.distance_to(hook_pos)
-			return
+			rope_length += rope_length_array.pop_back()
 

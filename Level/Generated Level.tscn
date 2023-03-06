@@ -9,7 +9,8 @@
 script = ExtResource("1_hr47y")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.5, 0.612372, -0.612372, 0, 0.707107, 0.707107, 0.866025, 0.353553, -0.353553, 0, 15, 0)
+transform = Transform3D(-0.902871, -0.426797, 0.0516637, -0.235623, 0.591769, 0.770903, -0.359592, 0.683853, -0.634854, 0, 15, 0)
+light_color = Color(0.956863, 0.956863, 0.847059, 1)
 
 [node name="CharacterBody3D" parent="." instance=ExtResource("2_4r5he")]
 
