@@ -29,7 +29,7 @@ var mouse_sensitivity = 0.2
 func set_up_vector(v):
 	var ang_error = rad_to_deg(Vector3.UP.angle_to(v))
 	
-	print(ang_error)
+	#print(ang_error)
 	if ang_error > 80:
 		v = Vector3.UP
 	

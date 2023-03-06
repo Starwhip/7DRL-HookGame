@@ -44,6 +44,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13947, 0)
 
 [node name="Grapple Hook" type="Node3D" parent="head"]
 script = ExtResource("2_53o63")
+max_length = 200
+hook_launch_velocity = 100
+reel_rate = 25
 force_curve = SubResource("Curve_jeond")
 
 [node name="RayCast3D" type="RayCast3D" parent="head/Grapple Hook"]
@@ -55,7 +58,7 @@ visible = false
 mesh = SubResource("SphereMesh_s0fhs")
 
 [node name="Grapple Hook Rope" type="MeshInstance3D" parent="head/Grapple Hook"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.365297, -0.279804, -0.881991)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.28, 0)
 visible = false
 material_override = SubResource("StandardMaterial3D_pv2e3")
 skeleton = NodePath("../../..")

@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://d1vj5mycpb6h4"]
+
+[ext_resource type="Script" path="res://Level/Generate Level.gd" id="1_hr47y"]
+[ext_resource type="PackedScene" uid="uid://bpnujqm6j55f3" path="res://player/fpscharacter.tscn" id="2_4r5he"]
+
+[sub_resource type="Curve3D" id="Curve3D_6ruay"]
+
+[node name="GrappleLevel" type="Node3D"]
+script = ExtResource("1_hr47y")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.5, 0.612372, -0.612372, 0, 0.707107, 0.707107, 0.866025, 0.353553, -0.353553, 0, 15, 0)
+
+[node name="CharacterBody3D" parent="." instance=ExtResource("2_4r5he")]
+
+[node name="Path3D" type="Path3D" parent="."]
+curve = SubResource("Curve3D_6ruay")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+
+[node name="Spawn Position" type="Node3D" parent="Path3D/PathFollow3D"]
