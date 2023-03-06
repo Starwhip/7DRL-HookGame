@@ -98,4 +98,16 @@ mesh = SubResource("BoxMesh_v8lkt")
 transform = Transform3D(14.1494, 0, 0, 0, 4.22807, 0, 0, 0, 9.11689, -0.223202, 0.135672, -0.0831776)
 shape = SubResource("ConvexPolygonShape3D_kwios")
 
+[node name="Platform4" type="StaticBody3D" parent="Platform4"]
+transform = Transform3D(0.116697, 0, 0, 0, 3.52041, 0, 0, 0, 0.133027, -14.3405, -4.47031, -32.1476)
+disable_mode = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Platform4/Platform4"]
+transform = Transform3D(14.1494, 0, 0, 0, 4.22807, 0, 0, 0, 9.11689, -0.223202, 0.135672, -0.0831776)
+mesh = SubResource("BoxMesh_v8lkt")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Platform4/Platform4"]
+transform = Transform3D(14.1494, 0, 0, 0, 4.22807, 0, 0, 0, 9.11689, -0.223202, 0.135672, -0.0831776)
+shape = SubResource("ConvexPolygonShape3D_kwios")
+
 [node name="CharacterBody3D" parent="." instance=ExtResource("4_w4yco")]

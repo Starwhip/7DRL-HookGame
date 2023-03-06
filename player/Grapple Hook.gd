@@ -9,6 +9,8 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity_vector") *
 var hook_init_pos = Vector3()
 var hook_vector = Vector3()
 
+var hook_point_array = Array()
+
 @export var max_length  = 20
 @export var hook_launch_velocity = 40
 @export var min_length = 2
@@ -40,6 +42,7 @@ func reset_hook(missed):
 	raycast.rotation = Vector3(0,0,0)
 	raycast.target_position = Vector3(0,0,0)
 
+	hook_point_array = Array()
 	grapple_rope.hide()
 	grapple_point.hide()
 	firing_hook = false
@@ -48,6 +51,11 @@ func reset_hook(missed):
 func fire_hook():
 	print("Firing Grapple")
 	firing_hook = true
+	
+	raycast.rotation = Vector3(0,0,0)
+	raycast.target_position = Vector3(0,0,0)
+	
+	
 	rope_length = 0
 	grapple_point.global_position = global_position
 	hook_init_pos = grapple_point.global_position
@@ -71,6 +79,12 @@ func hook(pos):
 	print(hook_pos)
 	
 func _physics_process(delta):
+	if Input.is_action_just_pressed("Fire Grapple"):
+		if hooked or firing_hook:
+			reset_hook(false)
+		else:
+			fire_hook()
+			
 	if firing_hook:
 		rope_length += hook_launch_velocity * delta
 		if(rope_length > max_length):
@@ -81,24 +95,16 @@ func _physics_process(delta):
 			if new_hook_pos:
 				hook(new_hook_pos)
 	
-	if hooked:
-		grapple_point.global_position = hook_pos
-	elif firing_hook:
+	if firing_hook:
 		grapple_point.global_position = hook_init_pos + (rope_length * hook_vector)
 		
-	if Input.is_action_just_pressed("Fire Grapple"):
-		if hooked or firing_hook:
-			reset_hook(false)
-		else:
-			fire_hook()
-	
-	
-	
 	var stretch_length = 0
 	var tension = Vector3()
 	
 	if hooked:
-				
+		#check_grapple_occlusion()
+		grapple_point.global_position = hook_pos
+		
 		if Input.is_action_pressed("Reel In"):
 			rope_length += -reel_rate * delta
 		
@@ -134,3 +140,35 @@ func get_grapple_point():
 	if raycast.is_colliding():
 		#print("Hit something")
 		return raycast.get_collision_point()
+
+func check_grapple_occlusion():
+	
+	var target = hook_pos
+	var space_state = get_world_3d().direct_space_state
+	var queryCurrent = PhysicsRayQueryParameters3D.create(global_position, hook_pos)
+	var new_hit = space_state.intersect_ray(queryCurrent)	
+			
+	if new_hit and abs((new_hit.get("position") - hook_pos).length()) > 0.01:
+		print("Added Point")
+		hook_point_array.append(hook_pos)
+		print(new_hit)
+		hook_pos = new_hit.get("position")
+		rope_length = global_position.distance_to(hook_pos)
+	
+	if(hook_point_array.size() > 0):
+		var last_point = hook_point_array.back()
+		var queryLast = PhysicsRayQueryParameters3D.create(global_position, last_point)
+		var old_hit = space_state.intersect_ray(queryLast)
+
+		var v1 = (global_position - hook_pos).normalized()
+		var v2 = (hook_pos - last_point).normalized()
+		var axis = v1.cross(v2).normalized()
+		var angle = acos(v1.dot(v2)) # radians, not degrees
+		
+		print("Angle: "+str(angle))
+		if angle < 0.00:
+			print("Removed Point")
+			hook_pos = hook_point_array.pop_back()
+			rope_length = global_position.distance_to(hook_pos)
+			return
+
