@@ -75,18 +75,19 @@ func hook(pos):
 	hooked = true
 	firing_hook = false
 	hook_pos = pos
-	
+
+	const BOOST = 0.75
 	grapple_point.global_position = pos
-	rope_length = global_position.distance_to(hook_pos)
+	rope_length = global_position.distance_to(hook_pos) * BOOST
 	print(rope_length)
 	print(hook_pos)
 	
 func _physics_process(delta):
-	if Input.is_action_just_pressed("Fire Grapple"):
-		if hooked or firing_hook:
-			reset_hook(false)
-		else:
+	if Input.is_action_pressed("Fire Grapple"):
+		if not (hooked or firing_hook):
 			fire_hook()
+	else:
+		reset_hook(false)
 			
 	if firing_hook:
 		rope_length += hook_launch_velocity * delta
