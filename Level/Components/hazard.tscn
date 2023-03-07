@@ -1,10 +1,37 @@
-[gd_scene load_steps=2 format=3 uid="uid://k6d8hwcucb4d"]
+[gd_scene load_steps=5 format=3 uid="uid://k6d8hwcucb4d"]
+
+[ext_resource type="Script" path="res://Level/Components/Damage Enter.gd" id="1_bga1x"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1llr1"]
+albedo_color = Color(0.564706, 0.00392157, 0.00784314, 1)
+emission_enabled = true
+emission = Color(0.784314, 0.415686, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_h36cm"]
+material = SubResource("StandardMaterial3D_1llr1")
+size = Vector3(5, 5, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lb3e4"]
+size = Vector3(5, 5, 1)
 
-[node name="Node3D" type="Node3D"]
+[node name="Hazard" type="StaticBody3D"]
+collision_layer = 8
+collision_mask = 8
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+mesh = SubResource("BoxMesh_h36cm")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+shape = SubResource("BoxShape3D_lb3e4")
 
 [node name="Area3D" type="Area3D" parent="."]
+collision_mask = 6
+script = ExtResource("1_bga1x")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
 shape = SubResource("BoxShape3D_lb3e4")
+
+[connection signal="body_entered" from="Area3D" to="Area3D" method="_on_body_entered"]

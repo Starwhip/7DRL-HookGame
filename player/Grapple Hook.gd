@@ -41,6 +41,8 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	$"../../HUD".rope_length = (max_length - get_rope_length()) / max_length
+	
 	match control_mode:
 		GRAPPLE_MODE.HOLD:
 			if Input.is_action_pressed("Fire Grapple"):
@@ -81,6 +83,8 @@ func reset_hook(missed):
 		print("Released Hook")	
 		character.velocity += -character.transform.basis.z * RELEASE_VEL_BOOST
 	
+	rope_length = 0
+	
 	raycast.rotation = Vector3(0,0,0)
 	raycast.target_position = Vector3(0,0,0)
 
@@ -101,7 +105,7 @@ func fire_hook():
 	raycast.target_position = Vector3(0,0,0)
 	
 	rope_length = 0
-	grapple_point.global_position = global_position
+	grapple_point.global_position = $GrappleGun/GrappleHook.global_position
 	hook_pos = grapple_point.global_position
 	hook_velocity = -global_transform.basis.z.normalized() * hook_launch_velocity
 	grapple_point.show()
@@ -146,6 +150,7 @@ func _physics_process(delta):
 	if hooked:
 		check_grapple_occlusion()
 		grapple_point.global_position = initial_hook_point
+		raycast.look_at(hook_pos)
 		
 		if Input.is_action_pressed("Reel In"):
 			if(get_rope_length() > min_length):

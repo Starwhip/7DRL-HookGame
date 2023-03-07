@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://k4e8cgjgtper"]
+
+[ext_resource type="Script" path="res://LifeTracker.gd" id="1_uv1b7"]
+
+[node name="LifeTracker" type="Node"]
+script = ExtResource("1_uv1b7")

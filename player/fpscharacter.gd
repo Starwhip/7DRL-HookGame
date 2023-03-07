@@ -7,11 +7,15 @@ const SURF_FRICTION = 10
 const SLIDE_FRICTION = 1
 const AIR_FRICTION = 3
 const ACCEL = 15
-const JUMP_VELOCITY = 8
+const JUMP_VELOCITY = 12
+
+@export var hitpoints = 100
+@export var stagger = 100
 
 @export var HEIGHT = 1.5
 @export var CROUCH_HEIGHT = 0.5
 @export var HEAD_OFFSET = -0.2
+
 var num_jumps = 1
 var MAX_JUMPS = 2
 var WALL_JUMPS = 1
@@ -35,10 +39,22 @@ func set_up_vector(v):
 	
 	up_vector = up_vector.lerp(v,0.025)
 	
+signal dead()
+
+signal hurt()
+
+func damage():
+	print("ow")
+	$LifeTracker.hit_points -= 25
+	hurt.emit()
+	
+	if $LifeTracker.hit_points <= 0:
+		dead.emit()
+		$LifeTracker.reset()
+	
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	
-	
+		
 func _input(event):
 	if Input.is_action_just_pressed("ui_cancel"):
 		if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
@@ -59,7 +75,7 @@ func jump():
 	if can_jump():
 		num_jumps = num_jumps - 1
 		velocity.y = JUMP_VELOCITY
-		
+	
 func _physics_process(delta):
 	look_at(global_position - transform.basis.x.cross(up_vector), up_vector)
 	#print(global_rotation)
@@ -117,6 +133,4 @@ func _physics_process(delta):
 		
 	move_and_slide()
 	#print (velocity)
-	
-	
-	
+

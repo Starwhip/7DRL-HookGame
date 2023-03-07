@@ -31,12 +31,8 @@ func _process(delta):
 		
 		for i in points.size()-1:
 			curve.add_point(self.to_local(points.pop_back()))
-		
-		
+			
 		curve.add_point(end)
-		
-		#for point in curve.point_count:
-			#print(curve.get_baked_points()[point])
 		
 		$"Grapple Hook Rope".curve = curve
 	else:

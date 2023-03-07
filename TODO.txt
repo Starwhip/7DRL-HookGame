@@ -1,0 +1,18 @@
+Enemy Design
+--Collision with enemy does momentum calculation
+--Staggered enemies are knocked back
+--If you are staggered, you are knocked back
+--Roaming, fleeing enemies
+
+
+Items:
+-Grapple Length up, Grapple Jolt up, Grapple Launch up, Grapple Reel up
+-Speed up, Jump up, HP up, Stagger up
+-Momentum Multiplier
+
+Levels:
+-Bridges
+-Islands
+-Arenas
+-Towers
+-Connect all items together with random dungeon generation style

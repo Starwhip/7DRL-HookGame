@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bpnujqm6j55f3"]
+[gd_scene load_steps=17 format=3 uid="uid://bpnujqm6j55f3"]
 
 [ext_resource type="Script" path="res://player/fpscharacter.gd" id="1_h4bf1"]
 [ext_resource type="Script" path="res://player/Grapple Hook.gd" id="2_53o63"]
@@ -6,12 +6,13 @@
 [ext_resource type="Script" path="res://player/RopeRender.gd" id="3_gyt40"]
 [ext_resource type="ArrayMesh" uid="uid://cp0x54aycbb7r" path="res://assets/voxel/Grapple Hook.obj" id="3_vbrex"]
 [ext_resource type="ArrayMesh" uid="uid://c2o23vtjgpvtn" path="res://assets/voxel/Grapple Gun.obj" id="5_oqawy"]
+[ext_resource type="PackedScene" uid="uid://k4e8cgjgtper" path="res://player/life_tracker.tscn" id="7_r5nq6"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0umyk"]
 height = 1.5
 
 [sub_resource type="Curve" id="Curve_jeond"]
-_data = [Vector2(0, 0), 0.0, 0.0391254, 0, 0, Vector2(0.768293, 0.763636), 1.03451, 1.03451, 0, 0, Vector2(1, 1), 0.973655, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 0.0391254, 0, 0, Vector2(0.521342, 0.754545), 1.09091, 1.09091, 0, 0, Vector2(1, 1), 0.101079, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="Gradient" id="Gradient_c77jh"]
@@ -48,6 +49,7 @@ point_count = 2
 
 [node name="CharacterBody3D" type="CharacterBody3D"]
 collision_layer = 2
+collision_mask = 3
 script = ExtResource("1_h4bf1")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -64,6 +66,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13947, 0)
 script = ExtResource("2_53o63")
 max_length = 100
 hook_launch_velocity = 60
+max_force_stretch = 0.1
+reel_rate = 25
 force_curve = SubResource("Curve_jeond")
 ROPE_LENGTH_MOD = 0.95
 
@@ -80,6 +84,7 @@ skeleton = NodePath("../../..")
 [node name="Node3D" type="Node3D" parent="head/Grapple Hook/GrappleGun"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.445742, 0, 0)
 script = ExtResource("3_gyt40")
+line_resolution = 30
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="head/Grapple Hook/GrappleGun/Node3D"]
 snap = 0.0001
@@ -105,10 +110,16 @@ mesh = ExtResource("3_vbrex")
 skeleton = NodePath("../../../..")
 
 [node name="RayCast3D" type="RayCast3D" parent="head/Grapple Hook/GrappleGun"]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.946, 0.598, 0.788)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.498241, 5.81741e-05, -0.457073)
 target_position = Vector3(0, 0, 0)
+collision_mask = 9
 debug_shape_custom_color = Color(0.776471, 0.396078, 0.294118, 1)
+debug_shape_thickness = 5
 
 [node name="Camera3D" type="Camera3D" parent="head"]
 
-[node name="HUD" parent="head" instance=ExtResource("3_5djpv")]
+[node name="HUD" parent="." instance=ExtResource("3_5djpv")]
+
+[node name="LifeTracker" parent="." instance=ExtResource("7_r5nq6")]
+
+[connection signal="hurt" from="." to="HUD" method="_on_character_body_3d_hurt"]
