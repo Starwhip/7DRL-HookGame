@@ -24,10 +24,16 @@ var rope_length_array = Array()
 @export var ROPE_LENGTH_MOD = 0.75
 @export var RELEASE_VEL_BOOST = 0
 
-@onready var raycast = $RayCast3D
+@onready var raycast = $GrappleGun/RayCast3D
 @onready var grapple_point = $"Grapple Hook Point"
-@onready var grapple_rope = $"Grapple Hook Rope"
 @onready var character = $"../.."
+
+var initial_hook_point = Vector3()
+enum GRAPPLE_MODE{
+	CLICK,
+	HOLD
+}
+var control_mode = GRAPPLE_MODE.HOLD
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -35,9 +41,40 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	match control_mode:
+		GRAPPLE_MODE.HOLD:
+			if Input.is_action_pressed("Fire Grapple"):
+				if not (hooked or firing_hook):
+					fire_hook()
+			else:
+				if firing_hook:
+					reset_hook(true)
+				elif hooked:
+					reset_hook(false)
+					
+		GRAPPLE_MODE.CLICK:
+			if Input.is_action_just_pressed("Fire Grapple"):
+				if not (hooked or firing_hook):
+					fire_hook()
+				else:
+					if firing_hook:
+						reset_hook(true)
+					elif hooked:
+						reset_hook(false)
+
+func get_rope_length():
+	var len = rope_length
+	#print("Rope Length: " + str(rope_length))
+	for i in rope_length_array.size()-1:
+		len += rope_length_array[i]
+		
+	#print("Total rope length: " + str(len))
+	return len
+
 
 func reset_hook(missed):
+	$GrappleGun.rotation = Vector3(0,0,0)
+	$GrappleGun/GrappleHook.show()
 	if missed:
 		print("Missed Hook")
 	else:
@@ -50,12 +87,13 @@ func reset_hook(missed):
 	hook_point_array = Array()
 	rope_length_array = Array()
 	
-	grapple_rope.hide()
 	grapple_point.hide()
 	firing_hook = false
 	hooked = false
 
+
 func fire_hook():
+	$GrappleGun/GrappleHook.hide()
 	print("Firing Grapple")
 	firing_hook = true
 	
@@ -66,12 +104,12 @@ func fire_hook():
 	grapple_point.global_position = global_position
 	hook_pos = grapple_point.global_position
 	hook_velocity = -global_transform.basis.z.normalized() * hook_launch_velocity
-	grapple_rope.show()
 	grapple_point.show()
 	#print(rope_length)
 	#print(grapple_point.global_position)
 	#print(hook_init_pos)
 	#print(hook_vector)
+
 	
 func hook(pos):
 	print("Hooked!")
@@ -79,20 +117,14 @@ func hook(pos):
 	firing_hook = false
 	hook_pos = pos
 
-	const BOOST = 0.75
-	grapple_point.global_position = pos
+	initial_hook_point = pos
+	grapple_point.global_position = initial_hook_point
 	rope_length = global_position.distance_to(hook_pos) * ROPE_LENGTH_MOD
 	print(rope_length)
 	print(hook_pos)
-	
-func _physics_process(delta):
-	if Input.is_action_pressed("Fire Grapple"):
-		if not (hooked or firing_hook):
-			fire_hook()
-	else:
-		if hooked or firing_hook:
-			reset_hook(false)
-			
+
+
+func _physics_process(delta):			
 	if firing_hook:
 		hook_pos += hook_velocity * delta
 		hook_velocity += gravity * delta
@@ -113,20 +145,27 @@ func _physics_process(delta):
 	
 	if hooked:
 		check_grapple_occlusion()
-		grapple_point.global_position = hook_pos
+		grapple_point.global_position = initial_hook_point
 		
 		if Input.is_action_pressed("Reel In"):
-			rope_length += -reel_rate * delta
+			if(get_rope_length() > min_length):
+				rope_length += -reel_rate * delta
 		
 		if Input.is_action_pressed("Reel Out"):
-			rope_length += reel_rate * delta
+			if(get_rope_length() < max_length):
+				rope_length += reel_rate * delta
 		
-		rope_length = clamp(rope_length, min_length, max_length)
+		#if get_rope_length() > max_length:
+		#	rope_length -= get_rope_length() - max_length 
 		
 		var tension_vector = (hook_pos - global_position)
 		stretch_length = tension_vector.length() - rope_length
 		
-		var spring_comp = spring_force * force_curve.sample(stretch_length / (rope_length * max_force_stretch))
+		#Do graphics for the hook and gun
+		grapple_point.look_at(tension_vector * 1000)
+		$GrappleGun.look_at(hook_pos)
+		
+		var spring_comp = spring_force * force_curve.sample(stretch_length / (get_rope_length() * max_force_stretch))
 		tension = tension_vector.normalized() * abs(spring_comp)
 		
 		#print("Tension: " + str(tension))
@@ -135,6 +174,7 @@ func _physics_process(delta):
 	var up_vector = Vector3.UP.lerp(tension.normalized(), clamp(tension.length()/ .5*spring_force, 0, 1))
 	
 	character.set_up_vector(up_vector)
+
 
 func get_grapple_point():
 	var target = grapple_point.global_position
@@ -151,8 +191,9 @@ func get_grapple_point():
 		#print("Hit something")
 		return raycast.get_collision_point()
 
+
 func check_grapple_occlusion():
-	const ERR_DISTANCE = 0.001
+	const ERR_DISTANCE = 0.01
 	var collision_mask = 0b00000000000000000001
 	var space_state = get_world_3d().direct_space_state
 	var query_current = PhysicsRayQueryParameters3D.create(global_position, hook_pos, collision_mask)
@@ -169,6 +210,14 @@ func check_grapple_occlusion():
 		hook_point_array.append(hook_pos)
 		rope_length_array.append(length_taken)
 		
+		print("Rope Len: " + str(rope_length))
+		print("Total Len: " + str(get_rope_length()))
+		print("Taken: " + str(length_taken))
+			
+		if rope_length < length_taken:
+			print("ALERT")
+			
+			
 		#Set new positions
 		hook_pos = new_position
 		rope_length = rope_length - length_taken

@@ -1,9 +1,21 @@
-[gd_scene load_steps=3 format=3 uid="uid://cbwtajho43dhg"]
+[gd_scene load_steps=7 format=3 uid="uid://cbwtajho43dhg"]
 
 [ext_resource type="Texture2D" uid="uid://t8dyr1fvrhy6" path="res://HUD/crosshair018.png" id="1_7jad4"]
 [ext_resource type="Script" path="res://HUD/Center.gd" id="2_xup7v"]
+[ext_resource type="Script" path="res://HUD/HealthBar.gd" id="3_7t37g"]
 
-[node name="HUD" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omper"]
+bg_color = Color(0.282353, 0.709804, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3j25i"]
+bg_color = Color(0.858824, 0.501961, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i8ymv"]
+bg_color = Color(0.858824, 0.501961, 0, 1)
+
+[node name="Node2D" type="Node2D"]
+
+[node name="HUD" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,6 +23,75 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Crosshair" type="Sprite2D" parent="HUD"]
+position = Vector2(590, 292)
 texture = ExtResource("1_7jad4")
 script = ExtResource("2_xup7v")
+
+[node name="ProgressBar" type="ProgressBar" parent="HUD/Crosshair"]
+offset_left = 81.0
+offset_top = -13.0
+offset_right = 184.0
+offset_bottom = 14.0
+
+[node name="ProgressBar2" type="ProgressBar" parent="HUD/Crosshair"]
+offset_left = -183.0
+offset_top = -12.0
+offset_right = -80.0
+offset_bottom = 15.0
+
+[node name="Hook Length" type="ProgressBar" parent="HUD"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 614.0
+offset_right = 146.0
+offset_bottom = 641.0
+
+[node name="Button" type="Button" parent="HUD"]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 575.0
+offset_right = 94.0
+offset_bottom = 606.0
+button_mask = 0
+text = "Hook Reel"
+
+[node name="Health" type="ProgressBar" parent="HUD"]
+layout_mode = 0
+offset_left = 594.0
+offset_top = 614.0
+offset_right = 734.0
+offset_bottom = 641.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_omper")
+show_percentage = false
+script = ExtResource("3_7t37g")
+
+[node name="HealthLeft" type="ProgressBar" parent="HUD/Health"]
+layout_mode = 0
+offset_left = -139.0
+offset_right = 1.0
+offset_bottom = 27.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_omper")
+rounded = true
+fill_mode = 1
+show_percentage = false
+
+[node name="Stagger" type="ProgressBar" parent="HUD"]
+layout_mode = 0
+offset_left = 594.0
+offset_top = 583.0
+offset_right = 734.0
+offset_bottom = 610.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_3j25i")
+show_percentage = false
+script = ExtResource("3_7t37g")
+
+[node name="HealthLeft" type="ProgressBar" parent="HUD/Stagger"]
+layout_mode = 0
+offset_left = -139.0
+offset_right = 1.0
+offset_bottom = 27.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_i8ymv")
+rounded = true
+fill_mode = 1
+show_percentage = false

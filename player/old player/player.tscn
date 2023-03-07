@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://buvlia4r1t7ks"]
+[gd_scene load_steps=10 format=3]
 
-[ext_resource type="Script" path="res://player/player.gd" id="1_c2afh"]
-[ext_resource type="Script" path="res://Camera Control.gd" id="2_s30cy"]
+[ext_resource type="Script" path="res://player/old player/player.gd" id="1_c2afh"]
+[ext_resource type="Script" path="res://player/old player/Camera Control.gd" id="2_s30cy"]
+
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vemxh"]
 

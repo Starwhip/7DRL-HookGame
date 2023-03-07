@@ -1,31 +1,50 @@
-[gd_scene load_steps=11 format=3 uid="uid://bpnujqm6j55f3"]
+[gd_scene load_steps=16 format=3 uid="uid://bpnujqm6j55f3"]
 
 [ext_resource type="Script" path="res://player/fpscharacter.gd" id="1_h4bf1"]
 [ext_resource type="Script" path="res://player/Grapple Hook.gd" id="2_53o63"]
 [ext_resource type="PackedScene" uid="uid://cbwtajho43dhg" path="res://HUD/HUD.tscn" id="3_5djpv"]
 [ext_resource type="Script" path="res://player/RopeRender.gd" id="3_gyt40"]
+[ext_resource type="ArrayMesh" uid="uid://cp0x54aycbb7r" path="res://assets/voxel/Grapple Hook.obj" id="3_vbrex"]
+[ext_resource type="ArrayMesh" uid="uid://c2o23vtjgpvtn" path="res://assets/voxel/Grapple Gun.obj" id="5_oqawy"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0umyk"]
 height = 1.5
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_s1jd3"]
-radius = 0.3
-height = 1.5
-
 [sub_resource type="Curve" id="Curve_jeond"]
-_data = [Vector2(0, 0), 0.0, 0.0391254, 0, 0, Vector2(1, 1), 1.78321, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 0.0391254, 0, 0, Vector2(0.768293, 0.763636), 1.03451, 1.03451, 0, 0, Vector2(1, 1), 0.973655, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_c77jh"]
+colors = PackedColorArray(0.424, 0.244331, 0.136408, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_fayi1"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_rklhd"]
+seamless_blend_skirt = 0.613
+color_ramp = SubResource("Gradient_c77jh")
+noise = SubResource("FastNoiseLite_fayi1")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_acimq"]
+frequency = 0.054
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_obk12"]
+noise = SubResource("FastNoiseLite_acimq")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_82b33"]
+albedo_color = Color(0.74902, 0.360784, 0, 1)
+albedo_texture = SubResource("NoiseTexture2D_rklhd")
+metallic_specular = 0.0
+emission = Color(0.584314, 0.0235294, 0.180392, 1)
+normal_enabled = true
+normal_scale = 0.38
+normal_texture = SubResource("NoiseTexture2D_obk12")
+
+[sub_resource type="Curve3D" id="Curve3D_wa1jj"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, -0.45212, -2.98923, 2.30637, 0.45212, 2.98923, -2.30637, 0.544581, 2.47199, -5.59044),
+"tilts": PackedFloat32Array(0, 0)
+}
 point_count = 2
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1j65g"]
-albedo_color = Color(1, 0.133333, 0.545098, 1)
-
-[sub_resource type="SphereMesh" id="SphereMesh_s0fhs"]
-material = SubResource("StandardMaterial3D_1j65g")
-radius = 0.1
-height = 0.2
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pv2e3"]
-albedo_color = Color(0.839216, 0, 0.105882, 1)
 
 [node name="CharacterBody3D" type="CharacterBody3D"]
 collision_layer = 2
@@ -35,8 +54,7 @@ script = ExtResource("1_h4bf1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.756044, 0)
 shape = SubResource("CapsuleShape3D_0umyk")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
-mesh = SubResource("CapsuleMesh_s1jd3")
+[node name="Player Mesh" type="MeshInstance3D" parent="CollisionShape3D"]
 skeleton = NodePath("../..")
 
 [node name="head" type="Node3D" parent="."]
@@ -44,26 +62,53 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13947, 0)
 
 [node name="Grapple Hook" type="Node3D" parent="head"]
 script = ExtResource("2_53o63")
-max_length = 80
-hook_launch_velocity = 50
-reel_rate = 50
+max_length = 100
+hook_launch_velocity = 60
 force_curve = SubResource("Curve_jeond")
+ROPE_LENGTH_MOD = 0.95
 
-[node name="RayCast3D" type="RayCast3D" parent="head/Grapple Hook"]
+[node name="Grapple Hook Point" type="MeshInstance3D" parent="head/Grapple Hook"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+visible = false
+mesh = ExtResource("3_vbrex")
+
+[node name="GrappleGun" type="MeshInstance3D" parent="head/Grapple Hook"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.473, -0.299, -0.394)
+mesh = ExtResource("5_oqawy")
+skeleton = NodePath("../../..")
+
+[node name="Node3D" type="Node3D" parent="head/Grapple Hook/GrappleGun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.445742, 0, 0)
+script = ExtResource("3_gyt40")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="head/Grapple Hook/GrappleGun/Node3D"]
+snap = 0.0001
+polygon = PackedVector2Array(0, 0.05, 0.00174497, 0.0499695, 0.00348782, 0.0498782, 0.00522642, 0.0497261, 0.00695866, 0.0495134, 0.00868241, 0.0492404, 0.0103956, 0.0489074, 0.0120961, 0.0485148, 0.0137819, 0.0480631, 0.0154509, 0.0475528, 0.017101, 0.0469846, 0.0187303, 0.0463592, 0.0203368, 0.0456773, 0.0219186, 0.0449397, 0.0234736, 0.0441474, 0.025, 0.0433013, 0.026496, 0.0424024, 0.0279596, 0.0414519, 0.0293893, 0.0404508, 0.0307831, 0.0394005, 0.0321394, 0.0383022, 0.0334565, 0.0371572, 0.0347329, 0.035967, 0.035967, 0.0347329, 0.0371572, 0.0334565, 0.0383022, 0.0321394, 0.0394005, 0.0307831, 0.0404508, 0.0293893, 0.0414519, 0.0279596, 0.0424024, 0.026496, 0.0433013, 0.025, 0.0441474, 0.0234736, 0.0449397, 0.0219186, 0.0456773, 0.0203368, 0.0463592, 0.0187303, 0.0469846, 0.017101, 0.0475528, 0.0154509, 0.0480631, 0.0137819, 0.0485148, 0.0120961, 0.0489074, 0.0103956, 0.0492404, 0.00868241, 0.0495134, 0.00695866, 0.0497261, 0.00522642, 0.0498782, 0.00348782, 0.0499695, 0.00174497, 0.05, 3.06152e-18, 0.0499695, -0.00174497, 0.0498782, -0.00348782, 0.0497261, -0.00522642, 0.0495134, -0.00695866, 0.0492404, -0.00868241, 0.0489074, -0.0103956, 0.0485148, -0.0120961, 0.0480631, -0.0137819, 0.0475528, -0.0154509, 0.0469846, -0.017101, 0.0463592, -0.0187303, 0.0456773, -0.0203368, 0.0449397, -0.0219186, 0.0441474, -0.0234736, 0.0433013, -0.025, 0.0424024, -0.026496, 0.0414519, -0.0279596, 0.0404508, -0.0293893, 0.0394005, -0.0307831, 0.0383022, -0.0321394, 0.0371572, -0.0334565, 0.035967, -0.0347329, 0.0347329, -0.035967, 0.0334565, -0.0371572, 0.0321394, -0.0383022, 0.0307831, -0.0394005, 0.0293893, -0.0404508, 0.0279596, -0.0414519, 0.026496, -0.0424024, 0.025, -0.0433013, 0.0234736, -0.0441474, 0.0219186, -0.0449397, 0.0203368, -0.0456773, 0.0187303, -0.0463592, 0.017101, -0.0469846, 0.0154509, -0.0475528, 0.0137819, -0.0480631, 0.0120961, -0.0485148, 0.0103956, -0.0489074, 0.00868241, -0.0492404, 0.00695866, -0.0495134, 0.00522642, -0.0497261, 0.00348782, -0.0498782, 0.00174497, -0.0499695, 6.12303e-18, -0.05, -0.00174497, -0.0499695, -0.00348782, -0.0498782, -0.00522642, -0.0497261, -0.00695866, -0.0495134, -0.00868241, -0.0492404, -0.0103956, -0.0489074, -0.0120961, -0.0485148, -0.0137819, -0.0480631, -0.0154509, -0.0475528, -0.017101, -0.0469846, -0.0187303, -0.0463592, -0.0203368, -0.0456773, -0.0219186, -0.0449397, -0.0234736, -0.0441474, -0.025, -0.0433013, -0.026496, -0.0424024, -0.0279596, -0.0414519, -0.0293893, -0.0404508, -0.0307831, -0.0394005, -0.0321394, -0.0383022, -0.0334565, -0.0371572, -0.0347329, -0.035967, -0.035967, -0.0347329, -0.0371572, -0.0334565, -0.0383022, -0.0321394, -0.0394005, -0.0307831, -0.0404508, -0.0293893, -0.0414519, -0.0279596, -0.0424024, -0.026496, -0.0433013, -0.025, -0.0441474, -0.0234736, -0.0449397, -0.0219186, -0.0456773, -0.0203368, -0.0463592, -0.0187303, -0.0469846, -0.017101, -0.0475528, -0.0154509, -0.0480631, -0.0137819, -0.0485148, -0.0120961, -0.0489074, -0.0103956, -0.0492404, -0.00868241, -0.0495134, -0.00695866, -0.0497261, -0.00522642, -0.0498782, -0.00348782, -0.0499695, -0.00174497, -0.05, -9.18455e-18, -0.0499695, 0.00174497, -0.0498782, 0.00348782, -0.0497261, 0.00522642, -0.0495134, 0.00695866, -0.0492404, 0.00868241, -0.0489074, 0.0103956, -0.0485148, 0.0120961, -0.0480631, 0.0137819, -0.0475528, 0.0154509, -0.0469846, 0.017101, -0.0463592, 0.0187303, -0.0456773, 0.0203368, -0.0449397, 0.0219186, -0.0441474, 0.0234736, -0.0433013, 0.025, -0.0424024, 0.026496, -0.0414519, 0.0279596, -0.0404508, 0.0293893, -0.0394005, 0.0307831, -0.0383022, 0.0321394, -0.0371572, 0.0334565, -0.035967, 0.0347329, -0.0347329, 0.035967, -0.0334565, 0.0371572, -0.0321394, 0.0383022, -0.0307831, 0.0394005, -0.0293893, 0.0404508, -0.0279596, 0.0414519, -0.026496, 0.0424024, -0.025, 0.0433013, -0.0234736, 0.0441474, -0.0219186, 0.0449397, -0.0203368, 0.0456773, -0.0187303, 0.0463592, -0.017101, 0.0469846, -0.0154509, 0.0475528, -0.0137819, 0.0480631, -0.0120961, 0.0485148, -0.0103956, 0.0489074, -0.00868241, 0.0492404, -0.00695866, 0.0495134, -0.00522642, 0.0497261, -0.00348782, 0.0498782, -0.00174497, 0.0499695)
+mode = 2
+path_node = NodePath("../Grapple Hook Rope")
+path_interval_type = 0
+path_interval = 0.1
+path_simplify_angle = 0.3
+path_rotation = 1
+path_local = true
+path_continuous_u = true
+path_u_distance = 0.2
+path_joined = false
+material = SubResource("StandardMaterial3D_82b33")
+
+[node name="Grapple Hook Rope" type="Path3D" parent="head/Grapple Hook/GrappleGun/Node3D"]
+curve = SubResource("Curve3D_wa1jj")
+
+[node name="GrappleHook" type="MeshInstance3D" parent="head/Grapple Hook/GrappleGun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.498241, 5.81741e-05, -0.457073)
+mesh = ExtResource("3_vbrex")
+skeleton = NodePath("../../../..")
+
+[node name="RayCast3D" type="RayCast3D" parent="head/Grapple Hook/GrappleGun"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.946, 0.598, 0.788)
 target_position = Vector3(0, 0, 0)
 debug_shape_custom_color = Color(0.776471, 0.396078, 0.294118, 1)
 
-[node name="Grapple Hook Point" type="MeshInstance3D" parent="head/Grapple Hook"]
-visible = false
-mesh = SubResource("SphereMesh_s0fhs")
-
-[node name="Grapple Hook Rope" type="MeshInstance3D" parent="head/Grapple Hook"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.28, 0)
-visible = false
-material_override = SubResource("StandardMaterial3D_pv2e3")
-skeleton = NodePath("../../..")
-script = ExtResource("3_gyt40")
-
 [node name="Camera3D" type="Camera3D" parent="head"]
 
-[node name="HUD" parent="head/Camera3D" instance=ExtResource("3_5djpv")]
+[node name="HUD" parent="head" instance=ExtResource("3_5djpv")]

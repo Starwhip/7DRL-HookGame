@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://deerw2a4uvpb5"
+path="res://.godot/imported/monu2.obj-7cf2e345e2bfbff993fa9c29d291c731.mesh"
+
+[deps]
+
+files=["res://.godot/imported/monu2.obj-7cf2e345e2bfbff993fa9c29d291c731.mesh"]
+
+source_file="res://assets/voxel/monu2.obj"
+dest_files=["res://.godot/imported/monu2.obj-7cf2e345e2bfbff993fa9c29d291c731.mesh", "res://.godot/imported/monu2.obj-7cf2e345e2bfbff993fa9c29d291c731.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

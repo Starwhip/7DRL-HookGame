@@ -3,7 +3,7 @@ extends CharacterBody3D
 
 const SPRINT_SPEED = 20
 const WALK_SPEED = 10
-const SURF_FRICTION = 6
+const SURF_FRICTION = 10
 const SLIDE_FRICTION = 1
 const AIR_FRICTION = 3
 const ACCEL = 15
@@ -33,7 +33,7 @@ func set_up_vector(v):
 	if ang_error > 80:
 		v = Vector3.UP
 	
-	up_vector = up_vector.lerp(v,0.05)
+	up_vector = up_vector.lerp(v,0.025)
 	
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -72,7 +72,7 @@ func _physics_process(delta):
 		if(num_jumps < WALL_JUMPS): #Restore jumps on wall contact
 			num_jumps = WALL_JUMPS
 		
-	if Input.is_action_just_pressed("Jump") or Input.is_action_pressed("Jump") and is_on_floor():
+	if Input.is_action_just_pressed("Jump") or Input.is_action_pressed("Jump") and (is_on_floor() or is_on_wall()):
 		jump()
 
 	# Get the input direction and handle the movement/deceleration.

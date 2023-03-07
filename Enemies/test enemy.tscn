@@ -1,0 +1,52 @@
+[gd_scene load_steps=11 format=3 uid="uid://dpxivlhml6hat"]
+
+[ext_resource type="Script" path="res://Enemies/test enemy.gd" id="1_me18d"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8th22"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f6tmi"]
+albedo_color = Color(0.862745, 0, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_fvpf5"]
+material = SubResource("StandardMaterial3D_f6tmi")
+
+[sub_resource type="Animation" id="Animation_luuw1"]
+resource_name = "die"
+
+[sub_resource type="Animation" id="Animation_082bp"]
+resource_name = "idle"
+
+[sub_resource type="Animation" id="Animation_238sv"]
+resource_name = "run"
+
+[sub_resource type="Animation" id="Animation_bcdgi"]
+resource_name = "spawn"
+
+[sub_resource type="Animation" id="Animation_61xg3"]
+resource_name = "walk"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_i7l13"]
+_data = {
+"die": SubResource("Animation_luuw1"),
+"idle": SubResource("Animation_082bp"),
+"run": SubResource("Animation_238sv"),
+"spawn": SubResource("Animation_bcdgi"),
+"walk": SubResource("Animation_61xg3")
+}
+
+[node name="CharacterBody3D" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("1_me18d")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_8th22")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_fvpf5")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_i7l13")
+}

@@ -1,33 +1,44 @@
-extends MeshInstance3D
+extends Node3D
 
+@export var line_radius = 0.1
+@export var line_resolution = 180
+
+@onready var hook_point = $"../../Grapple Hook Point"
+	
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	mesh = ImmediateMesh.new()
+	var circle = PackedVector2Array()
+	for degree in line_resolution:
+		var x = line_radius * sin(PI * 2 * degree/line_resolution)
+		var y = line_radius * -cos(PI * 2 * degree/line_resolution)
+		var coords = Vector2(x,y)
+		circle.append(coords)
+		
+	$CSGPolygon3D.polygon = circle
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	mesh.clear_surfaces()
-	mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP)
 	
-	var points = $"..".hook_point_array
-		
-	# Prepare attributes for add_vertex.
-	mesh.surface_set_normal(Vector3(0, 0, 1))
-	mesh.surface_set_uv(Vector2(0, 0))
-	# Call last for each vertex, adds the above attributes.
-	
-	mesh.surface_add_vertex(Vector3(0,0,0))
-	
-	mesh.surface_set_uv(Vector2(0, 1))
-	mesh.surface_add_vertex($"../Grapple Hook Point".position)
-	
-	for point in points.size():
-		#print (self.to_local()
-		mesh.surface_add_vertex(self.to_local(points[points.size() - point - 1]))
-		
-	
+	if hook_point.is_visible_in_tree():
+		show()
 
-
-	# End drawing.
-	mesh.surface_end()
+		var points = $"../..".hook_point_array.duplicate()
+		var start = Vector3(0,0,0)
+		var end = to_local(hook_point.global_position)
+		var curve = Curve3D.new() 
+		curve.add_point(start)
+		curve.add_point(to_local($"../..".hook_pos))
+		
+		for i in points.size()-1:
+			curve.add_point(self.to_local(points.pop_back()))
+		
+		
+		curve.add_point(end)
+		
+		#for point in curve.point_count:
+			#print(curve.get_baked_points()[point])
+		
+		$"Grapple Hook Rope".curve = curve
+	else:
+		hide()	
 	

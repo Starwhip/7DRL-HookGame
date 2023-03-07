@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://ch6wu5xmqmvqm"]
+
+[ext_resource type="Script" path="res://player/Respawn Player.gd" id="1_20tda"]
+[ext_resource type="PackedScene" uid="uid://bpnujqm6j55f3" path="res://player/fpscharacter.tscn" id="2_u6nkc"]
+
+[node name="Player Spawn" type="Node3D"]
+script = ExtResource("1_20tda")
+
+[node name="CharacterBody3D" parent="." instance=ExtResource("2_u6nkc")]

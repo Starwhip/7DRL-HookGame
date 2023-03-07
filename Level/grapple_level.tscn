@@ -1,12 +1,11 @@
-[gd_scene load_steps=20 format=3 uid="uid://biuyv160jvll0"]
+[gd_scene load_steps=19 format=3 uid="uid://cd30aac7e4egb"]
 
-[ext_resource type="Script" path="res://grapple_level.gd" id="1_gk81r"]
-[ext_resource type="Texture2D" uid="uid://rh7tuaacvd1g" path="res://addons/kenney_prototype_textures/green/texture_01.png" id="2_e5xcl"]
-[ext_resource type="Texture2D" uid="uid://cpimo1g6kd2x0" path="res://addons/kenney_prototype_textures/dark/texture_01.png" id="3_h2f8w"]
-[ext_resource type="PackedScene" uid="uid://bpnujqm6j55f3" path="res://player/fpscharacter.tscn" id="4_w4yco"]
-[ext_resource type="PackedScene" uid="uid://co6661ht8s7me" path="res://Blender Files/Wall A.dae" id="5_e1ygs"]
-[ext_resource type="PackedScene" uid="uid://4k4h7skeyjvb" path="res://Blender Files/Platform A.dae" id="6_3anct"]
-[ext_resource type="Script" path="res://Respawn Player.gd" id="6_sdh7v"]
+[ext_resource type="Script" path="res://grapple_level.gd" id="1_gx8e7"]
+[ext_resource type="Texture2D" uid="uid://rh7tuaacvd1g" path="res://addons/kenney_prototype_textures/green/texture_01.png" id="2_h6fl4"]
+[ext_resource type="Texture2D" uid="uid://cpimo1g6kd2x0" path="res://addons/kenney_prototype_textures/dark/texture_01.png" id="3_w7fv5"]
+[ext_resource type="PackedScene" uid="uid://co6661ht8s7me" path="res://Blender Files/Wall A.dae" id="4_vqmxu"]
+[ext_resource type="PackedScene" uid="uid://4k4h7skeyjvb" path="res://Blender Files/Platform A.dae" id="5_cqvhl"]
+[ext_resource type="PackedScene" uid="uid://ch6wu5xmqmvqm" path="res://player/player_spawn_point.tscn" id="6_47suk"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_w6no1"]
 friction = 0.14
@@ -15,7 +14,7 @@ bounce = 0.2
 [sub_resource type="BoxShape3D" id="BoxShape3D_gr2bj"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f8fok"]
-albedo_texture = ExtResource("2_e5xcl")
+albedo_texture = ExtResource("2_h6fl4")
 uv1_triplanar = true
 uv1_world_triplanar = true
 
@@ -23,7 +22,7 @@ uv1_world_triplanar = true
 material = SubResource("StandardMaterial3D_f8fok")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g6phw"]
-albedo_texture = ExtResource("3_h2f8w")
+albedo_texture = ExtResource("3_w7fv5")
 uv1_triplanar = true
 uv1_world_triplanar = true
 
@@ -46,7 +45,7 @@ points = PackedVector3Array(0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 
 
 [node name="GrappleLevel" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.248985, 0)
-script = ExtResource("1_gk81r")
+script = ExtResource("1_gx8e7")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.5, 0.612372, -0.612372, 0, 0.707107, 0.707107, 0.866025, 0.353553, -0.353553, 0, 15, 0)
@@ -162,24 +161,19 @@ skeleton = NodePath("../../Platform5")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platform8"]
 shape = SubResource("CylinderShape3D_uoorj")
 
-[node name="Wall A" parent="." instance=ExtResource("5_e1ygs")]
+[node name="Wall A" parent="." instance=ExtResource("4_vqmxu")]
 transform = Transform3D(1.15686, 0, -0.406112, 0, 1.1369, 0, 1.00398, 0, 0.467953, 34.4174, 0.5, -34.2746)
 
-[node name="Wall A2" parent="." instance=ExtResource("5_e1ygs")]
+[node name="Wall A2" parent="." instance=ExtResource("4_vqmxu")]
 transform = Transform3D(0.381232, 0, -0.924479, 0, 1, 0, 0.924479, 0, 0.381232, -29.6902, 0.5, 35.967)
 
-[node name="Wall A3" parent="." instance=ExtResource("5_e1ygs")]
+[node name="Wall A3" parent="." instance=ExtResource("4_vqmxu")]
 transform = Transform3D(-1.15567, 0, -1.35225, 0, 1.72536, 0, 1.30148, 0, -1.20076, 28.0423, 0.5, 36.3041)
 
-[node name="Platform A" parent="." instance=ExtResource("6_3anct")]
+[node name="Platform A" parent="." instance=ExtResource("5_cqvhl")]
 transform = Transform3D(2.27265, 0, 0, 0, 2.10781, 0, 0, 0, 2.27265, -33.2533, 0.5, -30.5048)
 
-[node name="Platform A2" parent="." instance=ExtResource("6_3anct")]
+[node name="Platform A2" parent="." instance=ExtResource("5_cqvhl")]
 transform = Transform3D(2.27265, 0, 0, 0, 2.10781, 0, 0, 0, 2.27265, 35.8156, 0.5, 0.814754)
 
-[node name="Player Spawn" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.26317, 16.8015, -2.64563)
-script = ExtResource("6_sdh7v")
-
-[node name="CharacterBody3D" parent="Player Spawn" instance=ExtResource("4_w4yco")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+[node name="Player Spawn" parent="." instance=ExtResource("6_47suk")]
