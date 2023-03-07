@@ -78,6 +78,7 @@ script = ExtResource("1_me18d")
 shape = SubResource("CapsuleShape3D_8th22")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0724203, 0)
 mesh = SubResource("CapsuleMesh_fvpf5")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
@@ -89,7 +90,7 @@ playback_default_blend_time = 0.1
 libraries = {
 "": SubResource("AnimationLibrary_i7l13")
 }
-blend_times = [&"run", &"idle", 1.0, &"run", &"spawn", 1.0, &"run", &"die", 1.0, &"run", &"run", 1.0, &"run", &"walk", 1.0]
+blend_times = [&"run", &"idle", 1.0, &"run", &"spawn", 1.0, &"run", &"die", 1.0, &"run", &"walk", 1.0, &"run", &"run", 1.0]
 
 [node name="Stun Timer" type="Timer" parent="."]
 wait_time = 0.5

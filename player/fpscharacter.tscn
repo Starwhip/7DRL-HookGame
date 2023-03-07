@@ -123,4 +123,13 @@ debug_shape_thickness = 5
 
 [node name="LifeTracker" parent="." instance=ExtResource("7_r5nq6")]
 
+[node name="StunTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
 [connection signal="hurt" from="." to="HUD" method="_on_character_body_3d_hurt"]
+[connection signal="stun" from="." to="head/Grapple Hook" method="_on_character_body_3d_stun"]
+[connection signal="stun" from="." to="HUD" method="_on_character_body_3d_stun"]
+[connection signal="timeout" from="StunTimer" to="." method="_on_stun_timer_timeout"]
+[connection signal="timeout" from="StunTimer" to="head/Grapple Hook" method="_on_stun_timer_timeout"]
+[connection signal="timeout" from="StunTimer" to="HUD" method="_on_stun_timer_timeout"]

@@ -28,7 +28,7 @@ bg_color = Color(0.858824, 0.501961, 0, 1)
 bg_color = Color(0.858824, 0.501961, 0, 1)
 
 [sub_resource type="Gradient" id="Gradient_kbxyn"]
-colors = PackedColorArray(0, 0, 0, 0, 1, 0.207843, 0, 0.380392)
+colors = PackedColorArray(0, 0, 0, 0, 0, 0.567057, 0.982163, 0.380392)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_ssfsj"]
 gradient = SubResource("Gradient_kbxyn")
@@ -145,6 +145,12 @@ Right Mouse - Reel In
 CTRL - Reel Out"
 
 [node name="Hurt" type="TextureRect" parent="."]
+visible = false
+offset_right = 1152.0
+offset_bottom = 646.0
+texture = SubResource("GradientTexture2D_ssfsj")
+
+[node name="Stun" type="TextureRect" parent="."]
 visible = false
 offset_right = 1152.0
 offset_bottom = 646.0

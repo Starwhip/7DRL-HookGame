@@ -115,14 +115,19 @@ func _on_bounce_body_entered(body):
 	var bounce = global_transform.origin.direction_to(body.global_transform.origin) + Vector3(0,1,0)
 	var momentum = (body.velocity - velocity).length() * bounce
 	var impulse = 7
-	var loser = 3
-	var winner = 0.1
+	var loser = 1.5
+	var winner = 0.25
 	#print(bounce)
 	#print(momentum)
 	#var force = bounce * momentum
+	
+	#Enemy wins
 	if velocity.length() > body.velocity.length():
 		body.velocity += (-global_transform.basis.z * impulse) + (momentum * loser)
 		velocity += (-body.global_transform.basis.z * impulse) - (momentum * winner)
+		body.pushed_by_enemy(self)
+	
+	#Player wins
 	else:
 		velocity += (-body.global_transform.basis.z * impulse) - (momentum * loser)
 		body.velocity += (-global_transform.basis.z * impulse) + (momentum * winner)

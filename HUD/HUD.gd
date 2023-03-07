@@ -13,6 +13,8 @@ extends CanvasLayer
 # Called when the node enters the scene tree for the first time.
 
 @onready var hurt = $Hurt
+@onready var stun = $Stun
+
 func _ready():
 	print (health_bar.value)
 	pass # Replace with function body.
@@ -35,3 +37,9 @@ func _on_timer_timeout():
 func _on_character_body_3d_hurt():
 	hurt.show()
 	$Timer.start()
+	
+func _on_character_body_3d_stun():
+	stun.show()
+
+func _on_stun_timer_timeout():
+	stun.hide()

@@ -22,7 +22,7 @@ var WALL_JUMPS = 1
 const GRAV_JUMP_MULT = 0.75
 
 var up_vector = Vector3(0,1,0)
-
+var stunned = false
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -38,7 +38,19 @@ func set_up_vector(v):
 		v = Vector3.UP
 	
 	up_vector = up_vector.lerp(v,0.025)
+
+func pushed_by_enemy(enemy):
+	print(enemy)
+	$StunTimer.start()
+	stun.emit()
+	stunned = true
 	
+func _on_stun_timer_timeout():
+	print("Time done")
+	stunned = false
+
+signal stun()
+
 signal dead()
 
 signal hurt()
@@ -80,24 +92,7 @@ func _physics_process(delta):
 	look_at(global_position - transform.basis.x.cross(up_vector), up_vector)
 	#print(global_rotation)
 	
-	# Handle Jump.
-	if is_on_floor():
-		num_jumps = MAX_JUMPS
-	
-	elif is_on_wall():
-		if(num_jumps < WALL_JUMPS): #Restore jumps on wall contact
-			num_jumps = WALL_JUMPS
-		
-	if Input.is_action_just_pressed("Jump") or Input.is_action_pressed("Jump") and (is_on_floor() or is_on_wall()):
-		jump()
-
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var input_dir = Input.get_vector("Left", "Right", "Forward", "Back")
-	
-	var direction = Vector3(input_dir.x, 0, input_dir.y).normalized()
-	
-	#print ("Direction: " + str(direction))
+	#Handle friction
 	var friction
 	if is_on_floor():
 		friction = Vector3(SURF_FRICTION, AIR_FRICTION, SURF_FRICTION)
@@ -109,28 +104,47 @@ func _physics_process(delta):
 	velocity.y = move_toward(velocity.y, 0, friction.y * delta)
 	velocity.z = move_toward(velocity.z, 0, friction.z * delta)
 	
-	if direction:
-		var speed = SPRINT_SPEED
-		var acceleration = ACCEL * delta
-		var desired_direction = global_transform.basis * direction
-		var desired_velocity = desired_direction * speed
-		#var nudge_vector = (transform.basis * desired_velocity) - velocity
-		velocity.x = move_toward(velocity.x, desired_velocity.x, acceleration)
-		velocity.z = move_toward(velocity.z, desired_velocity.z, acceleration)
-		
-		#velocity += nudge_vector
-		#velocity.x += clamp(desired_velocity.x, -acceleration, acceleration)
-		#velocity.z += clamp(desired_velocity.z, -acceleration, acceleration)
-		velocity.y += clamp(desired_direction.y * acceleration, -acceleration, acceleration)
-		#print("Velocity: " + str(velocity) + " Mag " + str(velocity.length()))
-		
 	# Add the gravity.
 	if not is_on_floor():
 		if Input.is_action_pressed("Jump") and velocity.y > 0:
 			velocity.y -= gravity * delta * GRAV_JUMP_MULT
 		else:
 			velocity.y -= gravity * delta
+	
+	if not stunned:
+		# Handle Jump.
+		if is_on_floor():
+			num_jumps = MAX_JUMPS
+		
+		elif is_on_wall():
+			if(num_jumps < WALL_JUMPS): #Restore jumps on wall contact
+				num_jumps = WALL_JUMPS
+			
+		if Input.is_action_just_pressed("Jump") or Input.is_action_pressed("Jump") and (is_on_floor() or is_on_wall()):
+			jump()
+
+		# Get the input direction and handle the movement/deceleration.
+		var input_dir = Input.get_vector("Left", "Right", "Forward", "Back")
+		var direction = Vector3(input_dir.x, 0, input_dir.y).normalized()
+		
+		if direction:
+			var speed = SPRINT_SPEED
+			var acceleration = ACCEL * delta
+			var desired_direction = global_transform.basis * direction
+			var desired_velocity = desired_direction * speed
+			#var nudge_vector = (transform.basis * desired_velocity) - velocity
+			velocity.x = move_toward(velocity.x, desired_velocity.x, acceleration)
+			velocity.z = move_toward(velocity.z, desired_velocity.z, acceleration)
+			
+			#velocity += nudge_vector
+			#velocity.x += clamp(desired_velocity.x, -acceleration, acceleration)
+			#velocity.z += clamp(desired_velocity.z, -acceleration, acceleration)
+			velocity.y += clamp(desired_direction.y * acceleration, -acceleration, acceleration)
+			#print("Velocity: " + str(velocity) + " Mag " + str(velocity.length()))
 		
 	move_and_slide()
 	#print (velocity)
+
+
+
 

@@ -43,26 +43,27 @@ func _ready():
 func _process(delta):
 	$"../../HUD".rope_length = (max_length - get_rope_length()) / max_length
 	
-	match control_mode:
-		GRAPPLE_MODE.HOLD:
-			if Input.is_action_pressed("Fire Grapple"):
-				if not (hooked or firing_hook):
-					fire_hook()
-			else:
-				if firing_hook:
-					reset_hook(true)
-				elif hooked:
-					reset_hook(false)
-					
-		GRAPPLE_MODE.CLICK:
-			if Input.is_action_just_pressed("Fire Grapple"):
-				if not (hooked or firing_hook):
-					fire_hook()
+	if($"../../StunTimer".is_stopped()):
+		match control_mode:
+			GRAPPLE_MODE.HOLD:
+				if Input.is_action_pressed("Fire Grapple"):
+					if not (hooked or firing_hook):
+						fire_hook()
 				else:
 					if firing_hook:
 						reset_hook(true)
 					elif hooked:
 						reset_hook(false)
+						
+			GRAPPLE_MODE.CLICK:
+				if Input.is_action_just_pressed("Fire Grapple"):
+					if not (hooked or firing_hook):
+						fire_hook()
+					else:
+						if firing_hook:
+							reset_hook(true)
+						elif hooked:
+							reset_hook(false)
 
 func get_rope_length():
 	var len = rope_length
@@ -251,3 +252,8 @@ func check_grapple_occlusion():
 			hook_pos = hook_point_array.pop_back()
 			rope_length += rope_length_array.pop_back()
 
+func _on_character_body_3d_stun():
+	if(hooked == true):
+		reset_hook(false)
+	else:
+		reset_hook(true)
