@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://player/RopeRender.gd" id="3_gyt40"]
 [ext_resource type="ArrayMesh" uid="uid://cp0x54aycbb7r" path="res://assets/voxel/Grapple Hook.obj" id="3_vbrex"]
 [ext_resource type="ArrayMesh" uid="uid://c2o23vtjgpvtn" path="res://assets/voxel/Grapple Gun.obj" id="5_oqawy"]
-[ext_resource type="PackedScene" uid="uid://k4e8cgjgtper" path="res://player/life_tracker.tscn" id="7_r5nq6"]
+[ext_resource type="PackedScene" path="res://player/life_tracker.tscn" id="7_r5nq6"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0umyk"]
 height = 1.5
@@ -84,7 +84,8 @@ skeleton = NodePath("../../..")
 [node name="Node3D" type="Node3D" parent="head/Grapple Hook/GrappleGun"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.445742, 0, 0)
 script = ExtResource("3_gyt40")
-line_resolution = 30
+line_radius = 0.075
+line_resolution = 16
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="head/Grapple Hook/GrappleGun/Node3D"]
 snap = 0.0001

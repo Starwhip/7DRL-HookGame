@@ -41,7 +41,7 @@ data = PackedVector3Array(-3.6, 0, -3.6, -3.6, 0.2, 3.4, -3.6, 0, 3.6, -3.6, 0, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.66726, 0, 2.35845)
 
 [node name="Enemy Spawner" parent="." instance=ExtResource("1_6mpgn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.8263, 27.5475, -8.20695)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.4486, 27.5475, -34.2632)
 
 [node name="Player Spawn" parent="." instance=ExtResource("1_mhppy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.13846, 32.4989, -4.72213)
@@ -56,6 +56,7 @@ camera_attributes = SubResource("CameraAttributesPractical_gompv")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_85b7m")
+enabled = false
 
 [node name="Monu2" type="MeshInstance3D" parent="NavigationRegion3D"]
 transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 0, 0, 0)
@@ -67,15 +68,22 @@ surface_material_override/0 = ExtResource("3_3ac15")
 transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 visible = false
 shape = SubResource("ConcavePolygonShape3D_l1bel")
 
 [node name="Hazard" parent="." instance=ExtResource("5_s08ac")]
-transform = Transform3D(0.753449, 0, -0.657507, 0, 1, 0, 0.657507, 0, 0.753449, 13.0486, 24, -37.8264)
+transform = Transform3D(-0.204615, 0, -1.45463, 0, 1.41256, 0, 7.69085, 0, -0.0387006, 13.0486, 24, -13.9533)
 
-[node name="Hazard2" parent="." instance=ExtResource("5_s08ac")]
-transform = Transform3D(-0.526362, 0, -0.85026, 0, 1, 0, 0.85026, 0, -0.526362, -37.8154, 24, -27.4732)
+[node name="Hazard4" parent="." instance=ExtResource("5_s08ac")]
+transform = Transform3D(-7.61699, 0, -0.204806, 0, 1.41256, 0, 1.08284, 0, -1.44066, -10.0035, 24, 11.2358)
 
-[node name="Hazard3" parent="." instance=ExtResource("5_s08ac")]
-transform = Transform3D(0.753449, 0, -0.657507, 0, 1, 0, 0.657507, 0, 0.753449, -36.7599, 24, 13.6356)
+[node name="Hazard5" parent="." instance=ExtResource("5_s08ac")]
+transform = Transform3D(51.0168, 0, 0, 0, -2.13085e-06, 1.00001, 0, -48.7481, -4.37119e-08, 2.86904, -17.4657, 130.014)
+
+[node name="Enemy Spawner2" parent="." instance=ExtResource("1_6mpgn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.9527, 27.5475, -19.6915)
+time = 20
+
+[node name="Enemy Spawner3" parent="." instance=ExtResource("1_6mpgn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.7647, 27.5475, -31.7058)
+time = 30

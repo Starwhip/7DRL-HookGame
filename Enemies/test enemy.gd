@@ -3,7 +3,7 @@ extends CharacterBody3D
 const ACCEL = 15
 const SPEED = 5
 const CHARGE_ACCEL = 40
-const CHARGE_SPEED = 35
+const CHARGE_SPEED = 15
 const JUMP_VELOCITY = 4.5
 const FRICTION = 0.5
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -113,14 +113,19 @@ func _on_detector_body_exited(body):
 
 func _on_bounce_body_entered(body):
 	var bounce = global_transform.origin.direction_to(body.global_transform.origin) + Vector3(0,1,0)
-	var momentum = (body.velocity - velocity).length() * 1
+	var momentum = (body.velocity - velocity).length() * bounce
+	var impulse = 7
+	var loser = 3
+	var winner = 0.1
 	#print(bounce)
 	#print(momentum)
-	var force = bounce * momentum
+	#var force = bounce * momentum
 	if velocity.length() > body.velocity.length():
-		body.velocity += force * 2
+		body.velocity += (-global_transform.basis.z * impulse) + (momentum * loser)
+		velocity += (-body.global_transform.basis.z * impulse) - (momentum * winner)
 	else:
-		velocity -= force * 3
+		velocity += (-body.global_transform.basis.z * impulse) - (momentum * loser)
+		body.velocity += (-global_transform.basis.z * impulse) + (momentum * winner)
 		state = STUNNED
 		stun_timer.start()
 	
