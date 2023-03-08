@@ -25,15 +25,16 @@ var in_range = false
 
 var state = IDLE
 @onready var stun_timer = $"Stun Timer"
+@onready var attacked_timer = $"Attacked Timer"
 
 var path = []
 var path_node = 0
 
 var last_state = -5
 
-var hit_points = 1
+var hit_points = 3
 
-@export var mass = 1
+@export var mass = 75
 
 func damage():
 	hit_points -= 1
@@ -43,8 +44,15 @@ func damage():
 signal die_signal()
 
 func die():
-	die_signal.emit()	
+	die_signal.emit()
+	if(not attacked_timer.is_stopped()):
+		killed()
+		
 	queue_free()
+
+func killed():
+	print("I was killed")
+	pass
 	
 func _process(delta):
 	if last_state != state:
@@ -120,9 +128,6 @@ func _on_bounce_body_entered(body):
 	#var bounce = global_transform.origin.direction_to(body.global_transform.origin) + Vector3(0,1,0)
 	var body_momentum = body.get_momentum()
 	var momentum = get_momentum()
-	var impulse = 7
-	var loser = 1
-	var winner = 0.25
 	#print(bounce)
 	#print(momentum)
 	#var force = bounce * momentum
@@ -146,6 +151,7 @@ func get_mass():
 	return mass
 
 func stun(time):
+	attacked_timer.start()
 	state = STUNNED
 	stun_timer.wait_time = time
 	stun_timer.start()

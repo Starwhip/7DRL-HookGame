@@ -114,6 +114,10 @@ shape = SubResource("CapsuleShape3D_2n5pl")
 
 [node name="grapple point" type="Node3D" parent="."]
 
+[node name="Attacked Timer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
 [connection signal="timeout" from="Stun Timer" to="." method="_on_timer_timeout"]
 [connection signal="body_entered" from="Detector" to="." method="_on_detector_body_entered"]
 [connection signal="body_exited" from="Detector" to="." method="_on_detector_body_exited"]

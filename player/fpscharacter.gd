@@ -5,7 +5,7 @@ const SPRINT_SPEED = 20
 const WALK_SPEED = 10
 const SURF_FRICTION = 1.7
 const SLIDE_FRICTION = 0.2
-const AIR_FRICTION = 0.5
+const AIR_FRICTION = 0.25
 const ACCEL = 1
 const JUMP_VELOCITY = 12
 
@@ -30,7 +30,7 @@ var mouse_sensitivity = 0.2
 @onready var head = $head
 @onready var hitbox = $CollisionShape3D
 
-@export var mass = 1
+@export var mass = 100
 
 func set_up_vector(v):
 	var ang_error = rad_to_deg(Vector3.UP.angle_to(v))
@@ -164,9 +164,9 @@ func _physics_process(delta):
 				
 				velocity += accel_speed * desired_direction
 				
-				print("Current Speed "+str(current_speed))
-				print("Add Speed "+str(add_speed))
-				print(accel_speed * desired_direction)
+				#print("Current Speed "+str(current_speed))
+				#print("Add Speed "+str(add_speed))
+				#print(accel_speed * desired_direction)
 				
 				#velocity.x = move_toward(velocity.x, desired_velocity.x, acceleration)
 				#velocity.z = move_toward(velocity.z, desired_velocity.z, acceleration)

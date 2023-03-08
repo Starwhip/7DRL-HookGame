@@ -43,7 +43,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.66726, 0, 2.35845)
 
 [node name="Enemy Spawner" parent="." instance=ExtResource("1_6mpgn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.4486, 27.5475, -34.2632)
-time = 50
+time = 15
 
 [node name="Player Spawn" parent="." instance=ExtResource("1_mhppy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.13846, 32.4989, -4.72213)

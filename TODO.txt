@@ -4,6 +4,8 @@ DONE--Staggered enemies are knocked back
 DONE--If you are staggered, you are knocked back
 --Design enemy types
 
+Movement:
+	Dash/Dodge?
 
 Items:
 -Grapple Length up, Grapple Jolt up, Grapple Launch up, Grapple Reel up
