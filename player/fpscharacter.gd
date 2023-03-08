@@ -30,6 +30,8 @@ var mouse_sensitivity = 0.2
 @onready var head = $head
 @onready var hitbox = $CollisionShape3D
 
+@export var mass = 1
+
 func set_up_vector(v):
 	var ang_error = rad_to_deg(Vector3.UP.angle_to(v))
 	
@@ -41,14 +43,27 @@ func set_up_vector(v):
 
 func pushed_by_enemy(enemy):
 	print(enemy)
-	$StunTimer.start()
-	stun.emit()
-	stunned = true
+	var deltaV = (get_momentum() - enemy.get_momentum()) / get_mass()
+	
+	if get_momentum().length() < enemy.get_momentum().length():
+		$StunTimer.start()
+		stun.emit()
+		stunned = true
+	else: 
+		deltaV = deltaV * 0.25
+	
+	velocity -= deltaV
 	
 func _on_stun_timer_timeout():
 	print("Time done")
 	stunned = false
 
+func get_mass():
+	return mass
+
+func get_momentum():
+	return mass * velocity
+	
 signal stun()
 
 signal dead()

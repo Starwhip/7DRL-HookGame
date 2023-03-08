@@ -7,6 +7,7 @@ extends CanvasLayer
 @onready var stagger_bar = $HP/Stagger
 
 @export var rope_length = 1.0
+var max_length = 1.0
 @onready var rope_bar = $"Center Screen/Crosshair/Rope Length"
 
 @export var bar_rate = 5
@@ -28,7 +29,7 @@ func _process(delta):
 	stagger_bar.value = lerpf(stagger_bar.value, stagger_points, bar_rate * delta)
 
 	rope_bar.value = lerpf(rope_bar.value, rope_length, bar_rate * delta)
-	
+	rope_bar.max_value = max_length	
 func _on_timer_timeout():
 	hurt.hide()
 	pass # Replace with function body.

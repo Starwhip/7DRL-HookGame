@@ -33,12 +33,17 @@ var last_state = -5
 
 var hit_points = 1
 
+@export var mass = 1
+
 func damage():
 	hit_points -= 1
 	if hit_points <= 0:
 		die()
 
+signal die_signal()
+
 func die():
+	die_signal.emit()	
 	queue_free()
 	
 func _process(delta):
@@ -112,28 +117,41 @@ func _on_detector_body_exited(body):
 	state = IDLE
 
 func _on_bounce_body_entered(body):
-	var bounce = global_transform.origin.direction_to(body.global_transform.origin) + Vector3(0,1,0)
-	var momentum = (body.velocity - velocity).length() * bounce
+	#var bounce = global_transform.origin.direction_to(body.global_transform.origin) + Vector3(0,1,0)
+	var body_momentum = body.get_momentum()
+	var momentum = get_momentum()
 	var impulse = 7
-	var loser = 1.5
+	var loser = 1
 	var winner = 0.25
 	#print(bounce)
 	#print(momentum)
 	#var force = bounce * momentum
 	
-	#Enemy wins
-	if velocity.length() > body.velocity.length():
-		body.velocity += (-global_transform.basis.z * impulse) + (momentum * loser)
-		velocity += (-body.global_transform.basis.z * impulse) - (momentum * winner)
-		body.pushed_by_enemy(self)
+	var deltaV = (momentum - body_momentum) / mass
+	body.pushed_by_enemy(self)
 	
-	#Player wins
+	#Lose momentum contest
+	if body_momentum.length() > momentum.length():
+		stun(3)
 	else:
-		velocity += (-body.global_transform.basis.z * impulse) - (momentum * loser)
-		body.velocity += (-global_transform.basis.z * impulse) + (momentum * winner)
-		state = STUNNED
-		stun_timer.start()
+		deltaV = deltaV
+		stun(1)
 	
+	velocity -= deltaV
+	
+func get_momentum():
+	return mass * velocity
+	
+func get_mass():
+	return mass
 
-
-
+func stun(time):
+	state = STUNNED
+	stun_timer.wait_time = time
+	stun_timer.start()
+	
+func get_grapple_point():
+	return $"grapple point".global_position
+	
+func set_grapple_point(point):
+	$"grapple point".global_position = point

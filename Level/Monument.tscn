@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://bvw0ti00uep20"]
+[gd_scene load_steps=13 format=3 uid="uid://bvw0ti00uep20"]
 
 [ext_resource type="ArrayMesh" uid="uid://deerw2a4uvpb5" path="res://assets/voxel/monu2.obj" id="1_3yphd"]
 [ext_resource type="PackedScene" uid="uid://b1jc6ad6ha22t" path="res://Enemies/Enemy Spawner.tscn" id="1_6mpgn"]
 [ext_resource type="PackedScene" uid="uid://ch6wu5xmqmvqm" path="res://player/player_spawn_point.tscn" id="1_mhppy"]
 [ext_resource type="Material" uid="uid://ch0s2wkv7ypkf" path="res://Level/materials/Monument.tres" id="3_3ac15"]
 [ext_resource type="PackedScene" uid="uid://k6d8hwcucb4d" path="res://Level/Components/hazard.tscn" id="5_s08ac"]
+[ext_resource type="PackedScene" uid="uid://ba0efyoqj13y8" path="res://Blender Files/Vertical Bar A.dae" id="6_x6otl"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_3gult"]
 
@@ -42,6 +43,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.66726, 0, 2.35845)
 
 [node name="Enemy Spawner" parent="." instance=ExtResource("1_6mpgn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.4486, 27.5475, -34.2632)
+time = 50
 
 [node name="Player Spawn" parent="." instance=ExtResource("1_mhppy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.13846, 32.4989, -4.72213)
@@ -80,10 +82,5 @@ transform = Transform3D(-7.61699, 0, -0.204806, 0, 1.41256, 0, 1.08284, 0, -1.44
 [node name="Hazard5" parent="." instance=ExtResource("5_s08ac")]
 transform = Transform3D(51.0168, 0, 0, 0, -2.13085e-06, 1.00001, 0, -48.7481, -4.37119e-08, 2.86904, -17.4657, 130.014)
 
-[node name="Enemy Spawner2" parent="." instance=ExtResource("1_6mpgn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.9527, 27.5475, -19.6915)
-time = 20
-
-[node name="Enemy Spawner3" parent="." instance=ExtResource("1_6mpgn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.7647, 27.5475, -31.7058)
-time = 30
+[node name="Vertical Bar A" parent="." instance=ExtResource("6_x6otl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.7896, 24, -15.2778)
