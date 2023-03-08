@@ -210,10 +210,10 @@ func _physics_process(delta):
 			tension = tension * (player_multiplier)
 			
 			var enemy_tension_vector = Vector3()
-			if (hook_point_array.size() > 0):
-				enemy_tension_vector = (grapple_point.global_position - hook_point_array[0]).normalized()
+			if (hook_point_array.size() > 1):
+				enemy_tension_vector = (hook_point_array[0] - hook_point_array[1]).normalized()
 			else:
-				enemy_tension_vector = (grapple_point.global_position - global_position).normalized()
+				enemy_tension_vector = (hook_point_array[0] - global_position).normalized()
 				
 			var enemy_tension = enemy_tension_vector * abs(spring_comp) * enemy_multiplier
 			hooked_enemy.velocity -= enemy_tension * delta
