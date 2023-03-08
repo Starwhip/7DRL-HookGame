@@ -27,6 +27,8 @@ corner_radius_bottom_left = 25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omper"]
 bg_color = Color(0.282353, 0.709804, 0, 1)
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3j25i"]
 bg_color = Color(0.858824, 0.501961, 0, 1)
@@ -122,12 +124,13 @@ script = ExtResource("3_7t37g")
 
 [node name="Left" type="ProgressBar" parent="HP/Health"]
 layout_mode = 0
-offset_left = -139.0
-offset_right = 1.0
-offset_bottom = 27.0
+offset_left = -6.10352e-05
+offset_top = 27.0
+offset_right = 140.0
+offset_bottom = 54.0
+rotation = 3.14159
 theme_override_styles/fill = SubResource("StyleBoxFlat_omper")
 rounded = true
-fill_mode = 1
 show_percentage = false
 
 [node name="Stamina" type="ProgressBar" parent="HP"]
