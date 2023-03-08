@@ -132,10 +132,10 @@ func _on_bounce_body_entered(body):
 	
 	#Lose momentum contest
 	if body_momentum.length() > momentum.length():
-		stun(3)
+		stun(1.5)
 	else:
 		deltaV = deltaV
-		stun(1)
+		stun(0.75)
 	
 	velocity -= deltaV
 	

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cbwtajho43dhg"]
+[gd_scene load_steps=13 format=3 uid="uid://cbwtajho43dhg"]
 
 [ext_resource type="Texture2D" uid="uid://t8dyr1fvrhy6" path="res://HUD/crosshair018.png" id="1_7jad4"]
 [ext_resource type="Script" path="res://HUD/HUD.gd" id="1_kqnfs"]
@@ -28,13 +28,23 @@ bg_color = Color(0.858824, 0.501961, 0, 1)
 bg_color = Color(0.858824, 0.501961, 0, 1)
 
 [sub_resource type="Gradient" id="Gradient_kbxyn"]
-colors = PackedColorArray(0, 0, 0, 0, 0, 0.567057, 0.982163, 0.380392)
+offsets = PackedFloat32Array(0, 0.707581)
+colors = PackedColorArray(0, 0, 0, 0, 0.803042, 0, 0.162175, 0.380392)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_ssfsj"]
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gcpau"]
 gradient = SubResource("Gradient_kbxyn")
 fill = 1
 fill_from = Vector2(0.474359, 0.517094)
 fill_to = Vector2(0.0042735, 1)
+
+[sub_resource type="Gradient" id="Gradient_8dkoj"]
+offsets = PackedFloat32Array(0, 0.913357)
+colors = PackedColorArray(0, 0, 0, 0, 0.0778749, 0.315617, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mhnee"]
+gradient = SubResource("Gradient_8dkoj")
+fill = 1
+fill_from = Vector2(0.5, 0.529915)
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_kqnfs")
@@ -148,16 +158,16 @@ CTRL - Reel Out"
 visible = false
 offset_right = 1152.0
 offset_bottom = 646.0
-texture = SubResource("GradientTexture2D_ssfsj")
+texture = SubResource("GradientTexture2D_gcpau")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
 
 [node name="Stun" type="TextureRect" parent="."]
 visible = false
 offset_right = 1152.0
 offset_bottom = 646.0
-texture = SubResource("GradientTexture2D_ssfsj")
-
-[node name="Timer" type="Timer" parent="."]
-wait_time = 0.5
-one_shot = true
+texture = SubResource("GradientTexture2D_mhnee")
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -41,7 +41,7 @@ func _ready():
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(delta):	
 	$"../../HUD".rope_length = get_rope_length()
 	$"../../HUD".max_length = max_length
 	
@@ -132,6 +132,7 @@ func fire_hook():
 	reel_length = 0
 	grapple_point.global_position = $GrappleGun/GrappleHook.global_position
 	hook_pos = grapple_point.global_position
+	hook_init_pos = hook_pos
 	hook_velocity = -global_transform.basis.z.normalized() * hook_launch_velocity
 	grapple_point.show()
 	#print(rope_length)
@@ -163,10 +164,10 @@ func _physics_process(delta):
 			hook_pos = initial_hook_point
 		
 	if firing_hook:
-		hook_pos += hook_velocity * delta
+		hook_init_pos += hook_velocity * delta
 		hook_velocity += gravity * delta
 		
-		grapple_point.global_position = hook_pos
+		grapple_point.global_position = hook_init_pos
 		var rope_length = get_rope_length()
 		if(rope_length > max_length):
 			reset_hook(true)
@@ -230,6 +231,7 @@ func _physics_process(delta):
 				
 			var enemy_tension = enemy_tension_vector * abs(spring_comp) * enemy_multiplier
 			hooked_enemy.velocity -= enemy_tension * delta
+			hooked_enemy.stun(0.1)
 		
 		print(stretch_length)
 		print("Tension: " + str(tension))
@@ -258,7 +260,6 @@ func get_grapple_point():
 			hooked_enemy.set_grapple_point(raycast.get_collision_point())
 			hooked_enemy.die_signal.connect(_on_enemy_death)
 			print("Grapple hooked enemy: " +str(hooked_enemy))
-			hooked_enemy.stun(5)
 		else:
 			hooked_enemy = null
 			
