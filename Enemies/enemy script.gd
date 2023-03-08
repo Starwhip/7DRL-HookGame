@@ -12,6 +12,9 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var raycast = $RayCast3D
 @onready var animplayer = $AnimationPlayer
 
+@export var max_hitpoints = 20
+@export var hitpoints = 20
+
 enum {
 	SPAWN,
 	DIE,
@@ -32,13 +35,19 @@ var path_node = 0
 
 var last_state = -5
 
-var hit_points = 3
-
+var can_attack = false
 @export var mass = 75
 
-func damage():
-	hit_points -= 1
-	if hit_points <= 0:
+func get_max_hp():
+	return max_hitpoints
+
+func get_hp():
+	return hitpoints
+	
+func damage(damage):
+	hitpoints -= damage
+	print(hitpoints)
+	if hitpoints <= 0:
 		die()
 
 signal die_signal()
@@ -71,9 +80,12 @@ func _process(delta):
 				animplayer.play("run")
 
 func _physics_process(delta):
+	if(can_attack and $"Attack Delay Timer".is_stopped()):
+		attack(target)
+		$"Attack Delay Timer".start()
+		
 	#print()
 	var nav_target = target.global_transform.origin
-	
 	
 	if is_on_floor():
 		velocity.x -= velocity.x * FRICTION * delta
@@ -106,7 +118,15 @@ func _physics_process(delta):
 		look_at(nav_target +  + Vector3(0,1,0))
 	
 	velocity.y -= gravity * delta
+	var last_velocity = velocity
 	move_and_slide()
+	
+	for i in get_slide_collision_count():
+		var body = get_slide_collision(i).get_collider()
+		var angle = get_slide_collision(i).get_normal()
+		
+		if body.get_collision_layer_value(5):
+			body.do_damage(self, last_velocity, angle)
 
 func _on_timer_timeout():
 	if(in_range):
@@ -125,6 +145,12 @@ func _on_detector_body_exited(body):
 	state = IDLE
 
 func _on_bounce_body_entered(body):
+	can_attack = true
+
+func _on_bounce_body_exited(body):
+	can_attack = false
+	
+func attack(body):
 	#var bounce = global_transform.origin.direction_to(body.global_transform.origin) + Vector3(0,1,0)
 	var body_momentum = body.get_momentum()
 	var momentum = get_momentum()
@@ -161,3 +187,5 @@ func get_grapple_point():
 	
 func set_grapple_point(point):
 	$"grapple point".global_position = point
+
+

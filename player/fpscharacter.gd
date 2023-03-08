@@ -70,14 +70,17 @@ signal dead()
 
 signal hurt()
 
-func damage():
-	print("ow")
-	$LifeTracker.hit_points -= 25
-	hurt.emit()
-	
-	if $LifeTracker.hit_points <= 0:
-		dead.emit()
-		$LifeTracker.reset()
+func damage(damage):
+	if $InvincibilityTimer.is_stopped():
+		print("ow")
+		$LifeTracker.hit_points -= damage
+		hurt.emit()
+		
+		$InvincibilityTimer.start()
+		
+		if $LifeTracker.hit_points <= 0:
+			dead.emit()
+			$LifeTracker.reset()
 	
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -115,12 +118,10 @@ func _physics_process(delta):
 	else:
 		friction = Vector3(AIR_FRICTION, AIR_FRICTION, AIR_FRICTION)
 	
+	#Add friction
 	velocity.x -= velocity.x * friction.x * delta
 	velocity.y -= velocity.y * friction.y * delta
 	velocity.z -= velocity.z * friction.z * delta
-	#velocity.x = move_toward(velocity.x, 0, friction.x * delta)
-	#velocity.y = move_toward(velocity.y, 0, friction.y * delta)
-	#velocity.z = move_toward(velocity.z, 0, friction.z * delta)
 	
 	# Add the gravity.
 	if not is_on_floor():
@@ -148,10 +149,10 @@ func _physics_process(delta):
 		
 		
 		if direction:
+			#Quake "inspired" movement
 			var speed = SPRINT_SPEED
 			var desired_direction = (global_transform.basis * direction).normalized()
 			var desired_speed = speed
-			#var nudge_vector = (transform.basis * desired_velocity) - velocity
 			
 			var current_speed = velocity.dot(desired_direction)
 			
@@ -163,22 +164,17 @@ func _physics_process(delta):
 					accel_speed = add_speed
 				
 				velocity += accel_speed * desired_direction
-				
-				#print("Current Speed "+str(current_speed))
-				#print("Add Speed "+str(add_speed))
-				#print(accel_speed * desired_direction)
-				
-				#velocity.x = move_toward(velocity.x, desired_velocity.x, acceleration)
-				#velocity.z = move_toward(velocity.z, desired_velocity.z, acceleration)
-				
-				#velocity += nudge_vector
-				#velocity.x += clamp(desired_velocity.x, -acceleration, acceleration)
-				#velocity.z += clamp(desired_velocity.z, -acceleration, acceleration)
-				#velocity.y += clamp(desired_direction.y * acceleration, -acceleration, acceleration)
-				#print("Velocity: " + str(velocity) + " Mag " + str(velocity.length()))
-		
+	
+	var last_velocity = velocity
 	move_and_slide()
-	#print (velocity)
+	
+	for i in get_slide_collision_count():
+		var body = get_slide_collision(i).get_collider()
+		var angle = get_slide_collision(i).get_normal()
+		
+		if body.get_collision_layer_value(5):
+			body.do_damage(self, last_velocity, angle)
+			
 
 
 

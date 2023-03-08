@@ -111,7 +111,7 @@ func reset_hook(missed):
 	raycast.rotation = Vector3(0,0,0)
 	raycast.target_position = Vector3(0,0,0)
 
-	hook_point_array = []
+	hook_point_array = [global_position]
 	
 	grapple_point.hide()
 	firing_hook = false
@@ -217,7 +217,7 @@ func _physics_process(delta):
 				
 			var enemy_tension = enemy_tension_vector * abs(spring_comp) * enemy_multiplier
 			hooked_enemy.velocity -= enemy_tension * delta
-			#hooked_enemy.stun(2)
+			hooked_enemy.stun(2)
 		
 		#print(stretch_length)
 		#print("Tension: " + str(tension))

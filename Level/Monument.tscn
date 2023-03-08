@@ -1,7 +1,7 @@
 [gd_scene load_steps=15 format=3 uid="uid://bvw0ti00uep20"]
 
 [ext_resource type="ArrayMesh" uid="uid://deerw2a4uvpb5" path="res://assets/voxel/monu2.obj" id="1_3yphd"]
-[ext_resource type="PackedScene" uid="uid://b1jc6ad6ha22t" path="res://Enemies/Enemy Spawner.tscn" id="1_6mpgn"]
+[ext_resource type="PackedScene" path="res://Enemies/Enemy Spawner.tscn" id="1_6mpgn"]
 [ext_resource type="PackedScene" uid="uid://ch6wu5xmqmvqm" path="res://player/player_spawn_point.tscn" id="1_mhppy"]
 [ext_resource type="Material" uid="uid://ch0s2wkv7ypkf" path="res://Level/materials/Monument.tres" id="3_3ac15"]
 [ext_resource type="PackedScene" uid="uid://k6d8hwcucb4d" path="res://Level/Components/hazard.tscn" id="5_s08ac"]
