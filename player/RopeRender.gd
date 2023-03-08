@@ -27,7 +27,6 @@ func _process(delta):
 		var end = to_local(hook_point.global_position)
 		var curve = Curve3D.new() 
 		curve.add_point(start)
-		curve.add_point(to_local($"../..".hook_pos))
 		
 		for i in points.size()-1:
 			curve.add_point(self.to_local(points.pop_back()))

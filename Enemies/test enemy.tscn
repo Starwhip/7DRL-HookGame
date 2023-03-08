@@ -90,7 +90,7 @@ playback_default_blend_time = 0.1
 libraries = {
 "": SubResource("AnimationLibrary_i7l13")
 }
-blend_times = [&"run", &"idle", 1.0, &"run", &"spawn", 1.0, &"run", &"die", 1.0, &"run", &"walk", 1.0, &"run", &"run", 1.0]
+blend_times = [&"run", &"die", 1.0, &"run", &"run", 1.0, &"run", &"walk", 1.0, &"run", &"idle", 1.0, &"run", &"spawn", 1.0]
 
 [node name="Stun Timer" type="Timer" parent="."]
 wait_time = 0.75
