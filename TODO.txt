@@ -1,8 +1,8 @@
 Enemy Design
---Collision with enemy does momentum calculation
---Staggered enemies are knocked back
---If you are staggered, you are knocked back
---Roaming, fleeing enemies
+DONE--Collision with enemy does momentum calculation
+DONE--Staggered enemies are knocked back
+DONE--If you are staggered, you are knocked back
+--Design enemy types
 
 
 Items:

@@ -1,8 +1,15 @@
-[gd_scene load_steps=13 format=3 uid="uid://cbwtajho43dhg"]
+[gd_scene load_steps=14 format=3 uid="uid://cbwtajho43dhg"]
 
 [ext_resource type="Texture2D" uid="uid://t8dyr1fvrhy6" path="res://HUD/crosshair018.png" id="1_7jad4"]
 [ext_resource type="Script" path="res://HUD/HUD.gd" id="1_kqnfs"]
 [ext_resource type="Script" path="res://HUD/HealthBar.gd" id="3_7t37g"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ft5sk"]
+bg_color = Color(0.196078, 0.352941, 1, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lx5sk"]
 bg_color = Color(0.137255, 0.137255, 0.137255, 0.137255)
@@ -62,15 +69,16 @@ grow_vertical = 2
 [node name="Crosshair" type="Sprite2D" parent="Center Screen"]
 texture = ExtResource("1_7jad4")
 
-[node name="Jumps" type="ProgressBar" parent="Center Screen/Crosshair"]
+[node name="Reel Length" type="ProgressBar" parent="Center Screen/Crosshair"]
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = -174.0
-offset_top = -45.0
-offset_right = -71.0
-offset_bottom = -18.0
+offset_left = -51.0
+offset_top = -18.0
+offset_right = 52.0
+offset_bottom = -11.0
 grow_vertical = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_ft5sk")
 show_percentage = false
 
 [node name="Rope Length" type="ProgressBar" parent="Center Screen/Crosshair"]
@@ -79,10 +87,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 13.0
-offset_top = -45.0
-offset_right = 116.0
-offset_bottom = -18.0
+offset_left = -115.0
+offset_right = -12.0
+offset_bottom = 8.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_lx5sk")
@@ -123,7 +130,7 @@ rounded = true
 fill_mode = 1
 show_percentage = false
 
-[node name="Stagger" type="ProgressBar" parent="HP"]
+[node name="Stamina" type="ProgressBar" parent="HP"]
 layout_mode = 0
 offset_left = 21.0
 offset_top = -33.0
@@ -133,7 +140,7 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_3j25i")
 show_percentage = false
 script = ExtResource("3_7t37g")
 
-[node name="Left" type="ProgressBar" parent="HP/Stagger"]
+[node name="Left" type="ProgressBar" parent="HP/Stamina"]
 layout_mode = 0
 offset_left = -139.0
 offset_right = 1.0

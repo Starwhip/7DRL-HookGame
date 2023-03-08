@@ -41,9 +41,11 @@ func _ready():
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):	
-	$"../../HUD".rope_length = get_rope_length()
-	$"../../HUD".max_length = max_length
+func _process(delta):
+	var HUD = $"../../HUD"
+	HUD.rope_length = get_rope_length()
+	HUD.reel_length = reel_length
+	HUD.max_length = max_length
 	
 	if($"../../StunTimer".is_stopped()):
 		match control_mode:
@@ -231,7 +233,7 @@ func _physics_process(delta):
 				
 			var enemy_tension = enemy_tension_vector * abs(spring_comp) * enemy_multiplier
 			hooked_enemy.velocity -= enemy_tension * delta
-			hooked_enemy.stun(0.1)
+			hooked_enemy.stun(1)
 		
 		print(stretch_length)
 		print("Tension: " + str(tension))

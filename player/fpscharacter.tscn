@@ -66,8 +66,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13947, 0)
 script = ExtResource("2_53o63")
 max_length = 100
 hook_launch_velocity = 60
+spring_force = 80
 max_force_stretch = 0.1
-reel_rate = 25
+reel_rate = 10
 force_curve = SubResource("Curve_jeond")
 ROPE_LENGTH_MOD = 0.95
 

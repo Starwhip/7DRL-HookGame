@@ -3,10 +3,10 @@ extends CharacterBody3D
 
 const SPRINT_SPEED = 20
 const WALK_SPEED = 10
-const SURF_FRICTION = 10
-const SLIDE_FRICTION = 1
-const AIR_FRICTION = 3
-const ACCEL = 15
+const SURF_FRICTION = 1.7
+const SLIDE_FRICTION = 0.2
+const AIR_FRICTION = 0.5
+const ACCEL = 1
 const JUMP_VELOCITY = 12
 
 @export var hitpoints = 100
@@ -114,10 +114,13 @@ func _physics_process(delta):
 
 	else:
 		friction = Vector3(AIR_FRICTION, AIR_FRICTION, AIR_FRICTION)
-
-	velocity.x = move_toward(velocity.x, 0, friction.x * delta)
-	velocity.y = move_toward(velocity.y, 0, friction.y * delta)
-	velocity.z = move_toward(velocity.z, 0, friction.z * delta)
+	
+	velocity.x -= velocity.x * friction.x * delta
+	velocity.y -= velocity.y * friction.y * delta
+	velocity.z -= velocity.z * friction.z * delta
+	#velocity.x = move_toward(velocity.x, 0, friction.x * delta)
+	#velocity.y = move_toward(velocity.y, 0, friction.y * delta)
+	#velocity.z = move_toward(velocity.z, 0, friction.z * delta)
 	
 	# Add the gravity.
 	if not is_on_floor():
@@ -140,22 +143,39 @@ func _physics_process(delta):
 
 		# Get the input direction and handle the movement/deceleration.
 		var input_dir = Input.get_vector("Left", "Right", "Forward", "Back")
-		var direction = Vector3(input_dir.x, 0, input_dir.y).normalized()
+		var input_vector = Vector3(input_dir.x, 0, input_dir.y)
+		var direction = input_vector.normalized()
+		
 		
 		if direction:
 			var speed = SPRINT_SPEED
-			var acceleration = ACCEL * delta
-			var desired_direction = global_transform.basis * direction
-			var desired_velocity = desired_direction * speed
+			var desired_direction = (global_transform.basis * direction).normalized()
+			var desired_speed = speed
 			#var nudge_vector = (transform.basis * desired_velocity) - velocity
-			velocity.x = move_toward(velocity.x, desired_velocity.x, acceleration)
-			velocity.z = move_toward(velocity.z, desired_velocity.z, acceleration)
 			
-			#velocity += nudge_vector
-			#velocity.x += clamp(desired_velocity.x, -acceleration, acceleration)
-			#velocity.z += clamp(desired_velocity.z, -acceleration, acceleration)
-			velocity.y += clamp(desired_direction.y * acceleration, -acceleration, acceleration)
-			#print("Velocity: " + str(velocity) + " Mag " + str(velocity.length()))
+			var current_speed = velocity.dot(desired_direction)
+			
+			var add_speed = desired_speed - current_speed
+			if(add_speed > 0):
+				var accel_speed = ACCEL * delta * desired_speed
+				
+				if(accel_speed > add_speed):
+					accel_speed = add_speed
+				
+				velocity += accel_speed * desired_direction
+				
+				print("Current Speed "+str(current_speed))
+				print("Add Speed "+str(add_speed))
+				print(accel_speed * desired_direction)
+				
+				#velocity.x = move_toward(velocity.x, desired_velocity.x, acceleration)
+				#velocity.z = move_toward(velocity.z, desired_velocity.z, acceleration)
+				
+				#velocity += nudge_vector
+				#velocity.x += clamp(desired_velocity.x, -acceleration, acceleration)
+				#velocity.z += clamp(desired_velocity.z, -acceleration, acceleration)
+				#velocity.y += clamp(desired_direction.y * acceleration, -acceleration, acceleration)
+				#print("Velocity: " + str(velocity) + " Mag " + str(velocity.length()))
 		
 	move_and_slide()
 	#print (velocity)
