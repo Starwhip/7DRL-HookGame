@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://bi4c8wo7bat2d"]
+
+[ext_resource type="PackedScene" uid="uid://78b3y4436vah" path="res://Enemies/physics character.tscn" id="1_dkp8v"]
+[ext_resource type="ArrayMesh" uid="uid://wcbre1iipyns" path="res://assets/modular/crate.obj" id="2_qqski"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_d8ir3"]
+points = PackedVector3Array(0.4, 0.8, 0.0999217, -0.5, 0.8, 0.0999217, 0.199931, 0.6, 0.3, 0.4, 0, 0.0999217, 0.4, 0.8, -0.50002, -0.5, 0, 0.0999217, -0.30002, 0.6, 0.3, -0.5, 0.8, -0.50002, 0.199931, 0.2, 0.3, 0.4, 0, -0.50002, 0.299922, 0.7, -0.600059, -0.30002, 0.2, 0.3, -0.5, 0, -0.50002, -0.40001, 0.7, -0.600059, 0.299922, 0.1, -0.600059, 0.199931, 0.6, -0.7, -0.40001, 0.1, -0.600059, -0.30002, 0.6, -0.7, 0.199931, 0.2, -0.7, -0.30002, 0.2, -0.7)
+
+[node name="Crate" type="Node3D"]
+
+[node name="Physics Character" parent="." instance=ExtResource("1_dkp8v")]
+FRICTION = 5.0
+mass = 50
+is_wall = false
+is_enemy = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Physics Character"]
+shape = SubResource("ConvexPolygonShape3D_d8ir3")
+
+[node name="Crate" type="MeshInstance3D" parent="Physics Character"]
+mesh = ExtResource("2_qqski")
+skeleton = NodePath("../..")

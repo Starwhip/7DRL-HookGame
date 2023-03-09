@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://b07d1npt8yu6x"]
+
+[ext_resource type="Script" path="res://Enemies/physics enemy template.gd" id="1_jogvk"]
+[ext_resource type="PackedScene" uid="uid://78b3y4436vah" path="res://Enemies/physics character.tscn" id="1_qb4wn"]
+
+[node name="Enemy" type="Node3D"]
+script = ExtResource("1_jogvk")
+
+[node name="Physics Character" parent="." instance=ExtResource("1_qb4wn")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]

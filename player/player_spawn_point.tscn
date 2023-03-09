@@ -1,11 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://ch6wu5xmqmvqm"]
+[gd_scene load_steps=3 format=3 uid="uid://b17w7hi3yq7t8"]
 
 [ext_resource type="Script" path="res://player/Respawn Player.gd" id="1_20tda"]
-[ext_resource type="PackedScene" uid="uid://bpnujqm6j55f3" path="res://player/fpscharacter.tscn" id="2_u6nkc"]
+[ext_resource type="PackedScene" uid="uid://b2v6facqn4yw8" path="res://player/physics_player.tscn" id="2_if2b3"]
 
-[node name="Player Spawn" type="Node3D"]
+[node name="Player Spawn" type="Node3D" node_paths=PackedStringArray("player")]
 script = ExtResource("1_20tda")
+player = NodePath("Physics Player")
 
-[node name="CharacterBody3D" parent="." instance=ExtResource("2_u6nkc")]
+[node name="Physics Player" parent="." instance=ExtResource("2_if2b3")]
 
-[connection signal="dead" from="CharacterBody3D" to="." method="_on_character_body_3d_dead"]
+[connection signal="dead" from="Physics Player" to="." method="_on_physics_player_dead"]

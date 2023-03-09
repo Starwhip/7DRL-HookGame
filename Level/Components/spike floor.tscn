@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://cpt7r587f4f0l"]
+
+[ext_resource type="PackedScene" uid="uid://bmu66u45kbfj2" path="res://Level/Components/hazard template.tscn" id="1_bcuve"]
+[ext_resource type="ArrayMesh" uid="uid://dt7ask07spasx" path="res://assets/modular/hazard floor.obj" id="2_4r6re"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_gmpu6"]
+points = PackedVector3Array(-4, 0, -4, -4, 0, 4, -4, 0.4, -4, 4, 0, -4, -4, 0.4, 4, 4, 0, 4, -3.40016, 0.8, -3.40016, 4, 0.4, -4, -3.20047, 0.8, 3.39937, -3.40016, 0.8, 3.19969, 4, 0.4, 4, 3.19969, 0.8, -3.40016, 3.39937, 0.8, -3.20047, 3.39937, 0.8, 3.39937)
+
+[node name="Spike Floor" type="Node3D"]
+
+[node name="Hazard" parent="." instance=ExtResource("1_bcuve")]
+damage_per_velocity = 2.0
+base_damage = 30
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hazard"]
+shape = SubResource("ConvexPolygonShape3D_gmpu6")
+
+[node name="HazardFloor" type="MeshInstance3D" parent="."]
+mesh = ExtResource("2_4r6re")

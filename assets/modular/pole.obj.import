@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://dp8haesy7818d"
+path="res://.godot/imported/pole.obj-e890f78d8d75b9ba1ec53b12119b9a81.mesh"
+
+[deps]
+
+files=["res://.godot/imported/pole.obj-e890f78d8d75b9ba1ec53b12119b9a81.mesh"]
+
+source_file="res://assets/modular/pole.obj"
+dest_files=["res://.godot/imported/pole.obj-e890f78d8d75b9ba1ec53b12119b9a81.mesh", "res://.godot/imported/pole.obj-e890f78d8d75b9ba1ec53b12119b9a81.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(2, 2, 2)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

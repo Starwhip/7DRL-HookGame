@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bmu66u45kbfj2"]
+
+[ext_resource type="Script" path="res://Level/Components/hazard script.gd" id="1_3ktfq"]
+
+[node name="Hazard" type="StaticBody3D"]
+collision_layer = 17
+collision_mask = 0
+script = ExtResource("1_3ktfq")

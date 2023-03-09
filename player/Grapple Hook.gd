@@ -23,7 +23,8 @@ var hook_point_array = []
 
 @onready var raycast = $GrappleGun/RayCast3D
 @onready var grapple_point = $"Grapple Hook Point"
-@onready var character = $"../.."
+@export var character = CharacterBody3D.new()
+@export var HUD = Node.new()
 
 enum GRAPPLE_MODE{
 	CLICK,
@@ -39,32 +40,30 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	var HUD = $"../../HUD"
 	HUD.rope_length = get_rope_length()
 	HUD.reel_length = reel_length
 	HUD.max_length = max_length
 	
-	if($"../../StunTimer".is_stopped()):
-		match control_mode:
-			GRAPPLE_MODE.HOLD:
-				if Input.is_action_pressed("Fire Grapple"):
-					if not (hooked or firing_hook):
-						fire_hook()
+	match control_mode:
+		GRAPPLE_MODE.HOLD:
+			if Input.is_action_pressed("Fire Grapple"):
+				if not (hooked or firing_hook):
+					fire_hook()
+			else:
+				if firing_hook:
+					reset_hook(true)
+				elif hooked:
+					reset_hook(false)
+					
+		GRAPPLE_MODE.CLICK:
+			if Input.is_action_just_pressed("Fire Grapple"):
+				if not (hooked or firing_hook):
+					fire_hook()
 				else:
 					if firing_hook:
 						reset_hook(true)
 					elif hooked:
 						reset_hook(false)
-						
-			GRAPPLE_MODE.CLICK:
-				if Input.is_action_just_pressed("Fire Grapple"):
-					if not (hooked or firing_hook):
-						fire_hook()
-					else:
-						if firing_hook:
-							reset_hook(true)
-						elif hooked:
-							reset_hook(false)
 
 func get_rope_length():
 	var len = 0
@@ -96,7 +95,13 @@ func get_rope_length():
 	#print("Total rope length: " + str(len))
 	return len
 
+signal rope_length_update(length)
+signal reel_length_update(length)
 
+func reel_rope(amount):
+	reel_length = clamp(reel_length + (reel_rate * amount), min_length,max_length)
+	reel_length_update.emit(reel_length)
+	
 func reset_hook(missed):
 	$GrappleGun.rotation = Vector3(0,0,0)
 	$GrappleGun/GrappleHook.show()
@@ -148,6 +153,7 @@ func hook(pos):
 	#print(reel_length)
 	#print(hook_pos)
 
+var last_rope_length = 0
 func _physics_process(delta):
 	if not hooked:
 		if firing_hook:
@@ -178,18 +184,7 @@ func _physics_process(delta):
 		grapple_point.global_position = hook_point_array[0]
 		
 		raycast.look_at(hook_point_array.back())
-		check_grapple_occlusion()		
-		
-		if Input.is_action_pressed("Reel In"):
-			if(reel_length > min_length):
-				reel_length += -reel_rate * delta
-		
-		if Input.is_action_pressed("Reel Out"):
-			if(reel_length < max_length):
-				reel_length += reel_rate * delta
-		
-		#if get_rope_length() > max_length:
-		#	rope_length -= get_rope_length() - max_length 
+		check_grapple_occlusion()
 		
 		var tension_vector = (hook_point_array.back() - global_position).normalized()
 		stretch_length = get_rope_length() - reel_length
@@ -204,8 +199,11 @@ func _physics_process(delta):
 			#print("Enemy Mass: " + str(hooked_enemy.get_mass()))
 			#print("Player Mass: " + str($"../..".get_mass()))
 			
-			var player_multiplier = float(hooked_enemy.get_mass()) / (hooked_enemy.get_mass() + $"../..".get_mass())
-			var enemy_multiplier =  float($"../..".get_mass()) / (hooked_enemy.get_mass() + $"../..".get_mass())
+			var enemy_mass = hooked_enemy.get_mass() * hooked_enemy.momentum_resistance
+			var player_mass = character.get_mass() * character.momentum_resistance
+			
+			var player_multiplier = float(enemy_mass) / (enemy_mass + player_mass)
+			var enemy_multiplier =  float(player_mass) / (enemy_mass + player_mass)
 			#print("Ratio: " + str(player_multiplier))
 			tension = tension * (player_multiplier)
 			
@@ -217,7 +215,6 @@ func _physics_process(delta):
 				
 			var enemy_tension = enemy_tension_vector * abs(spring_comp) * enemy_multiplier
 			hooked_enemy.velocity -= enemy_tension * delta
-			hooked_enemy.stun(2)
 		
 		#print(stretch_length)
 		#print("Tension: " + str(tension))
@@ -226,6 +223,10 @@ func _physics_process(delta):
 	var up_vector = Vector3.UP.lerp(tension.normalized(), clamp(tension.length()/ .5*spring_force, 0, 1))
 	
 	character.set_up_vector(up_vector)
+	
+	if get_rope_length() != last_rope_length:
+		last_rope_length = get_rope_length()
+		rope_length_update.emit(last_rope_length)
 
 
 func get_grapple_point():
@@ -241,21 +242,15 @@ func get_grapple_point():
 	
 	if raycast.is_colliding():
 		#print("Hit something")
-		if(raycast.get_collider().get_collision_layer() == 4):
+		if(raycast.get_collider().get_collision_layer_value(3)):
 			hooked_enemy = raycast.get_collider()
 			hooked_enemy.set_grapple_point(raycast.get_collision_point())
-			hooked_enemy.die_signal.connect(_on_enemy_death)
 			print("Grapple hooked enemy: " +str(hooked_enemy))
 		else:
 			hooked_enemy = null
 			
 		
 		return raycast.get_collision_point() - (global_position.direction_to(target) * 0.05)
-
-func _on_enemy_death():
-	if hooked and hooked_enemy:
-		hooked_enemy = null
-		reset_hook(false)
 
 func check_grapple_occlusion():
 	
@@ -286,9 +281,6 @@ func check_grapple_occlusion():
 				
 				#If there's a clear sight, remove the second index to unwrap the line.
 				hook_point_array.pop_at(1)
-				
-	
-	
 
 func is_rope_occluded(from, to):
 	const ERR_DISTANCE = 0.075 * 2

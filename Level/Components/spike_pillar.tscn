@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://i1douxywwht0"]
+
+[ext_resource type="ArrayMesh" uid="uid://bvdh2faxpufeq" path="res://assets/modular/hazard.obj" id="1_grdbl"]
+[ext_resource type="PackedScene" uid="uid://bmu66u45kbfj2" path="res://Level/Components/hazard template.tscn" id="2_fhg65"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_7idmx"]
+points = PackedVector3Array(-1.2, 0.6, -1, 0.8, 0.6, -1, -1.00012, 0, -0.800117, -1.2, 0.6, 1, -1.2, 4.39969, -1, 0.8, 0.6, 1, 0.599922, 0, -0.800117, 0.8, 4.39969, -1, -1.00012, 0, 0.799922, -1.2, 4.39969, 1, -1.00012, 4.8, -0.800117, 0.599922, 0, 0.799922, 0.8, 4.39969, 1, 0.599922, 4.8, -0.800117, -1.00012, 4.8, 0.799922, 0.599922, 4.8, 0.799922)
+
+[node name="Spike Pillar" type="Node3D"]
+
+[node name="Hazard" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_grdbl")
+
+[node name="Hazard2" parent="." instance=ExtResource("2_fhg65")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hazard2"]
+shape = SubResource("ConvexPolygonShape3D_7idmx")

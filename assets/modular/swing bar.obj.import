@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://b26vc5rt4m8ow"
+path="res://.godot/imported/swing bar.obj-6fd91ce6ed56a9f1672f4b64b5fd12a3.mesh"
+
+[deps]
+
+files=["res://.godot/imported/swing bar.obj-6fd91ce6ed56a9f1672f4b64b5fd12a3.mesh"]
+
+source_file="res://assets/modular/swing bar.obj"
+dest_files=["res://.godot/imported/swing bar.obj-6fd91ce6ed56a9f1672f4b64b5fd12a3.mesh", "res://.godot/imported/swing bar.obj-6fd91ce6ed56a9f1672f4b64b5fd12a3.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(2, 2, 2)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

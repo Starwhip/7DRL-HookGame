@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3 uid="uid://b2v6facqn4yw8"]
+
+[ext_resource type="Script" path="res://player/physics_player.gd" id="1_5v8e3"]
+[ext_resource type="PackedScene" uid="uid://78b3y4436vah" path="res://Enemies/physics character.tscn" id="1_strls"]
+[ext_resource type="PackedScene" uid="uid://sreobi57idmc" path="res://player/grapple_hook.tscn" id="2_a63ij"]
+[ext_resource type="PackedScene" uid="uid://cbwtajho43dhg" path="res://HUD/HUD.tscn" id="3_m8o2e"]
+[ext_resource type="PackedScene" path="res://player/life_tracker.tscn" id="4_y6775"]
+[ext_resource type="PackedScene" uid="uid://xeu3rkgd08fy" path="res://player/character input controller.tscn" id="5_ducwu"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_8akwk"]
+
+[node name="Physics Player" type="Node3D"]
+script = ExtResource("1_5v8e3")
+
+[node name="Physics Character" parent="." instance=ExtResource("1_strls")]
+collision_layer = 2
+FRICTION = 2.0
+momentum_resistance = 3
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Physics Character"]
+shape = SubResource("CylinderShape3D_8akwk")
+
+[node name="head" type="Node3D" parent="Physics Character"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.660124, 0)
+
+[node name="Grapple Hook" parent="Physics Character/head" node_paths=PackedStringArray("character", "HUD") instance=ExtResource("2_a63ij")]
+max_length = 50
+reel_rate = 25
+character = NodePath("../..")
+HUD = NodePath("../../../HUD")
+
+[node name="Camera3D" type="Camera3D" parent="Physics Character/head"]
+
+[node name="LifeTracker" parent="." node_paths=PackedStringArray("character") instance=ExtResource("4_y6775")]
+character = NodePath("../Physics Character")
+
+[node name="HUD" parent="." instance=ExtResource("3_m8o2e")]
+
+[node name="Character Input Controller" parent="." node_paths=PackedStringArray("character", "character_head", "grapple_hook") instance=ExtResource("5_ducwu")]
+character = NodePath("../Physics Character")
+character_head = NodePath("../Physics Character/head")
+grapple_hook = NodePath("../Physics Character/head/Grapple Hook")
+
+[connection signal="spawn" from="." to="Physics Character" method="_on_physics_player_spawn"]
+[connection signal="spawn" from="." to="LifeTracker" method="_on_physics_player_spawn"]
+[connection signal="hit_hazard" from="Physics Character" to="LifeTracker" method="_on_physics_character_hit_hazard"]
+[connection signal="reel_length_update" from="Physics Character/head/Grapple Hook" to="HUD" method="_on_grapple_hook_reel_length_update"]
+[connection signal="rope_length_update" from="Physics Character/head/Grapple Hook" to="HUD" method="_on_grapple_hook_rope_length_update"]
+[connection signal="dead" from="LifeTracker" to="." method="_on_life_tracker_dead"]
+[connection signal="hit_points_update" from="LifeTracker" to="HUD" method="_on_life_tracker_hit_points_update"]
+[connection signal="hurt" from="LifeTracker" to="HUD" method="_on_life_tracker_hurt"]
+[connection signal="stun" from="LifeTracker" to="HUD" method="_on_life_tracker_stun"]

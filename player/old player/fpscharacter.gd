@@ -110,6 +110,33 @@ func _physics_process(delta):
 	look_at(global_position - transform.basis.x.cross(up_vector), up_vector)
 	#print(global_rotation)
 	
+	apply_friction(delta)
+	fall(delta)	
+	
+	if not stunned:
+		# Handle Jump.
+		if is_on_floor():
+			num_jumps = MAX_JUMPS
+		
+		elif is_on_wall():
+			if(num_jumps < WALL_JUMPS): #Restore jumps on wall contact
+				num_jumps = WALL_JUMPS
+			
+		if Input.is_action_just_pressed("Jump") or Input.is_action_pressed("Jump") and (is_on_floor() or is_on_wall()):
+			jump()
+	
+	var last_velocity = velocity
+	move_and_slide()
+	
+	for i in get_slide_collision_count():
+		var body = get_slide_collision(i).get_collider()
+		var angle = get_slide_collision(i).get_normal()
+		
+		if body.get_collision_layer_value(5):
+			body.do_damage(self, last_velocity, angle)
+			
+
+func apply_friction(delta):
 	#Handle friction
 	var friction
 	if is_on_floor():
@@ -123,59 +150,20 @@ func _physics_process(delta):
 	velocity.y -= velocity.y * friction.y * delta
 	velocity.z -= velocity.z * friction.z * delta
 	
+func accelerate(desired_direction, desired_speed, delta):
+	#Quake "inspired" movement
+	var current_speed = velocity.dot(desired_direction)
+	
+	var add_speed = desired_speed - current_speed
+	if(add_speed > 0):
+		var accel_speed = ACCEL * delta * desired_speed
+		
+		if(accel_speed > add_speed):
+			accel_speed = add_speed
+		
+		velocity += accel_speed * desired_direction
+
+func fall(delta):
 	# Add the gravity.
 	if not is_on_floor():
-		if Input.is_action_pressed("Jump") and velocity.y > 0:
-			velocity.y -= gravity * delta * GRAV_JUMP_MULT
-		else:
-			velocity.y -= gravity * delta
-	
-	if not stunned:
-		# Handle Jump.
-		if is_on_floor():
-			num_jumps = MAX_JUMPS
-		
-		elif is_on_wall():
-			if(num_jumps < WALL_JUMPS): #Restore jumps on wall contact
-				num_jumps = WALL_JUMPS
-			
-		if Input.is_action_just_pressed("Jump") or Input.is_action_pressed("Jump") and (is_on_floor() or is_on_wall()):
-			jump()
-
-		# Get the input direction and handle the movement/deceleration.
-		var input_dir = Input.get_vector("Left", "Right", "Forward", "Back")
-		var input_vector = Vector3(input_dir.x, 0, input_dir.y)
-		var direction = input_vector.normalized()
-		
-		
-		if direction:
-			#Quake "inspired" movement
-			var speed = SPRINT_SPEED
-			var desired_direction = (global_transform.basis * direction).normalized()
-			var desired_speed = speed
-			
-			var current_speed = velocity.dot(desired_direction)
-			
-			var add_speed = desired_speed - current_speed
-			if(add_speed > 0):
-				var accel_speed = ACCEL * delta * desired_speed
-				
-				if(accel_speed > add_speed):
-					accel_speed = add_speed
-				
-				velocity += accel_speed * desired_direction
-	
-	var last_velocity = velocity
-	move_and_slide()
-	
-	for i in get_slide_collision_count():
-		var body = get_slide_collision(i).get_collider()
-		var angle = get_slide_collision(i).get_normal()
-		
-		if body.get_collision_layer_value(5):
-			body.do_damage(self, last_velocity, angle)
-			
-
-
-
-
+		velocity.y -= gravity * delta

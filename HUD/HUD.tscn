@@ -4,6 +4,25 @@
 [ext_resource type="Script" path="res://HUD/HUD.gd" id="1_kqnfs"]
 [ext_resource type="Script" path="res://HUD/HealthBar.gd" id="3_7t37g"]
 
+[sub_resource type="Gradient" id="Gradient_8dkoj"]
+offsets = PackedFloat32Array(0, 0.913357)
+colors = PackedColorArray(0, 0, 0, 0, 0.0778749, 0.315617, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mhnee"]
+gradient = SubResource("Gradient_8dkoj")
+fill = 1
+fill_from = Vector2(0.5, 0.529915)
+
+[sub_resource type="Gradient" id="Gradient_kbxyn"]
+offsets = PackedFloat32Array(0, 0.707581)
+colors = PackedColorArray(0, 0, 0, 0, 0.803042, 0, 0.162175, 0.380392)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gcpau"]
+gradient = SubResource("Gradient_kbxyn")
+fill = 1
+fill_from = Vector2(0.474359, 0.517094)
+fill_to = Vector2(0.0042735, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ft5sk"]
 bg_color = Color(0.196078, 0.352941, 1, 1)
 corner_radius_top_left = 25
@@ -36,27 +55,50 @@ bg_color = Color(0.858824, 0.501961, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i8ymv"]
 bg_color = Color(0.858824, 0.501961, 0, 1)
 
-[sub_resource type="Gradient" id="Gradient_kbxyn"]
-offsets = PackedFloat32Array(0, 0.707581)
-colors = PackedColorArray(0, 0, 0, 0, 0.803042, 0, 0.162175, 0.380392)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_gcpau"]
-gradient = SubResource("Gradient_kbxyn")
-fill = 1
-fill_from = Vector2(0.474359, 0.517094)
-fill_to = Vector2(0.0042735, 1)
-
-[sub_resource type="Gradient" id="Gradient_8dkoj"]
-offsets = PackedFloat32Array(0, 0.913357)
-colors = PackedColorArray(0, 0, 0, 0, 0.0778749, 0.315617, 1, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_mhnee"]
-gradient = SubResource("Gradient_8dkoj")
-fill = 1
-fill_from = Vector2(0.5, 0.529915)
-
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_kqnfs")
+
+[node name="Overlays" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Stun" type="TextureRect" parent="Overlays"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource("GradientTexture2D_mhnee")
+expand_mode = 1
+
+[node name="Hurt" type="TextureRect" parent="Overlays"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource("GradientTexture2D_gcpau")
+expand_mode = 1
+
+[node name="Hurt Timer" type="Timer" parent="Overlays"]
+wait_time = 0.5
+one_shot = true
+
+[node name="Stun Timer" type="Timer" parent="Overlays"]
 
 [node name="Center Screen" type="Control" parent="."]
 layout_mode = 3
@@ -165,20 +207,6 @@ Left Mouse - Grapple
 Right Mouse - Reel In
 CTRL - Reel Out"
 
-[node name="Hurt" type="TextureRect" parent="."]
-visible = false
-offset_right = 1152.0
-offset_bottom = 646.0
-texture = SubResource("GradientTexture2D_gcpau")
-
-[node name="Timer" type="Timer" parent="."]
-wait_time = 0.5
-one_shot = true
-
-[node name="Stun" type="TextureRect" parent="."]
-visible = false
-offset_right = 1152.0
-offset_bottom = 646.0
-texture = SubResource("GradientTexture2D_mhnee")
-
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Overlays/Hurt Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Overlays/Hurt Timer" to="." method="_on_hurt_timer_timeout"]
+[connection signal="timeout" from="Overlays/Stun Timer" to="." method="_on_stun_timer_timeout"]

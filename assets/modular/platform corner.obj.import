@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://dr0yq75uyna5i"
+path="res://.godot/imported/platform corner.obj-7e6fb4b4197496a526899d0b737d42ad.mesh"
+
+[deps]
+
+files=["res://.godot/imported/platform corner.obj-7e6fb4b4197496a526899d0b737d42ad.mesh"]
+
+source_file="res://assets/modular/platform corner.obj"
+dest_files=["res://.godot/imported/platform corner.obj-7e6fb4b4197496a526899d0b737d42ad.mesh", "res://.godot/imported/platform corner.obj-7e6fb4b4197496a526899d0b737d42ad.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(2, 2, 2)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://78b3y4436vah"]
+
+[ext_resource type="Script" path="res://Enemies/physics character.gd" id="1_wgtpc"]
+
+[node name="Physics Character" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 31
+script = ExtResource("1_wgtpc")
+is_player = false
+is_enemy = false
+is_hazard = false
+
+[node name="grapple point" type="Node3D" parent="."]
