@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://mtqrow6ncb7k"]
+[gd_scene load_steps=16 format=3 uid="uid://mtqrow6ncb7k"]
 
 [ext_resource type="ArrayMesh" uid="uid://deerw2a4uvpb5" path="res://assets/voxel/monu2.obj" id="1_3yphd"]
 [ext_resource type="PackedScene" uid="uid://b17w7hi3yq7t8" path="res://player/player_spawn_point.tscn" id="1_mhppy"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://ba0efyoqj13y8" path="res://Blender Files/Vertical Bar A.dae" id="6_x6otl"]
 [ext_resource type="PackedScene" uid="uid://cpt7r587f4f0l" path="res://Level/Components/spike floor.tscn" id="7_756sj"]
 [ext_resource type="PackedScene" uid="uid://bi4c8wo7bat2d" path="res://Enemies/crate.tscn" id="8_3ocgw"]
+[ext_resource type="PackedScene" uid="uid://b07d1npt8yu6x" path="res://Enemies/physics enemy template.tscn" id="8_gowve"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_3gult"]
 
@@ -94,7 +95,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.08399, 24, -24.9601)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.9107, 24, -36.8279)
 
 [node name="Crate" parent="." instance=ExtResource("8_3ocgw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.502, 24, -4.56122)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.501, 24.483, -5.22458)
 
 [node name="Player Spawn" parent="." instance=ExtResource("1_mhppy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.01307, 33.1823, 2.0782)
+
+[node name="Enemy" parent="." instance=ExtResource("8_gowve")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.7715, 27.493, -6.79867)

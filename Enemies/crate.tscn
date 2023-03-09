@@ -10,7 +10,6 @@ points = PackedVector3Array(0.4, 0.8, 0.0999217, -0.5, 0.8, 0.0999217, 0.199931,
 
 [node name="Physics Character" parent="." instance=ExtResource("1_dkp8v")]
 FRICTION = 5.0
-mass = 50
 is_wall = false
 is_enemy = true
 

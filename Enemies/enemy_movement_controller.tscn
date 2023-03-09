@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://mxqieux80f0v"]
+
+[ext_resource type="Script" path="res://Enemy Movement Controller.gd" id="1_m85ac"]
+
+[node name="Enemy Movement Controller" type="Node"]
+script = ExtResource("1_m85ac")

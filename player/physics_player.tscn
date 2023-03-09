@@ -15,7 +15,9 @@ script = ExtResource("1_5v8e3")
 [node name="Physics Character" parent="." instance=ExtResource("1_strls")]
 collision_layer = 2
 FRICTION = 2.0
-momentum_resistance = 3
+mass = 1
+is_wall = false
+is_player = true
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Physics Character"]
 shape = SubResource("CylinderShape3D_8akwk")

@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://867a42ocrlfu"]
+
+[ext_resource type="Script" path="res://Enemies/enemy_ai_module.gd" id="1_qvlx8"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_7oeh1"]
+radius = 30.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_2xmxj"]
+radius = 10.0
+
+[node name="Enemy AI Module" type="Node3D"]
+script = ExtResource("1_qvlx8")
+
+[node name="Far Range" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 31
+
+[node name="Far Collision" type="CollisionShape3D" parent="Far Range"]
+shape = SubResource("SphereShape3D_7oeh1")
+
+[node name="Near Range" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 31
+
+[node name="Near Collision" type="CollisionShape3D" parent="Near Range"]
+shape = SubResource("SphereShape3D_2xmxj")
+
+[connection signal="body_entered" from="Far Range" to="." method="_on_far_range_body_entered"]
+[connection signal="body_exited" from="Far Range" to="." method="_on_far_range_body_exited"]
+[connection signal="body_entered" from="Near Range" to="." method="_on_near_range_body_entered"]
+[connection signal="body_exited" from="Near Range" to="." method="_on_near_range_body_exited"]

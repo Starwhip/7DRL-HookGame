@@ -5,7 +5,7 @@ extends CharacterBody3D
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
-@export var mass = 75
+@export var mass = 5
 @export var is_wall = true
 @export var is_player = true
 @export var is_enemy = true
@@ -16,7 +16,10 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @export var hits_enemy = true
 @export var hits_hazard = true
 
+@export var gravity_multiplier = 1
 @export var momentum_resistance = 1
+
+var previous_collisions = []
 var desired_up_direction = Vector3.UP
 func _ready():
 	self.set_collision_layer_value(1,is_wall)
@@ -49,22 +52,23 @@ func _physics_process(delta):
 		velocity.z -= velocity.z * AIR_FRICTION * delta
 		
 	velocity.y -= velocity.y * AIR_FRICTION * delta
-	velocity.y -= gravity * delta
+	velocity.y -= gravity * delta * gravity_multiplier
 	
 	#print("velocity" + str(velocity))
 	var last_velocity = velocity
 	move_and_slide()
 	
-	var past_collisions = []
+	previous_collisions = []
 	for i in get_slide_collision_count():
 		
 		var collision = get_slide_collision(i)
 		var collider = collision.get_collider()
 		
-		if past_collisions.has(collider):
-			continue
+		if previous_collisions:
+			if previous_collisions.has(collider):
+				continue
 		
-		past_collisions.append(collider)
+		previous_collisions.append(collider)
 
 		var normal = get_slide_collision(i).get_normal()
 		
@@ -73,13 +77,16 @@ func _physics_process(delta):
 			
 		if collider.get_collision_layer_value(2): #player
 			print("Hit player")
-			hit_player.emit(collider, last_velocity, normal)
-			momentum_transfer(collider,last_velocity,normal)
+			if not collider.previous_collisions.has(self):
+				hit_player.emit(collider, last_velocity, normal)
+				momentum_transfer(collider,last_velocity,normal)
 		
 		if collider.get_collision_layer_value(3): #enemies
 			print("Hit Enemy")
-			hit_enemy.emit(collider, last_velocity, normal)
-			momentum_transfer(collider,last_velocity,normal)
+			
+			if not collider.previous_collisions.has(self):
+				hit_enemy.emit(collider, last_velocity, normal)
+				momentum_transfer(collider,last_velocity,normal)
 			
 		
 		if collider.get_collision_layer_value(5): #hazards

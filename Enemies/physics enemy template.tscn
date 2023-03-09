@@ -1,13 +1,42 @@
-[gd_scene load_steps=3 format=3 uid="uid://b07d1npt8yu6x"]
+[gd_scene load_steps=7 format=3 uid="uid://b07d1npt8yu6x"]
 
 [ext_resource type="Script" path="res://Enemies/physics enemy template.gd" id="1_jogvk"]
 [ext_resource type="PackedScene" uid="uid://78b3y4436vah" path="res://Enemies/physics character.tscn" id="1_qb4wn"]
+[ext_resource type="PackedScene" uid="uid://mxqieux80f0v" path="res://Enemies/enemy_movement_controller.tscn" id="3_xpyvm"]
+[ext_resource type="PackedScene" uid="uid://867a42ocrlfu" path="res://Enemies/enemy_ai_module.tscn" id="4_2dbvj"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ns5ic"]
+radius = 1.0
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_5gc17"]
+radius = 1.0
 
 [node name="Enemy" type="Node3D"]
 script = ExtResource("1_jogvk")
 
 [node name="Physics Character" parent="." instance=ExtResource("1_qb4wn")]
+mass = 1
+is_wall = false
+is_enemy = true
+gravity_multiplier = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="Enemy AI Module" parent="Physics Character" node_paths=PackedStringArray("controller") instance=ExtResource("4_2dbvj")]
+far_detection_range = 20
+near_detection_range = 5
+AI_mode = 1
+controller = NodePath("../../Enemy Movement Controller")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Physics Character"]
+shape = SubResource("CapsuleShape3D_ns5ic")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Physics Character"]
+mesh = SubResource("CapsuleMesh_5gc17")
+skeleton = NodePath("../..")
+
+[node name="Head" type="Node3D" parent="Physics Character"]
+
+[node name="Enemy Movement Controller" parent="." node_paths=PackedStringArray("character", "character_head") instance=ExtResource("3_xpyvm")]
+character = NodePath("../Physics Character")
+character_head = NodePath("../Physics Character/Head")
+speed = 35
+tracking_rate = 1

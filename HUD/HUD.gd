@@ -24,6 +24,9 @@ func _ready():
 func _process(delta):
 	var test = health_bar.value
 	
+	rope_bar.max_value = max_length
+	reel_bar.max_value = max_length
+	
 	animate_bar(health_bar, hit_points, delta)
 	animate_bar(rope_bar, rope_length, delta)
 	animate_bar(reel_bar, reel_length, delta)
