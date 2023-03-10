@@ -6,11 +6,13 @@ func _ready():
 	pass # Replace with function body.
 
 func respawn():
+	print("Respawn Triggered")
 	player.respawn()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if player.global_position.y < -150:
+	#print(player.get_player().global_position)
+	if player.get_player().global_position.y < 0:
 		respawn()
 
 func _on_physics_player_dead():

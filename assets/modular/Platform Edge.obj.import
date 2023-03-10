@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://do2cx0ax6awdq"
+path="res://.godot/imported/Platform Edge.obj-d18e73d3d14bfee06cb506ab258fcbc9.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Platform Edge.obj-d18e73d3d14bfee06cb506ab258fcbc9.mesh"]
+
+source_file="res://assets/modular/Platform Edge.obj"
+dest_files=["res://.godot/imported/Platform Edge.obj-d18e73d3d14bfee06cb506ab258fcbc9.mesh", "res://.godot/imported/Platform Edge.obj-d18e73d3d14bfee06cb506ab258fcbc9.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(2, 2, 2)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

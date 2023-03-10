@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://brxgyn5ch2a57"
-path.s3tc="res://.godot/imported/platform corner.png-7531d25ae9cdc797f0389b2e1ab87ac2.s3tc.ctex"
+uid="uid://r4f43d41paqq"
+path.s3tc="res://.godot/imported/platform column.png-e431cedf6f5273c80d502259c8872aa2.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/modular/platform corner.png"
-dest_files=["res://.godot/imported/platform corner.png-7531d25ae9cdc797f0389b2e1ab87ac2.s3tc.ctex"]
+source_file="res://assets/modular/platform column.png"
+dest_files=["res://.godot/imported/platform column.png-e431cedf6f5273c80d502259c8872aa2.s3tc.ctex"]
 
 [params]
 

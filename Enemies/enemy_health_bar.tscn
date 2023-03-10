@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://0ce0qdilhtto"]
+
+[ext_resource type="Script" path="res://Enemies/enemy_health_bar.gd" id="1_wmxm7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6unrq"]
+bg_color = Color(0.129412, 0.733333, 0, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[node name="Health Bar Location" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.60639, 0)
+script = ExtResource("1_wmxm7")
+
+[node name="Health Bar" type="ProgressBar" parent="."]
+offset_right = 50.0
+offset_bottom = 10.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_6unrq")
+show_percentage = false

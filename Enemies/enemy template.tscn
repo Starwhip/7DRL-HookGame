@@ -1,14 +1,7 @@
-[gd_scene load_steps=15 format=3 uid="uid://gfr72c8d5xlv"]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://Enemies/enemy script.gd" id="1_ribco"]
-[ext_resource type="Script" path="res://Enemies/Health Bar.gd" id="2_1r8dr"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6unrq"]
-bg_color = Color(0.129412, 0.733333, 0, 1)
-corner_radius_top_left = 25
-corner_radius_top_right = 25
-corner_radius_bottom_right = 25
-corner_radius_bottom_left = 25
+[ext_resource type="PackedScene" uid="uid://0ce0qdilhtto" path="res://Enemies/enemy_health_bar.tscn" id="2_4dkcb"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8th22"]
 height = 3.0
@@ -84,15 +77,7 @@ script = ExtResource("1_ribco")
 max_hitpoints = 75
 hitpoints = 75
 
-[node name="Health Bar Location" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.60639, 0)
-
-[node name="Health Bar" type="ProgressBar" parent="Health Bar Location"]
-offset_right = 50.0
-offset_bottom = 10.0
-theme_override_styles/fill = SubResource("StyleBoxFlat_6unrq")
-show_percentage = false
-script = ExtResource("2_1r8dr")
+[node name="Health Bar Location" parent="." instance=ExtResource("2_4dkcb")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_8th22")
@@ -110,7 +95,7 @@ playback_default_blend_time = 0.1
 libraries = {
 "": SubResource("AnimationLibrary_i7l13")
 }
-blend_times = [&"run", &"idle", 1.0, &"run", &"spawn", 1.0, &"run", &"run", 1.0, &"run", &"walk", 1.0, &"run", &"die", 1.0]
+blend_times = [&"run", &"walk", 1.0, &"run", &"run", 1.0, &"run", &"idle", 1.0, &"run", &"spawn", 1.0, &"run", &"die", 1.0]
 
 [node name="Stun Timer" type="Timer" parent="."]
 wait_time = 0.75

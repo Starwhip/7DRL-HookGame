@@ -4,6 +4,7 @@ extends Node3D
 @export var near_detection_range = 10
 @export_enum("Walk","Fly") var AI_mode
 @export var controller = Node.new()
+@export_enum("Chase","Evade","Stay Close") var Behavior
 
 var targeted_body = null
 var target_close = false
@@ -17,14 +18,31 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	var target_pos
+	var desired_speed = controller.speed
 	if targeted_body:
-		target_pos = targeted_body.global_position
+		
+		match Behavior:
+			0:
+				target_pos = targeted_body.global_position
+				if not target_close:
+					desired_speed *= 0.1
+				
+			2:
+				if target_close:
+					target_pos = targeted_body.global_position 
+					target_pos -= global_position.direction_to(target_pos)*near_detection_range
+				else:
+					target_pos = targeted_body.global_position
+				
 		
 	else:
 		target_pos = spawn_point
-		
-	controller.target_location = target_pos
-	controller.desired_direction = global_position.direction_to(target_pos)
+		desired_speed = clamp(global_position.distance_to(target_pos), 0, controller.speed)
+	
+	if target_pos:
+		controller.target_location = target_pos
+		controller.desired_direction = global_position.direction_to(target_pos)
+		controller.desired_speed = desired_speed
 
 
 func _on_far_range_body_entered(body):

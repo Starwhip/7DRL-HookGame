@@ -1,0 +1,67 @@
+[gd_resource type="ShaderMaterial" load_steps=10 format=3 uid="uid://b0w5jsp8icpvc"]
+
+[ext_resource type="Shader" path="res://Shaders/Lava A.gdshader" id="1_t3syf"]
+
+[sub_resource type="Gradient" id="Gradient_d7h2v"]
+offsets = PackedFloat32Array(0.451754, 0.820175)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ta5lx"]
+domain_warp_enabled = true
+domain_warp_amplitude = 50.0
+domain_warp_frequency = 0.01
+domain_warp_fractal_lacunarity = 2.0
+domain_warp_fractal_gain = 1.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_olcjd"]
+width = 2048
+height = 2048
+seamless = true
+color_ramp = SubResource("Gradient_d7h2v")
+noise = SubResource("FastNoiseLite_ta5lx")
+
+[sub_resource type="Gradient" id="Gradient_vcasq"]
+offsets = PackedFloat32Array(0, 0.399123)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_l61iq"]
+noise_type = 3
+frequency = 0.04
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_sifer"]
+width = 2048
+height = 2048
+seamless = true
+seamless_blend_skirt = 0.29
+color_ramp = SubResource("Gradient_vcasq")
+noise = SubResource("FastNoiseLite_l61iq")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_2r5gp"]
+noise_type = 3
+frequency = 0.191
+domain_warp_enabled = true
+domain_warp_amplitude = 5.0
+domain_warp_fractal_lacunarity = 1.0
+domain_warp_fractal_gain = 1.5
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ihrvs"]
+width = 2048
+height = 2048
+seamless = true
+as_normal_map = true
+bump_strength = 20.4
+noise = SubResource("FastNoiseLite_2r5gp")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_t3syf")
+shader_parameter/emission_strength = 25.0
+shader_parameter/emission_color = Color(0.541176, 0.188235, 0, 1)
+shader_parameter/hard_color = Color(0.00392157, 0.00392157, 0.00392157, 1)
+shader_parameter/noise_scale = 1000.0
+shader_parameter/time_scale = 0.003
+shader_parameter/height_scale = 1.0
+shader_parameter/direction = Vector2(1, 0.9)
+shader_parameter/direction2 = Vector2(0.5, 1)
+shader_parameter/noise = SubResource("NoiseTexture2D_olcjd")
+shader_parameter/noise2 = SubResource("NoiseTexture2D_sifer")
+shader_parameter/normal_map = SubResource("NoiseTexture2D_ihrvs")

@@ -33,6 +33,23 @@ HUD = NodePath("../../../HUD")
 
 [node name="Camera3D" type="Camera3D" parent="Physics Character/head"]
 
+[node name="SpotLight3D" type="SpotLight3D" parent="Physics Character/head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.539208, -0.252342, -0.445134)
+visible = false
+light_color = Color(1, 0.929412, 0.811765, 1)
+light_energy = 3.0
+light_bake_mode = 0
+shadow_enabled = true
+spot_range = 150.0
+spot_angle = 30.0
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Physics Character/head"]
+visible = false
+light_color = Color(0.933333, 0.682353, 0.223529, 1)
+light_size = 0.1
+light_bake_mode = 0
+omni_range = 10.0
+
 [node name="LifeTracker" parent="." node_paths=PackedStringArray("character") instance=ExtResource("4_y6775")]
 character = NodePath("../Physics Character")
 

@@ -58,6 +58,7 @@ mesh = ExtResource("2_lyqwr")
 
 [node name="GrappleGun" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.473, -0.299, -0.394)
+cast_shadow = 0
 mesh = ExtResource("3_eqen4")
 skeleton = NodePath("../../..")
 
@@ -87,6 +88,7 @@ curve = SubResource("Curve3D_wa1jj")
 
 [node name="GrappleHook" type="MeshInstance3D" parent="GrappleGun"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.498241, 5.81741e-05, -0.457073)
+cast_shadow = 0
 mesh = ExtResource("2_lyqwr")
 skeleton = NodePath("../../../..")
 

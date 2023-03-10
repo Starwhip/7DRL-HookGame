@@ -15,6 +15,7 @@ var num_jumps = max_jumps
 
 @export var desired_direction = Vector3()
 @export var target_location = Vector3()
+var desired_speed = speed
 var current_tracking_location = Vector3()
 var current_head_tracking_location = Vector3()
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -34,7 +35,7 @@ func _process(delta):
 	
 	if direction:
 		var desired_direction = (character.global_transform.basis * direction).normalized()
-		character.accelerate(desired_direction,speed,acceleration,delta)
+		character.accelerate(desired_direction,desired_speed,acceleration,delta)
 	
 func jump():
 	if num_jumps > 0:

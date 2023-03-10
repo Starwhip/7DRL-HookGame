@@ -18,3 +18,6 @@ func _on_life_tracker_dead():
 	
 func respawn():
 	spawn.emit()
+
+func get_player():
+	return $"Physics Character"

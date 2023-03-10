@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dxgwx7y680rds"
-path.s3tc="res://.godot/imported/platform corner inverted.png-c0aea679acf46f309318081483a8ed2a.s3tc.ctex"
+uid="uid://dl5strsob7ty"
+path.s3tc="res://.godot/imported/Platform Edge.png-449249d3094c054b2d81b19e378f440f.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/modular/platform corner inverted.png"
-dest_files=["res://.godot/imported/platform corner inverted.png-c0aea679acf46f309318081483a8ed2a.s3tc.ctex"]
+source_file="res://assets/modular/Platform Edge.png"
+dest_files=["res://.godot/imported/Platform Edge.png-449249d3094c054b2d81b19e378f440f.s3tc.ctex"]
 
 [params]
 

@@ -155,6 +155,10 @@ func hook(pos):
 
 var last_rope_length = 0
 func _physics_process(delta):
+	if hooked_enemy and not is_instance_valid(hooked_enemy):
+		reset_hook(false)
+		hooked_enemy = null
+		
 	if not hooked:
 		if firing_hook:
 			hook_point_array[0] += hook_velocity * delta
@@ -180,6 +184,7 @@ func _physics_process(delta):
 	if hooked:
 		if hooked_enemy:
 			hook_point_array[0] = hooked_enemy.get_grapple_point()
+				
 		
 		grapple_point.global_position = hook_point_array[0]
 		

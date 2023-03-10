@@ -17,6 +17,7 @@ func _process(delta):
 
 	if hit_points <= 0:
 		dead.emit()
+		get_parent().queue_free()
 	
 	hit_points_update.emit(hit_points)
 

@@ -1,0 +1,42 @@
+[gd_resource type="Shader" format=3 uid="uid://b5thle3qvyd1x"]
+
+[resource]
+code = "shader_type spatial;
+
+uniform float emission_strength = 5.0;
+uniform vec3 emission_color : source_color;
+uniform vec3 hard_color : source_color;
+uniform float noise_scale = 3.0;
+uniform float time_scale = 0.1;
+uniform float height_scale = 0.1;
+uniform sampler2D noise;
+uniform sampler2D noise2;
+uniform sampler2D normal_map;
+
+uniform vec2 direction = vec2(1.0,0.0);
+uniform vec2 direction2 = vec2(0.0,1.0);
+
+varying vec3 world_position;
+varying float height;
+varying float height2;
+
+void vertex(){
+	world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	height = texture(noise, world_position.xz / noise_scale + TIME * time_scale * direction).r;
+	height2 = texture(noise2, world_position.xz / noise_scale + TIME * time_scale * direction2).r;
+	VERTEX.y += (height + height2) / 2.0 * height_scale;
+}
+
+void fragment() {
+	// Place fragment code here.
+	//ALBEDO = color;
+	vec3 color_tex = mix(emission_color,hard_color,texture(noise, world_position.xz / noise_scale + TIME * time_scale * direction).rgb);
+	vec3 color_tex2 = mix(emission_color,hard_color,texture(noise2, world_position.xz / noise_scale + TIME * time_scale * direction2).rgb);
+	vec4 normal_tex = texture(normal_map, world_position.xz / noise_scale + TIME * time_scale * direction) * color_tex.r;
+	vec4 normal_tex2 = texture(normal_map, world_position.xz / noise_scale + TIME * time_scale * direction2) * color_tex.r;
+	
+	ALBEDO = mix(color_tex.rgb, color_tex2.rgb, 0.5);
+	EMISSION = emission_strength * mix(color_tex.rgb, color_tex2.rgb, 0.5);
+	NORMAL = mix(normal_tex.rgb, normal_tex2.rgb, 0.5);
+}
+"
