@@ -1,6 +1,6 @@
-[gd_resource type="ShaderMaterial" load_steps=14 format=3 uid="uid://bx8acoscfbovu"]
+[gd_resource type="ShaderMaterial" load_steps=14 format=3 uid="uid://d4im2fpl25cn6"]
 
-[ext_resource type="Shader" path="res://Shaders/Water.gdshader" id="1_b1vti"]
+[ext_resource type="Shader" path="res://Shaders/Water Shader Far.gdshader" id="1_alru7"]
 
 [sub_resource type="Gradient" id="Gradient_s0qu6"]
 offsets = PackedFloat32Array(0.324561, 0.850877)
@@ -66,21 +66,21 @@ normalize = false
 noise = SubResource("FastNoiseLite_qkgbh")
 
 [resource]
-render_priority = 0
-shader = ExtResource("1_b1vti")
+render_priority = -1
+shader = ExtResource("1_alru7")
 shader_parameter/albedo = Color(0, 0.243137, 0.419608, 1)
-shader_parameter/albedo2 = Color(0.517647, 0.839216, 1, 1)
+shader_parameter/albedo2 = Color(0, 0, 0, 1)
 shader_parameter/metallic = 0.0
-shader_parameter/roughness = 0.07
+shader_parameter/roughness = 0.083
 shader_parameter/specular = 0.5
 shader_parameter/emission = Color(0, 0, 0, 1)
 shader_parameter/emission2 = Color(0, 0, 0, 1)
-shader_parameter/fresnel_amount = 33.439
+shader_parameter/fresnel_amount = 15.0
 shader_parameter/wave_direction = Vector2(2, 0)
 shader_parameter/wave_direction2 = Vector2(0, 1)
 shader_parameter/time_scale = 0.02
 shader_parameter/noise_scale = 100.0
-shader_parameter/height_scale = 1.5
+shader_parameter/height_scale = 0.15
 shader_parameter/color_deep = Color(0.27451, 0.184314, 0.992157, 1)
 shader_parameter/color_shallow = Color(0.576471, 0.72549, 1, 1)
 shader_parameter/beers_law = 2.0

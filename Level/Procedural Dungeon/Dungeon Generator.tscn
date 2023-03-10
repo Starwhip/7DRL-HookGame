@@ -1,16 +1,15 @@
-[gd_scene load_steps=19 format=3 uid="uid://v8bfyahywd63"]
+[gd_scene load_steps=10 format=3 uid="uid://v8bfyahywd63"]
 
 [ext_resource type="Script" path="res://Level/Procedural Dungeon/Dungeon Generator.gd" id="1_f83ba"]
 [ext_resource type="PackedScene" uid="uid://b17w7hi3yq7t8" path="res://player/player_spawn_point.tscn" id="2_lfbhb"]
-[ext_resource type="Material" uid="uid://b0w5jsp8icpvc" path="res://Shaders/Lava.tres" id="3_dqrbi"]
-[ext_resource type="Shader" path="res://Level/Procedural Dungeon/Lava.gdshader" id="4_7tr48"]
+[ext_resource type="Material" uid="uid://bx8acoscfbovu" path="res://Shaders/water shader.tres" id="3_moxip"]
+[ext_resource type="Material" uid="uid://d4im2fpl25cn6" path="res://Shaders/Water Shader Far.tres" id="4_b670k"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jbroc"]
-sky_top_color = Color(0.337255, 0.054902, 0, 1)
-sky_horizon_color = Color(0.980392, 0.490196, 0, 1)
 sky_cover_modulate = Color(0, 0, 0, 1)
-ground_bottom_color = Color(0.760784, 0.101961, 0.203922, 1)
-ground_horizon_color = Color(0.854902, 0.521569, 0, 1)
+ground_bottom_color = Color(0.52549, 0.556863, 0.631373, 1)
+ground_horizon_color = Color(0.513726, 0.494118, 0.521569, 1)
+ground_curve = 0.00637278
 
 [sub_resource type="Sky" id="Sky_iw3r8"]
 sky_material = SubResource("ProceduralSkyMaterial_jbroc")
@@ -26,77 +25,13 @@ glow_blend_mode = 1
 volumetric_fog_temporal_reprojection_enabled = false
 
 [sub_resource type="QuadMesh" id="QuadMesh_m8k4c"]
-size = Vector2(500, 500)
+size = Vector2(2000, 2000)
 subdivide_width = 500
 subdivide_depth = 500
 orientation = 1
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_5ebls"]
-size = Vector2(10000, 10000)
-
-[sub_resource type="Gradient" id="Gradient_d7h2v"]
-offsets = PackedFloat32Array(0.451754, 0.820175)
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_ta5lx"]
-domain_warp_enabled = true
-domain_warp_amplitude = 50.0
-domain_warp_frequency = 0.01
-domain_warp_fractal_lacunarity = 2.0
-domain_warp_fractal_gain = 1.0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_olcjd"]
-width = 2048
-height = 2048
-seamless = true
-color_ramp = SubResource("Gradient_d7h2v")
-noise = SubResource("FastNoiseLite_ta5lx")
-
-[sub_resource type="Gradient" id="Gradient_vcasq"]
-offsets = PackedFloat32Array(0, 0.399123)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_l61iq"]
-noise_type = 3
-frequency = 0.04
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_sifer"]
-width = 2048
-height = 2048
-seamless = true
-seamless_blend_skirt = 0.29
-color_ramp = SubResource("Gradient_vcasq")
-noise = SubResource("FastNoiseLite_l61iq")
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_2r5gp"]
-noise_type = 3
-frequency = 0.191
-domain_warp_enabled = true
-domain_warp_amplitude = 5.0
-domain_warp_fractal_lacunarity = 1.0
-domain_warp_fractal_gain = 1.5
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ihrvs"]
-width = 2048
-height = 2048
-seamless = true
-as_normal_map = true
-bump_strength = 20.4
-noise = SubResource("FastNoiseLite_2r5gp")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7qr16"]
-render_priority = 0
-shader = ExtResource("4_7tr48")
-shader_parameter/emission_strength = 25.0
-shader_parameter/emission_color = Color(0.541176, 0.188235, 0, 1)
-shader_parameter/hard_color = Color(0.00392157, 0.00392157, 0.00392157, 1)
-shader_parameter/noise_scale = 1000.0
-shader_parameter/time_scale = 0.003
-shader_parameter/height_scale = 0.0
-shader_parameter/direction = Vector2(1, 0.9)
-shader_parameter/direction2 = Vector2(0.5, 1)
-shader_parameter/noise = SubResource("NoiseTexture2D_olcjd")
-shader_parameter/noise2 = SubResource("NoiseTexture2D_sifer")
-shader_parameter/normal_map = SubResource("NoiseTexture2D_ihrvs")
+size = Vector2(8000, 8000)
 
 [node name="Dungeon Generator" type="Node3D"]
 script = ExtResource("1_f83ba")
@@ -107,21 +42,18 @@ height = 50
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.371465, 2.76763e-09, 0.928447, -0.925585, -0.0784591, 0.37032, 0.0728451, -0.996917, -0.0291448, 0, 0, 0)
-light_color = Color(1, 0.705882, 0.498039, 1)
-light_energy = 2.801
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_v2vcs")
 
 [node name="Water Near" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 252.151, 0, 248.037)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 252.151, -2.30199, 248.037)
 cast_shadow = 0
 mesh = SubResource("QuadMesh_m8k4c")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("3_dqrbi")
+surface_material_override/0 = ExtResource("3_moxip")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 mesh = SubResource("PlaneMesh_5ebls")
-surface_material_override/0 = SubResource("ShaderMaterial_7qr16")
+surface_material_override/0 = ExtResource("4_b670k")

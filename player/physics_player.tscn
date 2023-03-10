@@ -32,6 +32,7 @@ character = NodePath("../..")
 HUD = NodePath("../../../HUD")
 
 [node name="Camera3D" type="Camera3D" parent="Physics Character/head"]
+far = 2000.0
 
 [node name="SpotLight3D" type="SpotLight3D" parent="Physics Character/head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.539208, -0.252342, -0.445134)
