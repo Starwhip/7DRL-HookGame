@@ -9,10 +9,10 @@ extends Node3D
 @export var offset = 1
 
 
-const COLUMN = preload("res://assets/modular/platform column.obj")
-const CENTER = preload("res://assets/modular/platform center.obj")
-const CORNER = preload("res://assets/modular/platform corner.obj")
-const EDGE = preload("res://assets/modular/Platform Edge.obj")
+const COLUMN = preload("res://assets/Pretty Models/Platform Column.tscn")
+const CENTER = preload("res://assets/Pretty Models/Platform Center.tscn")
+const CORNER = preload("res://assets/Pretty Models/Platform Corner.tscn")
+const EDGE = preload("res://assets/Pretty Models/Platform Edge.tscn")
 
 class Cell:
 	var position: Vector3
@@ -42,29 +42,27 @@ func generate_dungeon():
 
 	#Spawn meshes for the platforms
 	for cell in cells:
-		var new_mesh = MeshInstance3D.new()
+		var new_scene
 		match cell.cell_type:
 			Cell.type.CENTER:
-				new_mesh.mesh = CENTER 
+				new_scene = CENTER.instantiate()
 			Cell.type.CORNER:
-				new_mesh.mesh = CORNER
+				new_scene = CORNER.instantiate()
 			Cell.type.EDGE:	
-				new_mesh.mesh = EDGE
+				new_scene = EDGE.instantiate()
 				
 		var offset_size = Vector3(1, 1, 1)
 		#new_mesh.mesh.size = offset_size * Vector3(cell_width, 1, cell_height)
-		new_mesh.position = cell_to_global(cell)#offset_pos * Vector3(cell_width, 1, cell_height)
-		new_mesh.rotation = cell.rotation
-		new_mesh.create_trimesh_collision()
+		new_scene.position = cell_to_global(cell)#offset_pos * Vector3(cell_width, 1, cell_height)
+		new_scene.rotation = cell.rotation
 		
-		add_child(new_mesh)
+		
+		add_child(new_scene)
 		
 		if cell.cell_type == Cell.type.CENTER:
-			var column = MeshInstance3D.new()
-			column.mesh = COLUMN
+			var column = COLUMN.instantiate()
 			
 			column.position = cell_to_global(cell) + Vector3(0,-102,0)
-			column.create_convex_collision()
 			add_child(column)	
 	
 	level_generated.emit(cells,split_spaces)

@@ -1,6 +1,22 @@
-[gd_scene load_steps=2 format=3 uid="uid://d1mne61l110gi"]
+[gd_scene load_steps=8 format=3 uid="uid://d1mne61l110gi"]
 
 [ext_resource type="Script" path="res://Main/Main Menu.gd" id="1_8h5y6"]
+[ext_resource type="AudioStream" uid="uid://cu5epohbhpfb1" path="res://audio/UI/switch19.ogg" id="2_5la1s"]
+[ext_resource type="Script" path="res://Main/ButtonSounds.gd" id="3_f720m"]
+
+[sub_resource type="SystemFont" id="SystemFont_xhs8n"]
+font_names = PackedStringArray("Fantasy")
+
+[sub_resource type="LabelSettings" id="LabelSettings_xits0"]
+font = SubResource("SystemFont_xhs8n")
+font_size = 90
+
+[sub_resource type="Gradient" id="Gradient_ofjcb"]
+colors = PackedColorArray(0.0823529, 0.498039, 1, 1, 0.692101, 0.813682, 0.920797, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_eeaob"]
+gradient = SubResource("Gradient_ofjcb")
+fill_from = Vector2(0.542735, 1)
 
 [node name="Main Menu" type="Control"]
 layout_mode = 3
@@ -9,29 +25,73 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_8h5y6")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 1
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 7
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -104.5
-offset_top = -243.0
-offset_right = 104.5
+offset_left = -104.0
+offset_top = -197.0
+offset_right = 105.0
+offset_bottom = -85.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="Play" type="Button" parent="VBoxContainer"]
+[node name="Play" type="Button" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 action_mode = 0
 text = "PLAY"
 
-[node name="Quit" type="Button" parent="VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
+
+[node name="Quit" type="Button" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
 text = "QUIT"
 
-[connection signal="pressed" from="VBoxContainer/Play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="VBoxContainer/Quit" to="." method="_on_quit_pressed"]
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_right = 922.0
+offset_bottom = 94.0
+text = "UNTITLED HOOK GAME"
+label_settings = SubResource("LabelSettings_xits0")
+
+[node name="TextEdit" type="TextEdit" parent="CanvasLayer"]
+offset_left = 2.0
+offset_top = 500.0
+offset_right = 202.0
+offset_bottom = 646.0
+text = "W, A, S, D - Move
+Space - Jump
+Left Mouse - Grapple
+Right Mouse - Reel In
+CTRL - Reel Out"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_5la1s")
+script = ExtResource("3_f720m")
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer2"]
+z_index = -5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_eeaob")
+
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Play" to="AudioStreamPlayer" method="_on_play_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Quit" to="AudioStreamPlayer" method="_on_quit_pressed"]

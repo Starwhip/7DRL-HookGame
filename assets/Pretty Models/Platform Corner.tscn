@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://ctf14beixxrt7"]
+
+[ext_resource type="ArrayMesh" uid="uid://cde6vvks25rlk" path="res://assets/modular/platform corner.obj" id="1_f3kdr"]
+[ext_resource type="Texture2D" uid="uid://brxgyn5ch2a57" path="res://assets/modular/platform corner.png" id="2_lw2n2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lq3o4"]
+albedo_texture = ExtResource("2_lw2n2")
+metallic = 0.17
+metallic_specular = 0.07
+roughness = 0.3
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_6jcyg"]
+data = PackedVector3Array(-4, 4.2, -4, -4, 8, 4, -4, 4.2, 4, -4, 4.2, -4, -4, 8, -4, -4, 8, 4, 0.2, 0, 0, 0.2, 4.2, 4, 0.2, 0, 4, 0.2, 0, 0, 0.2, 4.2, 0, 0.2, 4.2, 4, 4, 0, 0, 4, 0, 4, 4, 0.2, 4, 4, 0, 0, 4, 0.2, 4, 4, 0.2, 0.2, 4, 0.2, 0.2, 4, 0.2, 4, 4, 4.2, 0.2, 4, 0, 0, 4, 0.2, 0.2, 4, 4.2, 0.2, 4, 0, 0, 4, 4.2, 0.2, 4, 4.2, 0, 4, 4.2, 0, 4, 4.2, 0.2, 4, 4.4, 0, 4, 4.2, -4, 4, 4.2, 0, 4, 4.4, 0, 4, 4.2, -4, 4, 4.4, 0, 4, 4.4, -3.8, 4, 4.2, 0.2, 4, 0.2, 4, 4, 8, 4, 4, 4.4, 0, 4, 4.2, 0.2, 4, 8, 4, 4, 4.4, -3.8, 4, 4.4, 0, 4, 8, 4, 4, 4.2, -4, 4, 4.4, -3.8, 4, 8, -3.8, 4, 4.4, -3.8, 4, 8, 4, 4, 8, -3.8, 4, 4.2, -4, 4, 8, -3.8, 4, 8, -4, -4, 8, 4, -3.8, 4.4, 4, -4, 4.2, 4, -4, 8, 4, -3.8, 8, 4, -3.8, 4.4, 4, -3.8, 4.4, 4, 0.2, 4.2, 4, -4, 4.2, 4, -3.8, 8, 4, 0.2, 4.4, 4, -3.8, 4.4, 4, -3.8, 4.4, 4, 0.2, 4.4, 4, 0.2, 4.2, 4, 0.2, 4.2, 4, 0.4, 0.2, 4, 0.2, 0, 4, 0.2, 4.4, 4, 0.4, 4.2, 4, 0.2, 4.2, 4, 0.2, 4.2, 4, 0.4, 4.2, 4, 0.4, 0.2, 4, 0.4, 0.2, 4, 4, 0, 4, 0.2, 0, 4, 0.4, 4.2, 4, 4, 0.2, 4, 0.4, 0.2, 4, 0.4, 0.2, 4, 4, 0.2, 4, 4, 0, 4, -3.8, 8, 4, 4, 8, 4, 0.2, 4.4, 4, 0.4, 4.2, 4, 4, 8, 4, 4, 0.2, 4, 0.2, 4.4, 4, 4, 8, 4, 0.4, 4.2, 4, 0.2, 4.2, 0, 0.2, 0, 0, 4, 0, 0, 0.2, 4.2, 0, 4, 0, 0, 4, 4.2, 0, -4, 8, -4, -4, 4.2, -4, 4, 4.2, -4, -4, 8, -4, 4, 4.2, -4, 4, 8, -4, 4, 0, 4, 0.2, 0, 0, 0.2, 0, 4, 4, 0, 4, 4, 0, 0, 0.2, 0, 0, 0.2, 4.2, 4, 0.2, 4.2, 0, -4, 4.2, 4, 0.2, 4.2, 0, -4, 4.2, -4, -4, 4.2, 4, 4, 4.2, 0, -4, 4.2, -4, 0.2, 4.2, 0, 4, 4.2, 0, 4, 4.2, -4, -4, 4.2, -4, -3.8, 8, 4, -4, 8, 4, -3.8, 8, -3.8, 4, 8, 4, -3.8, 8, 4, -3.8, 8, -3.8, 4, 8, 4, -3.8, 8, -3.8, 4, 8, -3.8, -3.8, 8, -3.8, -4, 8, 4, -4, 8, -4, 4, 8, -3.8, -3.8, 8, -3.8, -4, 8, -4, 4, 8, -3.8, -4, 8, -4, 4, 8, -4)
+
+[node name="Platform Corner" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="PlatformCorner" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = ExtResource("1_f3kdr")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_lq3o4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_6jcyg")

@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://oefdcv26mm72"]
+
+[ext_resource type="ArrayMesh" uid="uid://do2cx0ax6awdq" path="res://assets/modular/Platform Edge.obj" id="1_xfba6"]
+[ext_resource type="Texture2D" uid="uid://dl5strsob7ty" path="res://assets/modular/Platform Edge.png" id="2_r8l1f"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d7x2n"]
+albedo_texture = ExtResource("2_r8l1f")
+metallic = 0.17
+metallic_specular = 0.07
+roughness = 0.3
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_fm7yh"]
+data = PackedVector3Array(-4, 0, 0.2, -4, 0.2, 4, -4, 0, 4, -4, 0, 0.2, -4, 0.2, 0.4, -4, 0.2, 4, -4, 0, 0.2, -4, 4.2, 0.2, -4, 0.2, 0.4, -4, 0.2, 0.4, -4, 4.4, 0.4, -4, 0.2, 4, -4, 4.2, -4, -4, 4.4, 0.4, -4, 4.2, 0.2, -4, 4.2, 0.2, -4, 4.4, 0.4, -4, 0.2, 0.4, -4, 4.2, -4, -4, 4.4, -3.8, -4, 4.4, 0.4, -4, 4.4, 0.4, -4, 8, 4, -4, 0.2, 4, -4, 4.4, -3.8, -4, 8, 4, -4, 4.4, 0.4, -4, 4.2, -4, -4, 8, -3.8, -4, 4.4, -3.8, -4, 4.4, -3.8, -4, 8, -3.8, -4, 8, 4, -4, 4.2, -4, -4, 8, -4, -4, 8, -3.8, 4, 0, 0.2, 4, 0, 4, 4, 0.2, 4, 4, 0, 0.2, 4, 0.2, 4, 4, 0.2, 0.4, 4, 0, 0.2, 4, 0.2, 0.4, 4, 4.2, 0.2, 4, 0.2, 0.4, 4, 0.2, 4, 4, 4.4, 0.4, 4, 4.2, -4, 4, 4.2, 0.2, 4, 4.4, 0.4, 4, 4.2, 0.2, 4, 0.2, 0.4, 4, 4.4, 0.4, 4, 4.2, -4, 4, 4.4, 0.4, 4, 4.4, -3.8, 4, 4.4, 0.4, 4, 0.2, 4, 4, 8, 4, 4, 4.4, -3.8, 4, 4.4, 0.4, 4, 8, 4, 4, 4.2, -4, 4, 4.4, -3.8, 4, 8, -3.8, 4, 4.4, -3.8, 4, 8, 4, 4, 8, -3.8, 4, 4.2, -4, 4, 8, -3.8, 4, 8, -4, -4, 0.2, 4, 4, 0, 4, -4, 0, 4, -4, 8, 4, 4, 0.2, 4, -4, 0.2, 4, -4, 0.2, 4, 4, 0.2, 4, 4, 0, 4, -4, 8, 4, 4, 8, 4, 4, 0.2, 4, -4, 4.2, 0.2, -4, 0, 0.2, 4, 0, 0.2, -4, 4.2, 0.2, 4, 0, 0.2, 4, 4.2, 0.2, -4, 8, -4, -4, 4.2, -4, 4, 4.2, -4, -4, 8, -4, 4, 4.2, -4, 4, 8, -4, 4, 0, 4, -4, 0, 0.2, -4, 0, 4, 4, 0, 4, 4, 0, 0.2, -4, 0, 0.2, 4, 4.2, 0.2, -4, 4.2, -4, -4, 4.2, 0.2, 4, 4.2, 0.2, 4, 4.2, -4, -4, 4.2, -4, 4, 8, 4, -4, 8, 4, -4, 8, -3.8, 4, 8, 4, -4, 8, -3.8, 4, 8, -3.8, 4, 8, -3.8, -4, 8, -3.8, -4, 8, -4, 4, 8, -3.8, -4, 8, -4, 4, 8, -4)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="PlatformEdge" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_xfba6")
+surface_material_override/0 = SubResource("StandardMaterial3D_d7x2n")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="PlatformEdge"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlatformEdge/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_fm7yh")

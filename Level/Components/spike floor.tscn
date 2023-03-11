@@ -1,10 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://cpt7r587f4f0l"]
+[gd_scene load_steps=7 format=3 uid="uid://cpt7r587f4f0l"]
 
 [ext_resource type="PackedScene" uid="uid://bmu66u45kbfj2" path="res://Level/Components/hazard template.tscn" id="1_bcuve"]
 [ext_resource type="ArrayMesh" uid="uid://dt7ask07spasx" path="res://assets/modular/hazard floor.obj" id="2_4r6re"]
+[ext_resource type="Texture2D" uid="uid://cuy40xn1ioue8" path="res://assets/modular/hazard floor.png" id="3_a0ies"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vwje4"]
 size = Vector3(7.05062, 0.5269, 7.00977)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0m68n"]
+albedo_texture = ExtResource("3_a0ies")
+metallic = 0.61
+metallic_specular = 0.51
+roughness = 0.14
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4tfmp"]
 size = Vector3(8, 0.4, 8)
@@ -21,6 +28,7 @@ shape = SubResource("BoxShape3D_vwje4")
 
 [node name="HazardFloor" type="MeshInstance3D" parent="."]
 mesh = ExtResource("2_4r6re")
+surface_material_override/0 = SubResource("StandardMaterial3D_0m68n")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 collision_mask = 31

@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://c630dok3m368c"]
+
+[ext_resource type="ArrayMesh" uid="uid://b8hkp7mh41kdc" path="res://assets/modular/platform center.obj" id="1_8rv6b"]
+[ext_resource type="Texture2D" uid="uid://dc0jm3b5jfac6" path="res://assets/modular/platform center.png" id="2_rurun"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ifq2e"]
+albedo_texture = ExtResource("2_rurun")
+metallic = 0.17
+metallic_specular = 0.07
+roughness = 0.3
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_iu7tm"]
+points = PackedVector3Array(4, 8, 4, 4, 8, -4, -4, 8, 4, 4, 0, 4, 4, 0, -4, -4, 8, -4, -4, 0, 4, -4, 0, -4)
+
+[node name="Platform Center" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="PlatformCenter" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = ExtResource("1_8rv6b")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_ifq2e")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_iu7tm")

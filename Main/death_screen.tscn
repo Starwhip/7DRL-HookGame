@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://rnacsrh6glc4"]
+[gd_scene load_steps=4 format=3 uid="uid://rnacsrh6glc4"]
 
 [ext_resource type="Script" path="res://Death Screen.gd" id="1_myto7"]
+[ext_resource type="AudioStream" uid="uid://cu5epohbhpfb1" path="res://audio/UI/switch19.ogg" id="2_vuab8"]
+[ext_resource type="Script" path="res://Main/Death Screen Buttons.gd" id="3_sltna"]
 
 [node name="Death Screen" type="Control"]
 layout_mode = 3
@@ -36,6 +38,13 @@ text = "MAIN MENU"
 layout_mode = 2
 text = "QUIT"
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_vuab8")
+script = ExtResource("3_sltna")
+
 [connection signal="pressed" from="VBoxContainer/New Run" to="." method="_on_new_run_pressed"]
+[connection signal="pressed" from="VBoxContainer/New Run" to="AudioStreamPlayer" method="_on_new_run_pressed"]
 [connection signal="pressed" from="VBoxContainer/Main Menu" to="." method="_on_main_menu_pressed"]
+[connection signal="pressed" from="VBoxContainer/Main Menu" to="AudioStreamPlayer" method="_on_main_menu_pressed"]
 [connection signal="pressed" from="VBoxContainer/QUIT" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="VBoxContainer/QUIT" to="AudioStreamPlayer" method="_on_quit_pressed"]

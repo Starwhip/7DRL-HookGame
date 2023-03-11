@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://c5t2ywcuuk7wa"]
+
+[ext_resource type="ArrayMesh" uid="uid://h0fyld5p16fo" path="res://assets/modular/platform column.obj" id="1_44ejg"]
+[ext_resource type="Texture2D" uid="uid://r4f43d41paqq" path="res://assets/modular/platform column.png" id="2_uc2em"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ciacj"]
+albedo_texture = ExtResource("2_uc2em")
+metallic = 0.17
+metallic_specular = 0.07
+roughness = 0.3
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_b68r1"]
+data = PackedVector3Array(-4, 0, -4, -4, 102.4, 4, -4, 0, 4, -4, 0, -4, -4, 102.4, -4, -4, 102.4, 4, 4, 0, -4, 4, 0, 4, 4, 102.4, 4, 4, 0, -4, 4, 102.4, 4, 4, 102.4, -4, -4, 102.4, 4, 4, 0, 4, -4, 0, 4, -4, 102.4, 4, 4, 102.4, 4, 4, 0, 4, -4, 102.4, -4, -4, 0, -4, 4, 0, -4, -4, 102.4, -4, 4, 0, -4, 4, 102.4, -4, 4, 0, 4, -4, 0, -4, -4, 0, 4, 4, 0, 4, 4, 0, -4, -4, 0, -4, 4, 102.4, 4, -4, 102.4, 4, -4, 102.4, -4, 4, 102.4, 4, -4, 102.4, -4, 4, 102.4, -4)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="PlatformColumn" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_44ejg")
+surface_material_override/0 = SubResource("StandardMaterial3D_ciacj")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="PlatformColumn"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlatformColumn/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_b68r1")

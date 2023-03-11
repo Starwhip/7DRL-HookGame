@@ -1,13 +1,11 @@
-[gd_scene load_steps=21 format=3 uid="uid://fu2kxigequ7n"]
+[gd_scene load_steps=19 format=3 uid="uid://fu2kxigequ7n"]
 
 [ext_resource type="ArrayMesh" uid="uid://dt7ask07spasx" path="res://assets/modular/hazard floor.obj" id="2_dt4xw"]
 [ext_resource type="ArrayMesh" uid="uid://bvdh2faxpufeq" path="res://assets/modular/hazard.obj" id="3_dh7jp"]
-[ext_resource type="ArrayMesh" uid="uid://cik10u8v46wbt" path="res://assets/modular/platform center.obj" id="4_8j8d7"]
-[ext_resource type="ArrayMesh" uid="uid://ifeukbqesyl4" path="res://assets/modular/platform corner inverted.obj" id="5_y7yxf"]
-[ext_resource type="ArrayMesh" uid="uid://dr0yq75uyna5i" path="res://assets/modular/platform corner.obj" id="6_kgsv2"]
+[ext_resource type="ArrayMesh" uid="uid://b8hkp7mh41kdc" path="res://assets/modular/platform center.obj" id="4_8j8d7"]
+[ext_resource type="ArrayMesh" uid="uid://cde6vvks25rlk" path="res://assets/modular/platform corner.obj" id="6_kgsv2"]
 [ext_resource type="ArrayMesh" uid="uid://dp8haesy7818d" path="res://assets/modular/pole.obj" id="7_sv38g"]
 [ext_resource type="ArrayMesh" uid="uid://b26vc5rt4m8ow" path="res://assets/modular/swing bar.obj" id="8_orfei"]
-[ext_resource type="PackedScene" uid="uid://ch6wu5xmqmvqm" path="res://player/player_spawn_point.tscn" id="9_vs47e"]
 [ext_resource type="PackedScene" uid="uid://bi4c8wo7bat2d" path="res://Enemies/crate.tscn" id="9_x5pdq"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_40eqc"]
@@ -84,7 +82,6 @@ shape = SubResource("ConcavePolygonShape3D_rjwud")
 
 [node name="PlatformCornerInverted" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 12)
-mesh = ExtResource("5_y7yxf")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="PlatformCornerInverted"]
 
@@ -117,9 +114,6 @@ mesh = ExtResource("8_orfei")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SwingBar/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_08h87")
-
-[node name="Player Spawn" parent="." instance=ExtResource("9_vs47e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.17076, 0.731374, 10.8042)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.720461, 0.688351, 0.0843175, 0.535461, 0.474892, 0.698398, 0.440701, 0.548317, -0.710726, -1.66823, 5.57735, -10.085)

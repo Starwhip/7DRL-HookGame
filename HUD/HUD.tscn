@@ -194,16 +194,5 @@ rounded = true
 fill_mode = 1
 show_percentage = false
 
-[node name="TextEdit" type="TextEdit" parent="."]
-offset_left = 2.0
-offset_top = 500.0
-offset_right = 202.0
-offset_bottom = 646.0
-text = "W, A, S, D - Move
-Space - Jump
-Left Mouse - Grapple
-Right Mouse - Reel In
-CTRL - Reel Out"
-
 [connection signal="timeout" from="Overlays/Hurt Timer" to="." method="_on_hurt_timer_timeout"]
 [connection signal="timeout" from="Overlays/Hurt Timer" to="." method="_on_timer_timeout"]

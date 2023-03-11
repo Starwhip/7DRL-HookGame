@@ -1,7 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://i1douxywwht0"]
+[gd_scene load_steps=7 format=3 uid="uid://i1douxywwht0"]
 
 [ext_resource type="ArrayMesh" uid="uid://bvdh2faxpufeq" path="res://assets/modular/hazard.obj" id="1_grdbl"]
 [ext_resource type="PackedScene" uid="uid://bmu66u45kbfj2" path="res://Level/Components/hazard template.tscn" id="2_fhg65"]
+[ext_resource type="Texture2D" uid="uid://slvfwk8la8ib" path="res://assets/modular/hazard.png" id="2_jgkf1"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rw33l"]
+albedo_texture = ExtResource("2_jgkf1")
+metallic = 0.17
+metallic_specular = 0.07
+roughness = 0.1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gscry"]
 size = Vector3(2.00625, 3.7511, 1.94369)
@@ -13,6 +20,7 @@ size = Vector3(1.59073, 4.80126, 1.57227)
 
 [node name="Hazard" type="MeshInstance3D" parent="."]
 mesh = ExtResource("1_grdbl")
+surface_material_override/0 = SubResource("StandardMaterial3D_rw33l")
 
 [node name="Hazard2" parent="." instance=ExtResource("2_fhg65")]
 

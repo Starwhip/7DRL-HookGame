@@ -1,7 +1,5 @@
-extends Node
+extends AudioStreamPlayer
 
-
-var score = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -12,15 +10,10 @@ func _ready():
 func _process(delta):
 	pass
 
-func reset():
-	score = 0
-	
-func award(amount):
-	score += amount
-	print(score)
 
-func buy(amount):
-	if amount <= score:
-		score -= amount
-		return true
-	return false
+
+func _on_play_pressed():
+	play()
+
+func _on_quit_pressed():
+	play()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b07d1npt8yu6x"]
+[gd_scene load_steps=13 format=3 uid="uid://b07d1npt8yu6x"]
 
 [ext_resource type="Script" path="res://Enemies/Death Effect Script.gd" id="1_jlq5b"]
 [ext_resource type="PackedScene" uid="uid://78b3y4436vah" path="res://Enemies/physics character.tscn" id="1_qb4wn"]
@@ -7,6 +7,16 @@
 [ext_resource type="PackedScene" uid="uid://mxqieux80f0v" path="res://Enemies/enemy_movement_controller.tscn" id="3_xpyvm"]
 [ext_resource type="PackedScene" uid="uid://867a42ocrlfu" path="res://Enemies/enemy_ai_module.tscn" id="4_2dbvj"]
 [ext_resource type="PackedScene" path="res://player/life_tracker.tscn" id="4_51oe4"]
+[ext_resource type="Texture2D" uid="uid://wyo4mdpex1gb" path="res://assets/modular/Flying Enemy.png" id="5_4u1s3"]
+[ext_resource type="AudioStream" uid="uid://bp4awwc5b7h3p" path="res://audio/spaceEngine_003.ogg" id="8_tnnx7"]
+[ext_resource type="Script" path="res://Enemies/EngineAudio.gd" id="9_ipnlw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rghre"]
+resource_name = "palette"
+albedo_texture = ExtResource("5_4u1s3")
+metallic = 0.79
+metallic_specular = 0.1
+roughness = 0.5
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1qahk"]
 radius = 1.18847
@@ -20,6 +30,12 @@ is_wall = false
 is_enemy = true
 gravity_multiplier = 0.0
 
+[node name="OmniLight3D" type="OmniLight3D" parent="Physics Character"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.399471, -0.612038)
+light_color = Color(0.984314, 0, 0, 1)
+light_size = 0.116
+omni_range = 0.389427
+
 [node name="Enemy AI Module" parent="Physics Character" node_paths=PackedStringArray("controller") instance=ExtResource("4_2dbvj")]
 far_detection_range = 60
 AI_mode = 1
@@ -31,6 +47,7 @@ slow_multiplier = 1.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.83019, 0)
 mesh = ExtResource("3_hy7ug")
 skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_rghre")
 
 [node name="Head" type="Node3D" parent="Physics Character"]
 
@@ -46,6 +63,14 @@ head_tracking_rate = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Physics Character"]
 shape = SubResource("SphereShape3D_1qahk")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Physics Character"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45295, 0.925448)
+stream = ExtResource("8_tnnx7")
+volume_db = -20.0
+autoplay = true
+doppler_tracking = 1
+script = ExtResource("9_ipnlw")
 
 [node name="LifeTracker" parent="." node_paths=PackedStringArray("character") instance=ExtResource("4_51oe4")]
 hit_points = 10

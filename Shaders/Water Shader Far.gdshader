@@ -70,7 +70,7 @@ void fragment() {
 	
 	vec3 surface_color = mix(albedo, albedo2, fresnel);
 	vec3 emission_color = mix(heat, heat2, 0.5);
-	ALBEDO = surface_color; //mix(surface_color, color, 0.75);
+	ALBEDO = mix(surface_color, color, 0.75);
 	METALLIC = metallic;
 	ROUGHNESS = roughness;
 	EMISSION = emission_color.rgb * 5.0;

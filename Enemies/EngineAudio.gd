@@ -1,7 +1,5 @@
-extends Node
+extends AudioStreamPlayer3D
 
-
-var score = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -10,17 +8,4 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
-
-func reset():
-	score = 0
-	
-func award(amount):
-	score += amount
-	print(score)
-
-func buy(amount):
-	if amount <= score:
-		score -= amount
-		return true
-	return false
+	volume_db = lerpf(-40,-10,get_parent().velocity.length()/20)

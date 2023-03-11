@@ -31,30 +31,31 @@ func on_win():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	$HUD.hide()
 	$"Upgrade System".show()
+	$"Upgrade System/AudioStreamPlayer2".play()
 
 func _on_grapple_length_pressed():
-	if ScoreManager.buy(5):
+	if ScoreManager.buy(100):
 		$"Physics Character/head/Grapple Hook".max_length += 5
 		$"Physics Character/head/Grapple Hook".hook_launch_velocity += 5
 	pass # Replace with function body.
 
 
 func _on_grapple_reel_pressed():
-	if ScoreManager.buy(10):
+	if ScoreManager.buy(100):
 		$"Physics Character/head/Grapple Hook".reel_rate += 5
 	pass # Replace with function body.
 
 
 func _on_speed_pressed():
-	if ScoreManager.buy(30):
-		$"Character Input Controller".speed += 5
-		$"Character Input Controller".acceleration += 0.05
+	if ScoreManager.buy(250):
+		$"Character Input Controller".speed *= 1.1
+		$"Character Input Controller".acceleration *= 1.025
 	pass # Replace with function body.
 
 
 func _on_momentum_pressed():
-	if ScoreManager.buy(50):
-		$"Physics Character".mass *= 1.05
+	if ScoreManager.buy(300):
+		$"Physics Character".mass *= 1.125
 	pass # Replace with function body.
 
 signal next_level()

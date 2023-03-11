@@ -1,16 +1,24 @@
-[gd_scene load_steps=16 format=3 uid="uid://sreobi57idmc"]
+[gd_scene load_steps=19 format=3 uid="uid://sreobi57idmc"]
 
 [ext_resource type="Script" path="res://player/Grapple Hook.gd" id="1_rb26o"]
 [ext_resource type="ArrayMesh" uid="uid://cp0x54aycbb7r" path="res://assets/voxel/Grapple Hook.obj" id="2_lyqwr"]
+[ext_resource type="Material" uid="uid://ba5l077ibptxn" path="res://assets/Pretty Models/Grapple Hook Mat.tres" id="3_811vq"]
 [ext_resource type="ArrayMesh" uid="uid://c2o23vtjgpvtn" path="res://assets/voxel/Grapple Gun.obj" id="3_eqen4"]
 [ext_resource type="Script" path="res://player/RopeRender.gd" id="4_c21m7"]
 [ext_resource type="AudioStream" uid="uid://b5vgps0yjagwt" path="res://audio/grapple hook.ogg" id="5_6jdbo"]
+[ext_resource type="Texture2D" uid="uid://dpd7ofy5nvp7f" path="res://assets/voxel/Grapple Gun.png" id="6_760by"]
 [ext_resource type="AudioStream" uid="uid://cbdvp1r0aeqcr" path="res://audio/bookPlace3.ogg" id="7_5thni"]
 [ext_resource type="AudioStream" uid="uid://cj8n5tnc53kum" path="res://audio/metalClick.ogg" id="8_72kur"]
 
 [sub_resource type="Curve" id="Curve_jeond"]
 _data = [Vector2(0, 0), 0.0, 0.0391254, 0, 0, Vector2(0.521342, 0.754545), 1.09091, 1.09091, 0, 0, Vector2(1, 1), 0.101079, 0.0, 0, 0]
 point_count = 3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p1q1y"]
+albedo_texture = ExtResource("6_760by")
+metallic = 0.8
+metallic_specular = 0.32
+roughness = 0.21
 
 [sub_resource type="Gradient" id="Gradient_c77jh"]
 colors = PackedColorArray(0.424, 0.244331, 0.136408, 1, 1, 1, 1, 1)
@@ -58,6 +66,7 @@ ROPE_LENGTH_MOD = 0.95
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 visible = false
 mesh = ExtResource("2_lyqwr")
+surface_material_override/0 = ExtResource("3_811vq")
 
 [node name="Hook Audio" type="AudioStreamPlayer3D" parent="Grapple Hook Point"]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
@@ -68,6 +77,7 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.473, -0.299, -0.394)
 cast_shadow = 0
 mesh = ExtResource("3_eqen4")
 skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_p1q1y")
 
 [node name="Node3D" type="Node3D" parent="GrappleGun"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.445742, 0, 0)
@@ -98,6 +108,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.498241, 5.81741e-05, -0.45
 cast_shadow = 0
 mesh = ExtResource("2_lyqwr")
 skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("3_811vq")
 
 [node name="RayCast3D" type="RayCast3D" parent="GrappleGun"]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.498241, 5.81741e-05, -0.457073)
