@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://b5vgps0yjagwt"
+path="res://.godot/imported/grapple hook.ogg-a0954d269d0691021210ded666e99c50.oggvorbisstr"
+
+[deps]
+
+source_file="res://audio/grapple hook.ogg"
+dest_files=["res://.godot/imported/grapple hook.ogg-a0954d269d0691021210ded666e99c50.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

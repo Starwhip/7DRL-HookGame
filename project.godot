@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="HookLike"
-run/main_scene="res://Level/Procedural Dungeon/Dungeon Generator.tscn"
+run/main_scene="res://Main/Main Menu.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+ScoreManager="*res://Score Manager.gd"
 
 [editor]
 

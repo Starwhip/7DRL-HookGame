@@ -14,5 +14,4 @@ func _process(delta):
 func damage(entity, velocity, normal):
 	normal = -normal
 	var normal_vel = (velocity.dot(normal) / normal.dot(normal)) * normal
-
 	return normal_vel.length() * damage_per_velocity + base_damage #Damage calculation

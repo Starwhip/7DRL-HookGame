@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://pkqkbte44q6y"
+path="res://.godot/imported/Flying Enemy.obj-edf1c0fa34c27f7d35c4b00ea8e82739.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Flying Enemy.obj-edf1c0fa34c27f7d35c4b00ea8e82739.mesh"]
+
+source_file="res://assets/modular/Flying Enemy.obj"
+dest_files=["res://.godot/imported/Flying Enemy.obj-edf1c0fa34c27f7d35c4b00ea8e82739.mesh", "res://.godot/imported/Flying Enemy.obj-edf1c0fa34c27f7d35c4b00ea8e82739.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(0.5, 0.5, 0.5)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

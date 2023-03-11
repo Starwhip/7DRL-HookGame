@@ -5,7 +5,7 @@ extends CharacterBody3D
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
-@export var mass = 5
+@export var mass = 5.0
 @export var is_wall = true
 @export var is_player = true
 @export var is_enemy = true
@@ -16,11 +16,13 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @export var hits_enemy = true
 @export var hits_hazard = true
 
-@export var gravity_multiplier = 1
-@export var momentum_resistance = 1
+@export var gravity_multiplier = 1.0
+@export var momentum_resistance = 1.0
+@export var enable_gravity_multiplier = true
 
 var previous_collisions = []
 var desired_up_direction = Vector3.UP
+var last_velocity
 func _ready():
 	self.set_collision_layer_value(1,is_wall)
 	self.set_collision_layer_value(2,is_player)
@@ -36,12 +38,17 @@ func _process(delta):
 	pass
 
 func _physics_process(delta):
-	if rad_to_deg(Vector3.UP.angle_to(up_direction)) > 80:
+	#print(desired_up_direction)
+	#print (Vector3.UP.angle_to(up_direction))
+	if rad_to_deg(Vector3.UP.angle_to(desired_up_direction)) < 80:
 		up_direction = up_direction.lerp(desired_up_direction, 3 * delta)
 	else:
 		up_direction = up_direction.lerp(Vector3.UP, 3 * delta)
 	
-	look_at(global_position - transform.basis.x.cross(up_direction), up_direction)
+	#print(up_direction)
+	#print(global_transform.origin)
+	#print(transform.basis.x.cross(up_direction))
+	look_at(global_transform.origin - transform.basis.x.cross(up_direction), up_direction)
 	
 	if is_on_floor():
 		velocity.x -= velocity.x * FRICTION * delta
@@ -52,10 +59,14 @@ func _physics_process(delta):
 		velocity.z -= velocity.z * AIR_FRICTION * delta
 		
 	velocity.y -= velocity.y * AIR_FRICTION * delta
-	velocity.y -= gravity * delta * gravity_multiplier
+	
+	if enable_gravity_multiplier:
+		velocity.y -= gravity * delta * gravity_multiplier
+	else:
+		velocity.y -= gravity * delta
 	
 	#print("velocity" + str(velocity))
-	var last_velocity = velocity
+	last_velocity = velocity
 	move_and_slide()
 	
 	previous_collisions = []
@@ -78,13 +89,16 @@ func _physics_process(delta):
 		if collider.get_collision_layer_value(2): #player
 			print("Hit player")
 			if not collider.previous_collisions.has(self):
+				collider.get_hit(self, last_velocity, normal)
+				get_hit(collider, last_velocity, normal)
 				hit_player.emit(collider, last_velocity, normal)
 				momentum_transfer(collider,last_velocity,normal)
 		
 		if collider.get_collision_layer_value(3): #enemies
 			print("Hit Enemy")
-			
 			if not collider.previous_collisions.has(self):
+				collider.get_hit(self, last_velocity, normal)
+				get_hit(collider, last_velocity, normal)
 				hit_enemy.emit(collider, last_velocity, normal)
 				momentum_transfer(collider,last_velocity,normal)
 			
@@ -98,6 +112,15 @@ func _physics_process(delta):
 			
 			velocity = (Vector3(0,0,0) - self_normal_momentum) / mass
 
+
+signal was_hit(collider, last_velocity, normal)
+
+func get_last_momentum():
+	return mass * last_velocity
+
+func get_hit(collider, last_velocity, normal):
+	was_hit.emit(collider, last_velocity, normal)	
+	
 func accelerate(desired_direction, desired_speed, acceleration, delta):
 	#Quake "inspired" movement
 	var current_speed = velocity.dot(desired_direction)
@@ -122,9 +145,15 @@ func set_up_vector(vector):
 	
 func get_grapple_point():
 	return $"grapple point".global_position
-	
-func set_grapple_point(point):
+
+func set_gravity_multiplier_enabled(val: bool):
+	enable_gravity_multiplier = val
+
+signal got_grappled()
+
+func grapple(point):
 	$"grapple point".global_position = point
+	got_grappled.emit()
 
 signal hit_wall(collision, last_velocity, normal)
 

@@ -9,8 +9,8 @@ extends Node
 @export var max_jumps = 2
 @export var wall_jumps = 1
 @export var jump_velocity = 12
-@export var tracking_rate = 50
-@export var head_tracking_rate = 100
+@export var tracking_rate = 1
+@export var head_tracking_rate = 1
 var num_jumps = max_jumps
 
 @export var desired_direction = Vector3()
@@ -18,10 +18,14 @@ var num_jumps = max_jumps
 var desired_speed = speed
 var current_tracking_location = Vector3()
 var current_head_tracking_location = Vector3()
+
+var enabled = true
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	#rotate(delta)
-	
+	if not enabled:
+		return
+		
+	rotate(delta)
 	# Handle Jump.
 	if character.is_on_floor():
 		num_jumps = max_jumps
@@ -32,11 +36,12 @@ func _process(delta):
 		
 	# Get the input direction and handle the movement/deceleration.
 	var direction = desired_direction.normalized()
-	
 	if direction:
-		var desired_direction = (character.global_transform.basis * direction).normalized()
+		desired_direction = (direction).normalized()
 		character.accelerate(desired_direction,desired_speed,acceleration,delta)
-	
+		
+	#character.look_at(character.global_position + desired_direction)
+
 func jump():
 	if num_jumps > 0:
 		num_jumps = num_jumps - 1
@@ -49,3 +54,11 @@ func rotate(delta):
 	character_head.look_at(current_head_tracking_location)	
 	character_head.rotation.x = clamp(character_head.rotation.x, deg_to_rad(-89), deg_to_rad(89))
 	character_head.rotation.z = clamp(character_head.rotation.z, deg_to_rad(-89), deg_to_rad(89))
+
+func set_enabled(val: bool):
+	if val:
+		enabled = true
+		character.set_gravity_multiplier_enabled(true)
+	else:
+		enabled = false
+		character.set_gravity_multiplier_enabled(false)

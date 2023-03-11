@@ -11,7 +11,7 @@ var max_length = 1.0
 @onready var rope_bar = $"Center Screen/Crosshair/Rope Length"
 @onready var reel_bar = $"Center Screen/Crosshair/Reel Length"
 
-@export var bar_rate = 15
+@export var bar_rate = 25
 # Called when the node enters the scene tree for the first time.
 
 @onready var hurt = $Overlays/Hurt
@@ -22,7 +22,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	var test = health_bar.value
 	
 	rope_bar.max_value = max_length
 	reel_bar.max_value = max_length
@@ -53,6 +52,8 @@ func _on_life_tracker_hurt():
 	hurt.show()
 	$"Overlays/Hurt Timer".start()
 
-func _on_life_tracker_stun():
+func _on_character_input_controller_stun():
 	stun.show()
-	$"Overlays/Stun Timer".start()
+
+func _on_life_tracker_dead():
+	hurt.show()

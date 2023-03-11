@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3 uid="uid://bnbe12juoby8u"]
+
+[ext_resource type="AudioStream" uid="uid://bcrhqtorta6kl" path="res://audio/lowFrequency_explosion_001.ogg" id="1_u3gp4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g8fpa"]
+emission_enabled = true
+emission = Color(0.996078, 0.427451, 0.364706, 1)
+emission_energy_multiplier = 7.07
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_nvt21"]
+material = SubResource("StandardMaterial3D_g8fpa")
+size = Vector2(0.1, 0.1)
+
+[sub_resource type="Curve" id="Curve_yvk38"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0, -25.4545), 0.0, 0.0, 0, 0, Vector2(1, -156.364), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="Enemy Death" type="CPUParticles3D"]
+emitting = false
+amount = 80
+lifetime = 3.5
+one_shot = true
+explosiveness = 0.95
+randomness = 0.15
+lifetime_randomness = 0.91
+mesh = SubResource("QuadMesh_nvt21")
+emission_shape = 1
+emission_sphere_radius = 0.05
+direction = Vector3(0, 10, 0)
+spread = 80.76
+gravity = Vector3(0, -1, 0)
+initial_velocity_max = 15.0
+radial_accel_max = 0.16
+radial_accel_curve = SubResource("Curve_yvk38")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("1_u3gp4")
+autoplay = true

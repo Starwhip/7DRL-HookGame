@@ -10,22 +10,32 @@ radius = 10.0
 
 [node name="Enemy AI Module" type="Node3D"]
 script = ExtResource("1_qvlx8")
+far_detection_range = 25
 
 [node name="Far Range" type="Area3D" parent="."]
 collision_layer = 4
-collision_mask = 31
+collision_mask = 2
 
 [node name="Far Collision" type="CollisionShape3D" parent="Far Range"]
 shape = SubResource("SphereShape3D_7oeh1")
 
 [node name="Near Range" type="Area3D" parent="."]
 collision_layer = 4
-collision_mask = 31
+collision_mask = 2
 
 [node name="Near Collision" type="CollisionShape3D" parent="Near Range"]
 shape = SubResource("SphereShape3D_2xmxj")
+
+[node name="Attack Delay" type="Timer" parent="."]
+wait_time = 2.5
+one_shot = true
+
+[node name="Attack Window" type="Timer" parent="."]
+wait_time = 2.5
+one_shot = true
 
 [connection signal="body_entered" from="Far Range" to="." method="_on_far_range_body_entered"]
 [connection signal="body_exited" from="Far Range" to="." method="_on_far_range_body_exited"]
 [connection signal="body_entered" from="Near Range" to="." method="_on_near_range_body_entered"]
 [connection signal="body_exited" from="Near Range" to="." method="_on_near_range_body_exited"]
+[connection signal="timeout" from="Attack Window" to="." method="_on_attack_window_timeout"]

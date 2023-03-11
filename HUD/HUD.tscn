@@ -98,8 +98,6 @@ expand_mode = 1
 wait_time = 0.5
 one_shot = true
 
-[node name="Stun Timer" type="Timer" parent="Overlays"]
-
 [node name="Center Screen" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 8
@@ -207,6 +205,5 @@ Left Mouse - Grapple
 Right Mouse - Reel In
 CTRL - Reel Out"
 
-[connection signal="timeout" from="Overlays/Hurt Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="Overlays/Hurt Timer" to="." method="_on_hurt_timer_timeout"]
-[connection signal="timeout" from="Overlays/Stun Timer" to="." method="_on_stun_timer_timeout"]
+[connection signal="timeout" from="Overlays/Hurt Timer" to="." method="_on_timer_timeout"]

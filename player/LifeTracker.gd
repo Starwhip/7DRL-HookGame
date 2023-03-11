@@ -4,26 +4,29 @@ extends Node
 @export var max_hit_points = 100
 @export var heal_rate = 2
 @export var character = CharacterBody3D.new()
+
 var stunned = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
+var is_dead = false
 var last_hit_points = hit_points
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if is_dead:
+		return
 	if hit_points < max_hit_points:
 		heal(heal_rate * delta)
 
 	if hit_points <= 0:
 		dead.emit()
-		get_parent().queue_free()
+		is_dead = true
 	
 	hit_points_update.emit(hit_points)
 
 signal hit_points_update(hit_points)
 signal hurt()
-signal stun()
 
 func damage(amount):
 	hit_points -= amount

@@ -1,6 +1,6 @@
 [gd_scene load_steps=14 format=3]
 
-[ext_resource type="Script" path="res://Enemies/enemy script.gd" id="1_ribco"]
+[ext_resource type="Script" path="res://Enemies/OLD/enemy script.gd" id="1_ribco"]
 [ext_resource type="PackedScene" uid="uid://0ce0qdilhtto" path="res://Enemies/enemy_health_bar.tscn" id="2_4dkcb"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8th22"]

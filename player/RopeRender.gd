@@ -17,7 +17,7 @@ func _ready():
 	$CSGPolygon3D.polygon = circle
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	
 	if hook_point.is_visible_in_tree():
 		show()

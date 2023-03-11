@@ -1,18 +1,40 @@
-[gd_scene load_steps=8 format=3 uid="uid://b2v6facqn4yw8"]
+[gd_scene load_steps=17 format=3 uid="uid://b2v6facqn4yw8"]
 
 [ext_resource type="Script" path="res://player/physics_player.gd" id="1_5v8e3"]
 [ext_resource type="PackedScene" uid="uid://78b3y4436vah" path="res://Enemies/physics character.tscn" id="1_strls"]
 [ext_resource type="PackedScene" uid="uid://sreobi57idmc" path="res://player/grapple_hook.tscn" id="2_a63ij"]
 [ext_resource type="PackedScene" uid="uid://cbwtajho43dhg" path="res://HUD/HUD.tscn" id="3_m8o2e"]
 [ext_resource type="PackedScene" path="res://player/life_tracker.tscn" id="4_y6775"]
+[ext_resource type="AudioStream" uid="uid://b05uk4tg5ymo5" path="res://audio/footstep_concrete_000.ogg" id="4_ybfv5"]
 [ext_resource type="PackedScene" uid="uid://xeu3rkgd08fy" path="res://player/character input controller.tscn" id="5_ducwu"]
+[ext_resource type="Script" path="res://player/Footstep Player.gd" id="5_hlnxb"]
+[ext_resource type="AudioStream" uid="uid://bffa0co55bup7" path="res://audio/footstep_concrete_003.ogg" id="7_pnlnh"]
+[ext_resource type="AudioStream" uid="uid://c5nysqbqyiqj2" path="res://audio/footstep_concrete_004.ogg" id="8_1s8nh"]
+[ext_resource type="AudioStream" uid="uid://bh73o72hyu0lc" path="res://audio/wind-01.ogg" id="8_vm3on"]
+[ext_resource type="Script" path="res://player/Wind Player.gd" id="9_rumkc"]
+[ext_resource type="AudioStream" uid="uid://di0wurahrsw5e" path="res://audio/impactPlank_medium_004.ogg" id="10_56tp0"]
+[ext_resource type="Script" path="res://player/Points Label.gd" id="14_aqiy5"]
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_8akwk"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3k3q2"]
+radius = 0.75
+height = 3.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_nbd57"]
+streams_count = 3
+playback_mode = 1
+stream_0/stream = ExtResource("4_ybfv5")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("7_pnlnh")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("8_1s8nh")
+stream_2/weight = 1.0
 
 [node name="Physics Player" type="Node3D"]
+process_mode = 3
 script = ExtResource("1_5v8e3")
 
 [node name="Physics Character" parent="." instance=ExtResource("1_strls")]
+process_mode = 1
 collision_layer = 2
 FRICTION = 2.0
 mass = 1
@@ -20,53 +42,155 @@ is_wall = false
 is_player = true
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Physics Character"]
-shape = SubResource("CylinderShape3D_8akwk")
+shape = SubResource("CapsuleShape3D_3k3q2")
 
 [node name="head" type="Node3D" parent="Physics Character"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.660124, 0)
 
 [node name="Grapple Hook" parent="Physics Character/head" node_paths=PackedStringArray("character", "HUD") instance=ExtResource("2_a63ij")]
 max_length = 50
-reel_rate = 25
+hook_launch_velocity = 45
 character = NodePath("../..")
 HUD = NodePath("../../../HUD")
 
 [node name="Camera3D" type="Camera3D" parent="Physics Character/head"]
 far = 2000.0
 
-[node name="SpotLight3D" type="SpotLight3D" parent="Physics Character/head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.539208, -0.252342, -0.445134)
-visible = false
-light_color = Color(1, 0.929412, 0.811765, 1)
-light_energy = 3.0
-light_bake_mode = 0
-shadow_enabled = true
-spot_range = 150.0
-spot_angle = 30.0
+[node name="Footsteps" type="AudioStreamPlayer3D" parent="Physics Character"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.4597, 0)
+stream = SubResource("AudioStreamRandomizer_nbd57")
+script = ExtResource("5_hlnxb")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="Physics Character/head"]
-visible = false
-light_color = Color(0.933333, 0.682353, 0.223529, 1)
-light_size = 0.1
-light_bake_mode = 0
-omni_range = 10.0
+[node name="Wind" type="AudioStreamPlayer3D" parent="Physics Character"]
+stream = ExtResource("8_vm3on")
+max_db = 0.0
+script = ExtResource("9_rumkc")
+
+[node name="Jump" type="AudioStreamPlayer3D" parent="Physics Character"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.939175, 0.53928)
+stream = ExtResource("10_56tp0")
 
 [node name="LifeTracker" parent="." node_paths=PackedStringArray("character") instance=ExtResource("4_y6775")]
+process_mode = 1
 character = NodePath("../Physics Character")
 
 [node name="HUD" parent="." instance=ExtResource("3_m8o2e")]
 
-[node name="Character Input Controller" parent="." node_paths=PackedStringArray("character", "character_head", "grapple_hook") instance=ExtResource("5_ducwu")]
+[node name="Character Input Controller" parent="." node_paths=PackedStringArray("character", "character_head", "grapple_hook", "camera") instance=ExtResource("5_ducwu")]
+process_mode = 1
 character = NodePath("../Physics Character")
 character_head = NodePath("../Physics Character/head")
 grapple_hook = NodePath("../Physics Character/head/Grapple Hook")
+camera = NodePath("../Physics Character/head/Camera3D")
+
+[node name="Stun Timer" type="Timer" parent="."]
+wait_time = 0.75
+one_shot = true
+
+[node name="Upgrade System" type="CanvasLayer" parent="."]
+process_mode = 3
+visible = false
+
+[node name="Control" type="Control" parent="Upgrade System"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="Upgrade System/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -89.0
+offset_top = -68.0
+offset_right = 89.0
+offset_bottom = 68.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GrappleLength" type="Button" parent="Upgrade System/Control/GridContainer"]
+layout_mode = 2
+text = "5 - Grapple Length Up"
+
+[node name="GrappleReel" type="Button" parent="Upgrade System/Control/GridContainer"]
+layout_mode = 2
+text = "10 - Grapple Reel Rate Up"
+
+[node name="Speed" type="Button" parent="Upgrade System/Control/GridContainer"]
+layout_mode = 2
+text = "30 - Player Speed Up"
+
+[node name="Momentum" type="Button" parent="Upgrade System/Control/GridContainer"]
+layout_mode = 2
+text = "50 - Player Momentum Up"
+
+[node name="HSeparator" type="HSeparator" parent="Upgrade System/Control/GridContainer"]
+layout_mode = 2
+
+[node name="Continue" type="Button" parent="Upgrade System/Control/GridContainer"]
+layout_mode = 2
+text = "CONTINUE RUN"
+
+[node name="Points" type="Control" parent="."]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="Points"]
+layout_mode = 2
+offset_left = 17.0
+offset_top = 16.0
+offset_right = 122.0
+offset_bottom = 57.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Points/Panel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -104.0
+offset_top = -1.0
+offset_bottom = 40.0
+grow_horizontal = 0
+alignment = 1
+
+[node name="Label" type="Label" parent="Points/Panel/HBoxContainer"]
+layout_mode = 2
+text = "Points:"
+
+[node name="Points Label" type="Label" parent="Points/Panel/HBoxContainer"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 2
+script = ExtResource("14_aqiy5")
 
 [connection signal="spawn" from="." to="Physics Character" method="_on_physics_player_spawn"]
 [connection signal="spawn" from="." to="LifeTracker" method="_on_physics_player_spawn"]
+[connection signal="spawn" from="." to="Character Input Controller" method="_on_physics_player_spawn"]
 [connection signal="hit_hazard" from="Physics Character" to="LifeTracker" method="_on_physics_character_hit_hazard"]
+[connection signal="was_hit" from="Physics Character" to="Character Input Controller" method="_on_physics_character_was_hit"]
 [connection signal="reel_length_update" from="Physics Character/head/Grapple Hook" to="HUD" method="_on_grapple_hook_reel_length_update"]
 [connection signal="rope_length_update" from="Physics Character/head/Grapple Hook" to="HUD" method="_on_grapple_hook_rope_length_update"]
 [connection signal="dead" from="LifeTracker" to="." method="_on_life_tracker_dead"]
+[connection signal="dead" from="LifeTracker" to="HUD" method="_on_life_tracker_dead"]
 [connection signal="hit_points_update" from="LifeTracker" to="HUD" method="_on_life_tracker_hit_points_update"]
 [connection signal="hurt" from="LifeTracker" to="HUD" method="_on_life_tracker_hurt"]
-[connection signal="stun" from="LifeTracker" to="HUD" method="_on_life_tracker_stun"]
+[connection signal="stun" from="Character Input Controller" to="HUD" method="_on_character_input_controller_stun"]
+[connection signal="timeout" from="Stun Timer" to="HUD" method="_on_stun_timer_timeout"]
+[connection signal="timeout" from="Stun Timer" to="Character Input Controller" method="_on_stun_timer_timeout"]
+[connection signal="pressed" from="Upgrade System/Control/GridContainer/GrappleLength" to="." method="_on_grapple_length_pressed"]
+[connection signal="pressed" from="Upgrade System/Control/GridContainer/GrappleReel" to="." method="_on_grapple_reel_pressed"]
+[connection signal="pressed" from="Upgrade System/Control/GridContainer/Speed" to="." method="_on_speed_pressed"]
+[connection signal="pressed" from="Upgrade System/Control/GridContainer/Momentum" to="." method="_on_momentum_pressed"]
+[connection signal="button_up" from="Upgrade System/Control/GridContainer/Continue" to="." method="_on_continue_button_up"]

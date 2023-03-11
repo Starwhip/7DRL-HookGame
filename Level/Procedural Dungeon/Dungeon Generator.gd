@@ -6,11 +6,13 @@ extends Node3D
 @export var cell_width = 8
 @export var cell_height = 8
 
-@export var dungeon_height = 20
-@export var dungeon_depth = 1
-@export var floor_height = 0
-@export var ceiling_height = 5
 @export var offset = 1
+
+
+const COLUMN = preload("res://assets/modular/platform column.obj")
+const CENTER = preload("res://assets/modular/platform center.obj")
+const CORNER = preload("res://assets/modular/platform corner.obj")
+const EDGE = preload("res://assets/modular/Platform Edge.obj")
 
 class Cell:
 	var position: Vector3
@@ -19,31 +21,39 @@ class Cell:
 	var cell_type: type
 		
 var cells = []
+
+signal level_generated(cells,platforms)
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	generate_dungeon()
+
+func generate_dungeon():
+	cells = []
+	for child in self.get_children():
+		#print(child.get_parent())
+		child.queue_free()
+	
 	var spaces = Rect2i(0,0,width,height)
 	var split_spaces = binary_space_partition(spaces,4,4)
 	#for space in split_spaces:
 		#print("Space: "+str(space.position) + ", " + str(space.size))
 	create_platforms(split_spaces, cells)
-	
-	var rand_index = randi_range(0,cells.size()-1)
-	$"Player Spawn".position = Vector3(cells[rand_index].position.x * cell_width + cell_width/2, cells[rand_index].position.y + 50, cells[rand_index].position.z*cell_height + cell_height/2)
 
+	#Spawn meshes for the platforms
 	for cell in cells:
 		var new_mesh = MeshInstance3D.new()
 		match cell.cell_type:
 			Cell.type.CENTER:
-				new_mesh.mesh = load("res://assets/modular/platform center.obj")
+				new_mesh.mesh = CENTER 
 			Cell.type.CORNER:
-				new_mesh.mesh = load("res://assets/modular/platform corner.obj")
+				new_mesh.mesh = CORNER
 			Cell.type.EDGE:	
-				new_mesh.mesh = load("res://assets/modular/Platform Edge.obj")
+				new_mesh.mesh = EDGE
 				
 		var offset_size = Vector3(1, 1, 1)
-		var offset_pos = Vector3(cell.position.x + 0.5, cell.position.y, cell.position.z + 0.5)
 		#new_mesh.mesh.size = offset_size * Vector3(cell_width, 1, cell_height)
-		new_mesh.position = offset_pos * Vector3(cell_width, 1, cell_height)
+		new_mesh.position = cell_to_global(cell)#offset_pos * Vector3(cell_width, 1, cell_height)
 		new_mesh.rotation = cell.rotation
 		new_mesh.create_trimesh_collision()
 		
@@ -51,11 +61,28 @@ func _ready():
 		
 		if cell.cell_type == Cell.type.CENTER:
 			var column = MeshInstance3D.new()
-			column.mesh = load("res://assets/modular/platform column.obj")
-			offset_pos = Vector3(cell.position.x + 0.5, (cell.position.y - 16/2) - 128 + 34, cell.position.z + 0.5)
-			column.position = offset_pos * Vector3(cell_width, 1, cell_height)
+			column.mesh = COLUMN
+			
+			column.position = cell_to_global(cell) + Vector3(0,-102,0)
 			column.create_convex_collision()
-			add_child(column)
+			add_child(column)	
+	
+	level_generated.emit(cells,split_spaces)
+
+func cell_to_global(cell: Cell) -> Vector3:
+	return Vector3((cell.position.x + 0.5) * cell_width, cell.position.y, (cell.position.z + 0.5) * cell_height)
+
+func cell_vec_to_global(vec: Vector3) -> Vector3:
+	return Vector3((vec.x + 0.5) * cell_width, vec.y, (vec.z + 0.5) * cell_height)
+	
+func get_rand_cell_in_platform(platform):
+	var target_cells = []
+	for a_cell in cells:
+		if platform.end.x >= a_cell.position.x and platform.position.x <= a_cell.position.x:
+			if platform.end.y >= a_cell.position.z and platform.position.y <= a_cell.position.z:	
+				target_cells.append(a_cell)
+	
+	return target_cells.pick_random()
 	
 func create_platforms(spaces: Array, cells: Array):
 	for space in spaces:

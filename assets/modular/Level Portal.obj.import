@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bem4wh433cguv"
+path="res://.godot/imported/Level Portal.obj-408b94eaf10a2e6814f7fac6acc33ebf.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Level Portal.obj-408b94eaf10a2e6814f7fac6acc33ebf.mesh"]
+
+source_file="res://assets/modular/Level Portal.obj"
+dest_files=["res://.godot/imported/Level Portal.obj-408b94eaf10a2e6814f7fac6acc33ebf.mesh", "res://.godot/imported/Level Portal.obj-408b94eaf10a2e6814f7fac6acc33ebf.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(2, 2, 2)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

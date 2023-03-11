@@ -1,9 +1,12 @@
-[gd_scene load_steps=13 format=3 uid="uid://sreobi57idmc"]
+[gd_scene load_steps=16 format=3 uid="uid://sreobi57idmc"]
 
 [ext_resource type="Script" path="res://player/Grapple Hook.gd" id="1_rb26o"]
 [ext_resource type="ArrayMesh" uid="uid://cp0x54aycbb7r" path="res://assets/voxel/Grapple Hook.obj" id="2_lyqwr"]
 [ext_resource type="ArrayMesh" uid="uid://c2o23vtjgpvtn" path="res://assets/voxel/Grapple Gun.obj" id="3_eqen4"]
 [ext_resource type="Script" path="res://player/RopeRender.gd" id="4_c21m7"]
+[ext_resource type="AudioStream" uid="uid://b5vgps0yjagwt" path="res://audio/grapple hook.ogg" id="5_6jdbo"]
+[ext_resource type="AudioStream" uid="uid://cbdvp1r0aeqcr" path="res://audio/bookPlace3.ogg" id="7_5thni"]
+[ext_resource type="AudioStream" uid="uid://cj8n5tnc53kum" path="res://audio/metalClick.ogg" id="8_72kur"]
 
 [sub_resource type="Curve" id="Curve_jeond"]
 _data = [Vector2(0, 0), 0.0, 0.0391254, 0, 0, Vector2(0.521342, 0.754545), 1.09091, 1.09091, 0, 0, Vector2(1, 1), 0.101079, 0.0, 0, 0]
@@ -56,6 +59,10 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 visible = false
 mesh = ExtResource("2_lyqwr")
 
+[node name="Hook Audio" type="AudioStreamPlayer3D" parent="Grapple Hook Point"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+stream = ExtResource("5_6jdbo")
+
 [node name="GrappleGun" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.473, -0.299, -0.394)
 cast_shadow = 0
@@ -98,3 +105,11 @@ target_position = Vector3(0, 0, 0)
 collision_mask = 13
 debug_shape_custom_color = Color(0.776471, 0.396078, 0.294118, 1)
 debug_shape_thickness = 5
+
+[node name="Gun Fire" type="AudioStreamPlayer3D" parent="GrappleGun"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.451245, 0.135776, -0.607149)
+stream = ExtResource("7_5thni")
+
+[node name="Trigger" type="AudioStreamPlayer3D" parent="GrappleGun"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.73249, -0.0840381, 0.788)
+stream = ExtResource("8_72kur")

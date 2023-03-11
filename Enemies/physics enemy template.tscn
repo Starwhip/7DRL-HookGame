@@ -1,35 +1,35 @@
-[gd_scene load_steps=8 format=3 uid="uid://b07d1npt8yu6x"]
+[gd_scene load_steps=9 format=3 uid="uid://b07d1npt8yu6x"]
 
+[ext_resource type="Script" path="res://Enemies/Death Effect Script.gd" id="1_jlq5b"]
 [ext_resource type="PackedScene" uid="uid://78b3y4436vah" path="res://Enemies/physics character.tscn" id="1_qb4wn"]
 [ext_resource type="PackedScene" uid="uid://0ce0qdilhtto" path="res://Enemies/enemy_health_bar.tscn" id="3_cx0qp"]
+[ext_resource type="ArrayMesh" uid="uid://pkqkbte44q6y" path="res://assets/modular/Flying Enemy.obj" id="3_hy7ug"]
 [ext_resource type="PackedScene" uid="uid://mxqieux80f0v" path="res://Enemies/enemy_movement_controller.tscn" id="3_xpyvm"]
 [ext_resource type="PackedScene" uid="uid://867a42ocrlfu" path="res://Enemies/enemy_ai_module.tscn" id="4_2dbvj"]
 [ext_resource type="PackedScene" path="res://player/life_tracker.tscn" id="4_51oe4"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ns5ic"]
-radius = 1.0
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_5gc17"]
-radius = 1.0
+[sub_resource type="SphereShape3D" id="SphereShape3D_1qahk"]
+radius = 1.18847
 
 [node name="Enemy" type="Node3D"]
+script = ExtResource("1_jlq5b")
 
 [node name="Physics Character" parent="." instance=ExtResource("1_qb4wn")]
-mass = 1
+mass = 1.25
 is_wall = false
 is_enemy = true
-gravity_multiplier = 0
+gravity_multiplier = 0.0
 
 [node name="Enemy AI Module" parent="Physics Character" node_paths=PackedStringArray("controller") instance=ExtResource("4_2dbvj")]
+far_detection_range = 60
 AI_mode = 1
-controller = NodePath("../../Enemy Movement Controller")
+controller = NodePath("../Enemy Movement Controller")
 Behavior = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Physics Character"]
-shape = SubResource("CapsuleShape3D_ns5ic")
+slow_multiplier = 1.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Physics Character"]
-mesh = SubResource("CapsuleMesh_5gc17")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.83019, 0)
+mesh = ExtResource("3_hy7ug")
 skeleton = NodePath("../..")
 
 [node name="Head" type="Node3D" parent="Physics Character"]
@@ -38,15 +38,27 @@ skeleton = NodePath("../..")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.18998, 0)
 entity_life = NodePath("../../LifeTracker")
 
-[node name="Enemy Movement Controller" parent="." node_paths=PackedStringArray("character", "character_head") instance=ExtResource("3_xpyvm")]
-character = NodePath("../Physics Character")
-character_head = NodePath("../Physics Character/Head")
-speed = 25
+[node name="Enemy Movement Controller" parent="Physics Character" node_paths=PackedStringArray("character", "character_head") instance=ExtResource("3_xpyvm")]
+character = NodePath("..")
+character_head = NodePath("../Head")
+acceleration = 5
+head_tracking_rate = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Physics Character"]
+shape = SubResource("SphereShape3D_1qahk")
 
 [node name="LifeTracker" parent="." node_paths=PackedStringArray("character") instance=ExtResource("4_51oe4")]
-hit_points = 30
-max_hit_points = 30
+hit_points = 10
+max_hit_points = 10
 heal_rate = 0
 character = NodePath("../Physics Character")
 
+[node name="Stun Timer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[connection signal="got_grappled" from="Physics Character" to="Physics Character/Enemy AI Module" method="_on_physics_character_got_grappled"]
 [connection signal="hit_hazard" from="Physics Character" to="LifeTracker" method="_on_physics_character_hit_hazard"]
+[connection signal="was_hit" from="Physics Character" to="Physics Character/Enemy AI Module" method="_on_physics_character_was_hit"]
+[connection signal="dead" from="LifeTracker" to="Physics Character/Enemy AI Module" method="_on_life_tracker_dead"]
+[connection signal="timeout" from="Stun Timer" to="Physics Character/Enemy AI Module" method="_on_stun_timer_timeout"]

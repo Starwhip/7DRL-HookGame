@@ -26,12 +26,6 @@ var hook_point_array = []
 @export var character = CharacterBody3D.new()
 @export var HUD = Node.new()
 
-enum GRAPPLE_MODE{
-	CLICK,
-	HOLD
-}
-var control_mode = GRAPPLE_MODE.HOLD
-
 var hooked_enemy = null
 
 # Called when the node enters the scene tree for the first time.
@@ -39,31 +33,11 @@ func _ready():
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	HUD.rope_length = get_rope_length()
 	HUD.reel_length = reel_length
 	HUD.max_length = max_length
 	
-	match control_mode:
-		GRAPPLE_MODE.HOLD:
-			if Input.is_action_pressed("Fire Grapple"):
-				if not (hooked or firing_hook):
-					fire_hook()
-			else:
-				if firing_hook:
-					reset_hook(true)
-				elif hooked:
-					reset_hook(false)
-					
-		GRAPPLE_MODE.CLICK:
-			if Input.is_action_just_pressed("Fire Grapple"):
-				if not (hooked or firing_hook):
-					fire_hook()
-				else:
-					if firing_hook:
-						reset_hook(true)
-					elif hooked:
-						reset_hook(false)
 
 func get_rope_length():
 	var len = 0
@@ -105,12 +79,14 @@ func reel_rope(amount):
 func reset_hook(missed):
 	$GrappleGun.rotation = Vector3(0,0,0)
 	$GrappleGun/GrappleHook.show()
+	
 	if missed:
 		print("Missed Hook")
 	else:
 		print("Released Hook")	
 		character.velocity += -character.transform.basis.z * RELEASE_VEL_BOOST
-	
+		$GrappleGun/Trigger.play()
+		
 	reel_length = 0
 	
 	raycast.rotation = Vector3(0,0,0)
@@ -127,6 +103,9 @@ func fire_hook():
 	$GrappleGun/GrappleHook.hide()
 	print("Firing Grapple")
 	firing_hook = true
+	
+	$GrappleGun/Trigger.play()
+	$"GrappleGun/Gun Fire".play()
 	
 	raycast.rotation = Vector3(0,0,0)
 	raycast.target_position = Vector3(0,0,0)
@@ -150,13 +129,15 @@ func hook(pos):
 	hook_point_array[0] = pos
 	reel_length = get_rope_length() * ROPE_LENGTH_MOD
 	
+	$"Grapple Hook Point/Hook Audio".play()
 	#print(reel_length)
 	#print(hook_pos)
 
 var last_rope_length = 0
 func _physics_process(delta):
 	if hooked_enemy and not is_instance_valid(hooked_enemy):
-		reset_hook(false)
+		if hooked:
+			reset_hook(false)
 		hooked_enemy = null
 		
 	if not hooked:
@@ -249,7 +230,8 @@ func get_grapple_point():
 		#print("Hit something")
 		if(raycast.get_collider().get_collision_layer_value(3)):
 			hooked_enemy = raycast.get_collider()
-			hooked_enemy.set_grapple_point(raycast.get_collision_point())
+			hooked_enemy.grapple(raycast.get_collision_point())
+			
 			print("Grapple hooked enemy: " +str(hooked_enemy))
 		else:
 			hooked_enemy = null
@@ -312,7 +294,6 @@ func is_rope_unwrapped(from,anchor,to):
 	const ERR_DISTANCE = 0.01
 	var collision_mask = 0b00000000000000000001
 	var space_state = get_world_3d().direct_space_state
-	var query_current = PhysicsRayQueryParameters3D.create(from, anchor, collision_mask)
 	
 	var samples = 10
 	for i in samples:

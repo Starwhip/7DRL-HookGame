@@ -12,8 +12,7 @@ func respawn():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	#print(player.get_player().global_position)
-	if player.get_player().global_position.y < 0:
-		respawn()
+	pass
 
 func _on_physics_player_dead():
 	print("respawning")
